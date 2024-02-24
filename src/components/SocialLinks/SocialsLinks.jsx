@@ -12,7 +12,7 @@ import { FaDiscord } from "react-icons/fa";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-
+import Image from "next/image";
 const socials = {
   Discord: "https://discord.com/channels/954778773654478940",
   Github: "https://github.com/JoseEnriquez88",
@@ -46,7 +46,7 @@ const SocialsLinks = ({ open, onClose }) => {
           <span className={styles.closeIcon} onClick={handleArrowClick}>
             <ArrowForwardIcon />
           </span>
-          <img src="/logo.png" alt="image" className={styles.image} />
+          <Image src="/logo.png" width={350} height={350} alt="image" className={styles.image} />
         </div>
         <List className={styles.list}>
           {Object.keys(socials).map((key) => (

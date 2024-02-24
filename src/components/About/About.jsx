@@ -13,7 +13,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailIcon from "@mui/icons-material/Email";
 import { FaDiscord } from "react-icons/fa";
-
+import Image from "next/image";
 const About = () => {
   const ref = useRef();
   const isInView = useInView(ref, { threshold: 0.5 });
@@ -92,7 +92,7 @@ const About = () => {
               </div>
             </div>
             <div className={styles.imageContainer}>
-              <img src="/SVG/about.png" alt="image" className={styles.image} />
+              <Image src="/SVG/about.png" width={350} alt="image" height={350} className={styles.image} />
             </div>
           </div>
           <div className={styles.stackContainer}>

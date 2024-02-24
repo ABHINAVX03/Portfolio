@@ -9,8 +9,8 @@ import {
 import projects from "@/utils/projects.json";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
-
-const content = () => {
+import Image from "next/image";
+const Content = () => {
   const ref = useRef();
   const isInView = useInView(ref, { threshold: 0.5 });
 
@@ -31,7 +31,7 @@ const content = () => {
           <div className={styles.card}>
             <>
               <div className={styles.frontContent}>
-                <img src={project.image} alt="image" className={styles.image} />
+                <Image src={project.image} height={350} width={350} alt="image" className={styles.image} />
               </div>
               <div className={styles.content}>
                 <p className={styles.heading}>{project.name}</p>
@@ -70,4 +70,4 @@ const content = () => {
   );
 };
 
-export default content;
+export default Content;

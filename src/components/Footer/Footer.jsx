@@ -4,7 +4,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import EmailIcon from "@mui/icons-material/Email";
 import { FaDiscord } from "react-icons/fa";
-
+import Image from "next/image";
 const socials = {
   discord: "https://discord.com/channels/abhinav3688",
 github: "https://github.com/ABHINAVX03",
@@ -32,7 +32,7 @@ const Footer = () => {
         </div>
         <div className={styles.textContainer}>
           &copy; {new Date().getFullYear()}: Abhinav Gupta
-          <img src="/icon.ico" alt="logo" className={styles.logo} />
+          <Image height={50} width={100} src="/icon.ico" alt="logo" className={styles.logo} />
         </div>
       </div>
     </footer>

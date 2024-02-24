@@ -8,7 +8,7 @@ import projects from "@/utils/projects.json";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import InsertLinkIcon from "@mui/icons-material/InsertLink";
 import styles from "./cardslist.module.css";
-
+import Image from "next/image";
 const Cards = () => {
   const ref = useRef();
   const isInView = useInView(ref, { threshold: 0.5 });
@@ -31,7 +31,9 @@ const Cards = () => {
             {index % 2 !== 0 ? (
               <>
                 <div className={styles.frontContent}>
-                  <img
+                  <Image
+                    width={350}
+                    height={350}
                     src={project.image}
                     alt="image"
                     className={styles.image}
@@ -99,7 +101,9 @@ const Cards = () => {
                   </div>
                 </div>
                 <div className={styles.frontContent}>
-                  <img
+                  <Image
+                    height={350}
+                    width={350}
                     src={project.image}
                     alt="image"
                     className={styles.image}

@@ -3,7 +3,7 @@ import styles from "./navbar.module.css";
 import { Link } from "react-scroll";
 import Nav from "../NavLinks/Nav";
 import { useEffect, useState } from "react";
-
+import Image from "next/image";
 const Navbar = () => {
   const [navbar, setNavbar] = useState(false);
 
@@ -33,7 +33,7 @@ const Navbar = () => {
         className={navbar ? `${styles.navbar} ${styles.active}` : styles.navbar}
       >
         <Link to="home">
-          <img src="/logo.png" alt="logo" className={styles.logo} />
+          <Image height={350} width={350} src="/logo.png" alt="logo" className={styles.logo} />
         </Link>
         <div className={styles.itemsContainer}>
           <Nav />
