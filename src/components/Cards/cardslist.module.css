@@ -1,0 +1,145 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+/* .container */
+
+.cardContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card {
+  display: flex;
+  background-color: transparent;
+  width: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  transition: border 0.3s ease-in-out;
+  margin-bottom: 25px;
+}
+
+.frontContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 50%;
+}
+
+.image {
+  width: 98%;
+  height: 350px;
+  border-radius: 20px;
+  overflow: hidden;
+  object-fit: cover;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 50%;
+  background-color: var(--color-background-card-button);
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  transition: border 0.3s ease-in-out;
+}
+
+.content:hover {
+  border: 1px solid var(--color-border-hover);
+  /* border: 1px solid #5c5b5b; */
+}
+
+.heading {
+  font-family: Prototype, sans-serif;
+  font-size: 30px;
+  color: var(--color-primary);
+}
+
+.type {
+  font-family: Prototype, sans-serif;
+  font-size: 25px;
+}
+
+.article {
+  font-family: Prototype, sans-serif;
+  font-size: 17px;
+  text-align: center;
+  width: 65%;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.repoButton,
+.deployButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-family: Prototype, sans-serif;
+  width: 150px;
+  padding: 8px;
+  border-radius: 20px;
+  border: 1px solid var(--color-border);
+  background: transparent;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out,
+    border 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.repoButton:hover,
+.deployButton:hover {
+  border: 1px solid var(--color-border-hover);
+}
+
+@media (max-width: 800px) {
+  .card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .frontContent {
+    width: 100vw;
+  }
+
+  .content {
+    width: 98vw;
+    outline: none;
+    transition: border 0.3s ease-in-out;
+  }
+
+  .heading {
+    margin-top: 20px;
+  }
+
+  .content:hover,
+  .content:active {
+    border: 1px solid var(--color-border-hover);
+  }
+
+  .article {
+    width: 90vw;
+    text-align: left;
+  }
+
+  .repoButton,
+  .deployButton {
+    outline: none;
+  }
+  .iconContainer {
+    margin-bottom: 20px;
+  }
+}

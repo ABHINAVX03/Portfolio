@@ -1,0 +1,49 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "Travel World",
+      "type": "E-commerce",
+      "repo": "https://github.com/ABHINAVX03/Traveling_World_Client",
+      "deploy": "https://traveling-world-client.vercel.app/",
+      "image": "/projects/project1.png",
+      "description": "E-commerce application that allows users to search and purchase travel products. Includes a shopping cart, registration form, and login. The application is built using React, Redux, and Node.js."
+    },
+    {
+      "id": 2,
+      "name": "Voting App",
+      "type": "BlockChain",
+      "repo": "https://github.com/ABHINAVX03/Voting_Dapp",
+      "deploy": "https://votingbeta.netlify.app/",
+      "image": "/projects/project2.png",
+      "description": "Decentralized application that allows users to create and vote on polls. It uses the Ethereum blockchain to store the polls and votes. The application is built using Solidity, React, and Web3.js. It also includes a login system. "
+    },
+    {
+      "id": 3,
+      "name": "News Panda",
+      "type": "Frontend",
+      "repo": "https://github.com/ABHINAVX03/Newspanda",
+      "deploy": "https://newspanda-gilt.vercel.app/",
+      "image": "/projects/project3.png",
+      "description": " News application that allows users to search for news articles. It uses the News API to fetch the news articles. The application is built using React and Redux."
+    },
+    {
+      "id": 4,
+      "name": "Chat App",
+      "type": "Full Stack | Socket.io",
+      "repo": "https://github.com/ABHINAVX03/ChatApp-Socket.io",
+      "deploy": null,
+      "image": "/projects/project4.png",
+      "description": "Chat application that allows users to create and join chat rooms. It uses Socket.io to enable real-time communication between users. The application is built using Node.js, Express, and Socket.io. It also includes a login system. "
+    },
+    {
+      "id": 5,
+      "name": "Todo App",
+      "type": "Frontend",
+      "repo": "https://github.com/ABHINAVX03/Todo-ContextAPI",
+      "deploy": "https://todo-context-api-eight.vercel.app/",
+      "image": "/projects/project5.png",
+      "description": "Todo application that allows users to create, update, and delete tasks. It uses the Context API to manage the state of the application. The application is built using React and the Context API."
+    }
+  ]
+}

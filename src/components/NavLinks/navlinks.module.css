@@ -1,0 +1,21 @@
+.container ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2.5rem;
+  list-style: none;
+  color: var(--color-text-color);
+  font-weight: bold;
+  /* font-family: Prototype, sans-serif; */
+  z-index: 2;
+}
+
+.container ul li {
+  font-size: 20px;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.container li:hover {
+  color: var(--color-primary);
+}

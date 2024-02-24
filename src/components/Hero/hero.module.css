@@ -1,0 +1,104 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+.container {
+  height: calc(100vh);
+  overflow: hidden;
+  position: relative;
+  color: var(--color-text-color);
+}
+
+.wrapper {
+  width: 80%;
+  margin: auto;
+  margin-top: 150px;
+}
+
+.dataContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+  gap: 2rem;
+  width: 800px;
+  height: 400px;
+}
+
+.name {
+  font-size: 88px;
+  font-family: Prototype, sans-serif;
+  letter-spacing: 2px;
+  background: linear-gradient(
+    to right,
+    var(--color-green1),
+    var(--color-green2),
+    var(--color-green6),
+    var(--color-green7),
+    var(--color-green8)
+  );
+  background-clip: text;
+  color: transparent;
+}
+
+.dataContainer h2 {
+  font-size: 50px;
+  font-family: Prototype, sans-serif;
+}
+
+.dataContainer a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  font-family: Prototype, sans-serif;
+  font-weight: 500;
+  width: 200px;
+  padding: 15px;
+  border-radius: 20px;
+  background-color: var(--color-background-card-button);
+  border: 1px solid var(--color-border);
+  transition: border 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.dataContainer a:hover {
+  border: 1px solid var(--color-border-hover);
+}
+
+.wavesContainer {
+  margin-top: 50px;
+  mask: linear-gradient(90deg, transparent, white 20%, white 80%, transparent);
+}
+
+@media (max-width: 800px) {
+  .container,
+  .wrapper {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+  }
+
+  .dataContainer {
+    width: 100vw;
+    margin-top: 50px;
+  }
+
+  .name {
+    font-size: 50px;
+    margin: 0 auto;
+  }
+
+  .dataContainer h2 {
+    font-size: 40px;
+  }
+  .seniority {
+    font-size: 40px;
+  }
+
+  .wavesContainer {
+    margin-top: -400px;
+  }
+}

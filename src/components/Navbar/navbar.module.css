@@ -1,0 +1,44 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../../assets/fonts/Prototype.ttf") format("truetype");
+}
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 0 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Prototype, sans-serif;
+  transition: background-color 0.3s ease-in-out;
+  z-index: 1;
+}
+
+.navbar.active {
+  background: var(--color-background-card-button);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.logo {
+  height: 80px;
+  width: 100px;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease-in-out;
+}
+
+.logo:hover {
+  transform: scale(1.1);
+  filter: brightness(150%);
+}
+
+.iconContainer {
+  display: none;
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    display: none;
+  }
+}

@@ -1,0 +1,43 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-color: var(--color-primary) var(--color-background-card-button);
+}
+
+body {
+  background: var(--color-background);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+:root {
+  --color-green1: #078343;
+  --color-green2: #11a759;
+  --color-green3: #8bf4be;
+  --color-green4: #5ee9a1;
+  --color-green5: #bffbdc;
+  --color-green6: #3bd988;
+  --color-green7: #22c470;
+  --color-green8: #02592c;
+  --color-primary: #22c070;
+  --color-text-color: #ececec;
+  --color-copyright: #8a8484;
+  --color-border: rgb(52, 52, 52);
+  --color-border-hover: rgb(150, 159, 155);
+  --color-background: rgb(28, 28, 28);
+  --color-background-card-button: #232323;
+}

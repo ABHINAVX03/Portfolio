@@ -1,0 +1,120 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+.container {
+  overflow: hidden;
+  position: relative;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 80%;
+  margin: auto;
+  color: var(--color-text-color);
+}
+
+.textContainer {
+  flex: 1;
+  display: flex;
+  gap: 40px;
+  margin-top: 120px;
+  margin-left: -775px;
+}
+
+.title {
+  font-family: Prototype, sans-serif;
+  font-size: 80px;
+  line-height: 88px;
+  background: linear-gradient(
+    to right,
+    var(--color-green1),
+    var(--color-green2),
+    var(--color-green6),
+    var(--color-green7),
+    var(--color-green8)
+  );
+  background-clip: text;
+  color: transparent;
+}
+
+.subContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.itemsContainer {
+  margin-bottom: 200px;
+  margin-left: 50px;
+  width: 50%;
+}
+
+.formContainer {
+  flex: 1;
+  position: relative;
+  height: 30rem;
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+@media (max-width: 800px) {
+  .container {
+    height: calc(100vh);
+    width: 100vw;
+  }
+
+  .wrapper {
+    width: 100vw;
+  }
+
+  .textContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    width: 100vw;
+    margin-top: 100px;
+  }
+
+  .title {
+    font-size: 50px;
+    text-align: center;
+  }
+
+  .itemsContainer {
+    display: none;
+  }
+
+  .subContainer {
+    margin-top: 100px;
+  }
+
+  .formContainer {
+    width: 98%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 720px) {
+  .formContainer {
+    margin-top: -100px;
+  }
+}
+
+@media (max-width: 400px) {
+  .title {
+    font-size: 45px;
+  }
+
+  .formContainer {
+    margin-top: -50px;
+  }
+}
