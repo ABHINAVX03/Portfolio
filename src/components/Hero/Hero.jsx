@@ -39,8 +39,8 @@ const Hero = () => {
             developer
           </h2>
           <a
-            href="https://drive.google.com/file/d/1YM6bpmSylztGeyAgDf6IECwtz_4pWi60/view?usp=sharing"
-            download="https://drive.google.com/file/d/1YM6bpmSylztGeyAgDf6IECwtz_4pWi60/view?usp=sharing"
+            href="https://drive.google.com/file/d/1O5dY_xWAStDr8xTFhm_YeXfeIBg67XPZ/view"
+            download="https://drive.google.com/file/d/1O5dY_xWAStDr8xTFhm_YeXfeIBg67XPZ/view"
             aria-label="Download Resume"
           >
             <span className={styles.icon}>
