@@ -55,7 +55,7 @@
       "description": "Real-time chat application with Socket.io enabling instant messaging, chat rooms, and presence indicators. Node.js & Express backend with room-based architecture.",
       "tags": ["Socket.io", "Node.js", "Express", "React", "WebSockets"],
       "color": "violet",
-      "priority": 4,
+      "priority": 3,
       "featured": true,
       "year": 2024,
       "status": "completed"
@@ -70,7 +70,7 @@
       "description": "Decentralized voting application built on Ethereum blockchain with smart contracts. Secure, transparent voting system with real-time results and voter verification.",
       "tags": ["Solidity", "Ethereum", "Web3", "React", "Smart Contracts"],
       "color": "primary",
-      "priority": ,
+      "priority": 4,
       "featured": false,
       "year": 2024,
       "status": "completed"
