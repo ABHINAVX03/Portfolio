@@ -3,36 +3,22 @@ import nodemailer from "nodemailer";
 const GMAIL_USER = "guptaabhinav697@gmail.com";
 const GMAIL_PASSWORD = "kczkmyfinkvqcfef";
 
-// Create transporter with error handling
-let transporter;
-
 function getTransporter() {
-  if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-      pool: true,
-      maxConnections: 1,
-      maxMessages: 100,
-      rateDelta: 1000,
-      rateLimit: 3,
-    });
-
-    // Verify connection
-    transporter.verify((error, success) => {
-      if (error) {
-        console.error("Gmail transporter verification failed:", error.message);
-      } else if (success) {
-        console.log("Gmail transporter ready");
-      }
-    });
-  }
-  return transporter;
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+    greetingTimeout: 30000,
+    connectionTimeout: 30000,
+  });
 }
 
 export async function POST(request) {
