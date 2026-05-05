@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portfolio
+
+A modern, responsive portfolio website showcasing projects with animations and interactive UI components.
+
+## Tech Stack
+
+- **Framework**: Next.js 14.1.0 with App Router
+- **Frontend**: React 18 with Framer Motion animations
+- **Styling**: Tailwind CSS with CSS Modules
+- **Email**: EmailJS and Nodemailer integration
+- **Internationalization**: i18next
+- **UI Components**: Material-UI icons
+- **Deployment**: Vercel
+
+## Project Features
+
+- ✨ Smooth animations and transitions using Framer Motion
+- 📱 Fully responsive design with Tailwind CSS
+- 🎨 Modern glass morphism and 3D UI effects
+- ✉️ Contact form with email notifications
+- 🔄 Project management system with single JSON source
+- 🌍 Multi-language support (i18n)
+- 🚀 Optimized for performance
 
 ## Getting Started
 
-First, run the development server:
+### Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:4000](http://localhost:4000) to see your portfolio.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## Project Management
 
-To learn more about Next.js, take a look at the following resources:
+Manage projects using the provided CLI script:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# List all projects
+node scripts/manage-projects.js list
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Add a new project
+node scripts/manage-projects.js add my-project
 
-## Deploy on Vercel
+# Update a project
+node scripts/manage-projects.js update my-project priority=1 featured=true
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Delete a project
+node scripts/manage-projects.js delete my-project
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# Validate project data
+node scripts/manage-projects.js validate
+
+# View statistics
+node scripts/manage-projects.js stats
+```
+
+All project data is stored in `src/utils/projects/index.json`.
+
+## Environment Variables
+
+Create a `.env.local` file with:
+
+```env
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+GMAIL_USER=your_email
+GMAIL_PASSWORD=your_app_password
+```
+
+## Deployment on Vercel
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Vercel will auto-detect Next.js configuration
+4. Deploy with a single click
+
+Visit [Vercel Dashboard](https://vercel.com/dashboard) to manage your deployments.
