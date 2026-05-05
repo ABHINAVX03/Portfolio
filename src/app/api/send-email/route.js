@@ -1,23 +1,18 @@
 import nodemailer from "nodemailer";
 
+const GMAIL_USER = "guptaabhinav697@gmail.com";
+const GMAIL_PASSWORD = "kczk myfi nkvq cfef";
+
 // Create transporter with error handling
 let transporter;
 
 function getTransporter() {
   if (!transporter) {
-    // Check if Gmail credentials are available
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_PASSWORD) {
-      console.warn(
-        "Warning: Gmail credentials not configured. Email functionality disabled."
-      );
-      return null;
-    }
-
     transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASSWORD,
+        user: GMAIL_USER,
+        pass: GMAIL_PASSWORD,
       },
       pool: true,
       maxConnections: 1,
@@ -67,7 +62,7 @@ export async function POST(request) {
         {
           success: false,
           warning:
-            "Email service not configured, but message was received. Please configure Gmail credentials in Vercel.",
+            "Email service is unavailable. Please check the application settings.",
         },
         { status: 503 }
       );
@@ -75,7 +70,7 @@ export async function POST(request) {
 
     // Email to admin with detailed HTML
     const adminMailOptions = {
-      from: process.env.GMAIL_USER,
+      from: GMAIL_USER,
       to: "guptaabhinav697@gmail.com",
       replyTo: user_email,
       subject: `New Contact Form Submission from ${user_name}`,

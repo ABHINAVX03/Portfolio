@@ -1,0 +1,48 @@
+{
+  "personal": {
+    "name": "Abhinav Gupta",
+    "title": "Full Stack Developer",
+    "email": "guptaabhinav697@gmail.com",
+    "phone": "+91-XXXXXXXXXX",
+    "location": "India",
+    "summary": "Experienced Full Stack Developer with expertise in React, Java Spring Boot, and modern web technologies. Passionate about building scalable applications and delivering high-quality solutions."
+  },
+  "experience": [
+    {
+      "id": 1,
+      "company": "Your Company",
+      "position": "Full Stack Developer",
+      "duration": "Jan 2024 - Present",
+      "description": "Develop and maintain web applications using React and Spring Boot. Implement RESTful APIs and optimize database queries.",
+      "responsibilities": [
+        "Built scalable backend services using Java Spring Boot",
+        "Developed responsive UI components with React",
+        "Optimized application performance by 40%"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "id": 1,
+      "institution": "Your University",
+      "degree": "Bachelor of Technology",
+      "field": "Computer Science",
+      "year": "2024",
+      "gpa": "8.5/10"
+    }
+  ],
+  "skills": {
+    "languages": ["JavaScript", "TypeScript", "Java", "Python"],
+    "frontend": ["React", "Next.js", "Tailwind CSS", "Framer Motion"],
+    "backend": ["Node.js", "Express", "Java Spring Boot", "PostgreSQL"],
+    "tools": ["Git", "Docker", "AWS", "Vercel"]
+  },
+  "certifications": [
+    {
+      "id": 1,
+      "name": "Full Stack Web Development",
+      "issuer": "Udemy",
+      "year": "2024"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ import styles from "./navbar.module.css";
 import { Link } from "react-scroll";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import ResumeModal from "@/components/ResumeModal/ResumeModal";
 
 const navLinks = [
   { title: "Home", href: "home" },
@@ -15,6 +16,12 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
+
+  const openResumePopup = (event) => {
+    event.preventDefault();
+    setResumeOpen(true);
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -51,14 +58,14 @@ const Navbar = () => {
         </ul>
 
         {/* CTA */}
-        <a
-          href="https://drive.google.com/file/d/1eUGL9v-nDdo9setCaWis9LgrIdmSyC9V/view?usp=sharing"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
           className={styles.ctaBtn}
+          aria-label="Preview resume"
+          onClick={openResumePopup}
         >
           Resume ↗
-        </a>
+        </button>
 
         {/* Mobile hamburger */}
         <button
@@ -87,6 +94,8 @@ const Navbar = () => {
           </Link>
         ))}
       </div>
+
+      <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
     </header>
   );
 };

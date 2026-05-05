@@ -95,11 +95,11 @@ const Hero = () => {
           {/* CTA buttons */}
           <motion.div className={styles.actions} variants={itemVariants}>
             <a
-              href="https://drive.google.com/file/d/1eUGL9v-nDdo9setCaWis9LgrIdmSyC9V/view?usp=sharing"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/resume/Resume1.pdf"
+              download="Abhinav-Gupta-Resume.pdf"
               className={styles.btnPrimary}
               id="hero-resume-btn"
+              aria-label="Download resume"
             >
               <CloudDownloadIcon style={{ fontSize: 18 }} />
               Download Resume
