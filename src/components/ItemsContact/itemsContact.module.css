@@ -1,0 +1,33 @@
+.itemsCntnr {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.ulCntnr {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 42%;
+}
+
+.ulCntnr li {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-family: Prototype, sans-serif;
+  transition: color 0.3s ease-in-out;
+  width: 100%;
+}
+
+.ulCntnr li:hover {
+  color: var(--color-primary);
+  cursor: pointer;
+}
+
+.icon {
+  color: var(--color-text-color);
+  transition: color 0.3s ease-in-out;
+}

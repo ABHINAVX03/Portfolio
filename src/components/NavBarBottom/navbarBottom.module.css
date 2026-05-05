@@ -1,0 +1,41 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+.container {
+  width: 100%;
+  bottom: 0;
+  background: var(--color-background-card-button);
+  color: var(--color-text-color);
+  position: fixed;
+  padding: 10px;
+  border-top: 1px solid var(--color-border);
+  border-radius: 20px 20px 0px 0px;
+  font-family: Prototype, sans-serif;
+}
+
+.iconContainer {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  list-style: none;
+}
+
+.iconContainer li {
+  display: flex;
+  flex-direction: column;
+  font-size: 13px;
+  align-items: center;
+  transition: color 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.iconContainer li:hover {
+  color: var(--color-primary);
+}
+
+.logo {
+  height: 60px;
+  cursor: pointer;
+}

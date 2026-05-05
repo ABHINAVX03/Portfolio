@@ -1,0 +1,72 @@
+.container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.nav {
+  width: 480px;
+  height: 70px;
+  background-color: #242426;
+  display: flex;
+  list-style: none;
+  padding: 10px 0;
+  border-radius: 20px 20px 40px 40px;
+  position: relative;
+  filter: url(#goo);
+}
+
+.navCircle {
+  width: 80px;
+  height: 80px;
+  background-color: #242426;
+  position: absolute;
+  top: -30px;
+  margin-left: -45px;
+  left: calc(500px - 480px);
+  border-radius: 200%;
+  z-index: -1;
+  transition: left 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav li {
+  display: flex;
+  align-items: center;
+}
+
+.navItemActive {
+  transition: transform 0.5s cubic-bezier(0.61, 1, 0.88, 1);
+  transform: translateY(-30%);
+}
+
+.navItemActive .navitemText {
+  display: block;
+}
+
+.nav li a {
+  color: #fff;
+  text-decoration: none;
+  width: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav li a:hover {
+  color: rgb(34, 196, 112);
+}
+
+.navItemIcon {
+  width: 40px;
+  height: 40px;
+}
+
+.navitemText {
+  display: none;
+  margin-top: 10px;
+}
+
+.filterSvg {
+  display: none;
+}

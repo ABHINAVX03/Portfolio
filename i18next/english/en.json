@@ -1,0 +1,22 @@
+{
+  "about": {
+    "title": "About me",
+    "text": "I am a web developer with strong skills in HTML, CSS, and JavaScript, enabling me to create appealing interfaces. Furthermore, I have experience developing with technologies such as React, Next, and Redux/Toolkit. On the server side, I use Express and relational databases like SQL, Prisma, and PostgreSQL to ensure efficient performance and effective data management."
+  },
+  "contact": {
+    "title": "Let's get in touch!"
+  },
+  "hero": {
+    "span": "resume"
+  },
+  "navbar": {
+    "home": "Home",
+    "project": "Project",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "projects": {
+    "title": "Projects",
+    "subTitle": "See my latest work"
+  }
+}

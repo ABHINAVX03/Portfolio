@@ -1,0 +1,85 @@
+{
+  "projects": [
+    {
+      "id": "uber-ride-platform",
+      "name": "BookKaro-Uber Clone",
+      "type": "Full Stack · React + Spring Boot",
+      "repo": "https://github.com/ABHINAVX03/Book_Karo-Backend",
+      "deploy": null,
+      "image": "/projects/project1.png",
+      "description": "Production-grade ride-hailing platform with real-time driver dispatch, wallet management, and live ride tracking. Built with React on the frontend and Java Spring Boot REST APIs on the backend.",
+      "tags": ["React", "Spring Boot", "Java", "REST API", "PostgreSQL"],
+      "color": "primary",
+      "priority": 1,
+      "featured": true,
+      "year": 2026,
+      "status": "completed"
+    },
+    {
+      "id": "hospital-management",
+      "name": "MediCore-Hospital Management",
+      "type": "Full Stack · Java Backend",
+      "repo": "https://github.com/ABHINAVX03",
+      "deploy": null,
+      "image": "/projects/project3.png",
+      "description": "Enterprise hospital management system with patient records, doctor scheduling, and billing modules. Java Spring Boot microservices architecture with PostgreSQL and secure JWT authentication.",
+      "tags": ["Java", "Spring Boot", "JWT", "PostgreSQL", "React"],
+      "color": "emerald",
+      "priority": 5,
+      "featured": true,
+      "year": 2026,
+      "status": "completed"
+    },
+    {
+      "id": "travel-world",
+      "name": "Travel World",
+      "type": "Full Stack · E-commerce",
+      "repo": "https://github.com/ABHINAVX03/Traveling_World_Client",
+      "deploy": "https://traveling-world-client.vercel.app/",
+      "image": "/projects/project2.png",
+      "description": "E-commerce platform for booking travel packages with cart, authentication and checkout flow. Built with React, Redux Toolkit, and a Node.js backend with PostgreSQL.",
+      "tags": ["React", "Redux", "Node.js", "PostgreSQL", "Vercel"],
+      "color": "cyan",
+      "priority": 2,
+      "featured": true,
+      "year": 2025,
+      "status": "completed"
+    },
+    {
+      "id": "chat-app",
+      "name": "Chat App",
+      "type": "Full Stack · Real-time",
+      "repo": "https://github.com/ABHINAVX03/ChatApp-Socket.io",
+      "deploy": null,
+      "image": "/projects/project4.png",
+      "description": "Real-time chat application with Socket.io enabling instant messaging, chat rooms, and presence indicators. Node.js & Express backend with room-based architecture.",
+      "tags": ["Socket.io", "Node.js", "Express", "React", "WebSockets"],
+      "color": "violet",
+      "priority": 4,
+      "featured": true,
+      "year": 2024,
+      "status": "completed"
+    },
+    {
+      "id": "voting-dapp",
+      "name": "Voting DApp",
+      "type": "Blockchain · Web3",
+      "repo": "https://github.com/ABHINAVX03/Voting_Dapp",
+      "deploy": "https://votingbeta.netlify.app/",
+      "image": "/projects/project5.png",
+      "description": "Decentralized voting application built on Ethereum blockchain with smart contracts. Secure, transparent voting system with real-time results and voter verification.",
+      "tags": ["Solidity", "Ethereum", "Web3", "React", "Smart Contracts"],
+      "color": "primary",
+      "priority": 4,
+      "featured": false,
+      "year": 2024,
+      "status": "completed"
+    }
+  ],
+  "metadata": {
+    "totalProjects": 5,
+    "featuredProjects": 4,
+    "lastUpdated": "2024-12-19",
+    "version": "1.0.0"
+  }
+}

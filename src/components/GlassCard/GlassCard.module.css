@@ -1,0 +1,40 @@
+.glassCard {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 2rem;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glassCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 196, 112, 0.1) 0%,
+    transparent 50%,
+    rgba(34, 196, 112, 0.05) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.glassCard:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(34, 196, 112, 0.3);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(34, 196, 112, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.glassCard:hover::before {
+  opacity: 1;
+}

@@ -1,0 +1,275 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+/* ============ Reset ============ */
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* ============ Design Tokens ============ */
+:root {
+  /* Brand palette - deep blue-slate + electric accents */
+  --c-bg:           #060811;
+  --c-bg-secondary: #0b0f1a;
+  --c-bg-card:      rgba(13, 17, 30, 0.75);
+  --c-surface:      rgba(15, 20, 35, 0.85);
+
+  /* Primary — electric blue-cyan */
+  --c-primary:      #4f8ef7;
+  --c-primary-dim:  rgba(79, 142, 247, 0.15);
+  --c-primary-glow: rgba(79, 142, 247, 0.35);
+
+  /* Accent — vivid cyan */
+  --c-cyan:         #00d4ff;
+  --c-cyan-dim:     rgba(0, 212, 255, 0.12);
+  --c-cyan-glow:    rgba(0, 212, 255, 0.3);
+
+  /* Accent 2 — violet */
+  --c-violet:       #8b5cf6;
+  --c-violet-dim:   rgba(139, 92, 246, 0.12);
+
+  /* Accent 3 — emerald (for Java/backend badge) */
+  --c-emerald:      #10b981;
+  --c-emerald-dim:  rgba(16, 185, 129, 0.12);
+
+  /* Text */
+  --c-text-primary:   #f1f5f9;
+  --c-text-secondary: #94a3b8;
+  --c-text-muted:     #475569;
+
+  /* Borders */
+  --c-border:         rgba(255, 255, 255, 0.06);
+  --c-border-active:  rgba(79, 142, 247, 0.4);
+  --c-border-glow:    rgba(0, 212, 255, 0.35);
+
+  /* Glass */
+  --glass-bg:         rgba(13, 17, 30, 0.6);
+  --glass-border:     rgba(79, 142, 247, 0.15);
+  --glass-blur:       blur(20px);
+  --glass-shadow:     0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(79, 142, 247, 0.06);
+
+  /* Glows */
+  --glow-primary:     0 0 30px rgba(79, 142, 247, 0.4), 0 0 80px rgba(79, 142, 247, 0.15);
+  --glow-cyan:        0 0 30px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.15);
+
+  /* Typography */
+  --font-sans:  'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+  --font-proto: 'Prototype', sans-serif;
+
+  /* Spacing scale */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   40px;
+  --space-2xl:  64px;
+  --space-3xl:  96px;
+
+  /* Radius */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast:   all 0.15s ease;
+  --transition-base:   all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ============ Base ============ */
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: var(--c-primary) var(--c-bg-secondary);
+  background: var(--c-bg);
+  /* Removed scroll-snap-type to prevent janky scrolling */
+}
+
+body {
+  background: var(--c-bg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--c-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ============ Scrollbar ============ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--c-bg); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--c-primary), var(--c-cyan));
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--c-cyan), var(--c-primary));
+}
+
+/* ============ Selection ============ */
+::selection {
+  background: var(--c-primary-dim);
+  color: var(--c-text-primary);
+}
+
+/* ============ CSS Animated Background ============ */
+/* Pure CSS star/grid background — zero JS, zero lag */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79, 142, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 0% 60%, rgba(0, 212, 255, 0.06) 0%, transparent 50%);
+  background-color: var(--c-bg);
+}
+
+.bg-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 142, 247, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 142, 247, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+
+.bg-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 2px at 15% 25%, rgba(79, 142, 247, 0.6) 0%, transparent 100%),
+    radial-gradient(circle 1px at 85% 15%, rgba(0, 212, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 70% 70%, rgba(139, 92, 246, 0.4) 0%, transparent 100%),
+    radial-gradient(circle 1px at 30% 80%, rgba(79, 142, 247, 0.4) 0%, transparent 100%),
+    radial-gradient(circle 2px at 50% 50%, rgba(0, 212, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px at 90% 50%, rgba(139, 92, 246, 0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 10% 60%, rgba(79, 142, 247, 0.4) 0%, transparent 100%),
+    radial-gradient(circle 1px at 60% 30%, rgba(0, 212, 255, 0.5) 0%, transparent 100%);
+  animation: twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.4; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+/* ============ Glassmorphism Utility ============ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ============ Gradient Text Utility ============ */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradientText {
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-cyan) 40%, var(--c-violet) 70%, var(--c-primary) 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* ============ Badge Utility ============ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid;
+}
+
+.badge-primary {
+  color: var(--c-primary);
+  border-color: var(--c-primary-dim);
+  background: var(--c-primary-dim);
+}
+
+.badge-cyan {
+  color: var(--c-cyan);
+  border-color: var(--c-cyan-dim);
+  background: var(--c-cyan-dim);
+}
+
+.badge-violet {
+  color: var(--c-violet);
+  border-color: var(--c-violet-dim);
+  background: var(--c-violet-dim);
+}
+
+.badge-emerald {
+  color: var(--c-emerald);
+  border-color: var(--c-emerald-dim);
+  background: var(--c-emerald-dim);
+}
+
+/* ============ Section Utility ============ */
+.section {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============ Container Utility ============ */
+.container-max {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ============ Floating Animation ============ */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+/* ============ Shimmer ============ */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%) rotate(20deg); }
+  100% { transform: translateX(200%) rotate(20deg); }
+}
+
+/* ============ Fade-in Up ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ Pulse Ring ============ */
+@keyframes pulseRing {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}

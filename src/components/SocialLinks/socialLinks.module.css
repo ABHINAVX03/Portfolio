@@ -1,0 +1,55 @@
+@font-face {
+  font-family: "Prototype";
+  src: url("../../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+.drawer {
+  background-color: var(--color-background-card-button);
+  height: 100vh;
+}
+
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text-color);
+}
+
+.closeIcon {
+  margin-left: 20px;
+  width: 80px;
+  cursor: pointer;
+}
+
+.image {
+  width: 80px;
+}
+
+.list {
+  margin-top: 50px;
+  color: var(--color-text-color);
+}
+
+.button {
+  width: 250px;
+  padding-bottom: 10px;
+}
+
+.icon {
+  color: var(--color-text-color);
+}
+
+.discordIcon {
+  color: var(--color-text-color);
+  font-size: 25px;
+}
+
+.textContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--color-copyright);
+  font-size: 12px;
+  font-family: "Proxima Nova", -apple-system, Roboto, Arial, sans-serif;
+  margin-top: 400px;
+}
