@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 const GMAIL_USER = "guptaabhinav697@gmail.com";
-const GMAIL_PASSWORD = "kczk myfi nkvq cfef";
+const GMAIL_PASSWORD = "kczkmyfinkvqcfef";
 
 // Create transporter with error handling
 let transporter;
@@ -9,7 +9,9 @@ let transporter;
 function getTransporter() {
   if (!transporter) {
     transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
       auth: {
         user: GMAIL_USER,
         pass: GMAIL_PASSWORD,
@@ -94,13 +96,21 @@ export async function POST(request) {
       `,
     };
 
-    // Send admin email in background (don't await)
-    transporter.sendMail(adminMailOptions).catch((error) => {
-      console.error("Admin email error:", error.message);
-      // Don't fail the response if email fails
-    });
+    try {
+      await transporter.sendMail(adminMailOptions);
+    } catch (error) {
+      console.error("Admin email error:", error);
+      return Response.json(
+        {
+          success: false,
+          error: "Failed to send email. Please try again later.",
+          details: error.message,
+        },
+        { status: 502 }
+      );
+    }
 
-    // Respond immediately to user
+    // Respond after email is sent
     return Response.json(
       {
         success: true,
