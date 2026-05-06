@@ -1,36 +1,24 @@
 import nodemailer from "nodemailer";
 
 const GMAIL_USER = "guptaabhinav697@gmail.com";
-const GMAIL_PASSWORD = "kczk myfi nkvq cfef";
-
-// Create transporter with error handling
-let transporter;
+const GMAIL_PASSWORD = "kczkmyfinkvqcfef";
 
 function getTransporter() {
-  if (!transporter) {
-    transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: GMAIL_USER,
-        pass: GMAIL_PASSWORD,
-      },
-      pool: true,
-      maxConnections: 1,
-      maxMessages: 100,
-      rateDelta: 1000,
-      rateLimit: 3,
-    });
-
-    // Verify connection
-    transporter.verify((error, success) => {
-      if (error) {
-        console.error("Gmail transporter verification failed:", error.message);
-      } else if (success) {
-        console.log("Gmail transporter ready");
-      }
-    });
-  }
-  return transporter;
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: GMAIL_USER,
+      pass: GMAIL_PASSWORD,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+    greetingTimeout: 30000,
+    connectionTimeout: 30000,
+  });
 }
 
 export async function POST(request) {
@@ -94,13 +82,21 @@ export async function POST(request) {
       `,
     };
 
-    // Send admin email in background (don't await)
-    transporter.sendMail(adminMailOptions).catch((error) => {
-      console.error("Admin email error:", error.message);
-      // Don't fail the response if email fails
-    });
+    try {
+      await transporter.sendMail(adminMailOptions);
+    } catch (error) {
+      console.error("Admin email error:", error);
+      return Response.json(
+        {
+          success: false,
+          error: "Failed to send email. Please try again later.",
+          details: error.message,
+        },
+        { status: 502 }
+      );
+    }
 
-    // Respond immediately to user
+    // Respond after email is sent
     return Response.json(
       {
         success: true,
