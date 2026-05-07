@@ -101,6 +101,9 @@ const ProjectCard = ({ project, index }) => {
     >
       {/* Image with overlay */}
       <div className={styles.cardImage}>
+        {project.type.includes("Blockchain") && (
+          <span className={styles.web3Badge}>Web3 Highlight</span>
+        )}
         <Image
           src={project.image}
           alt={project.name}
@@ -172,11 +175,12 @@ const ProjectCard = ({ project, index }) => {
               key={tag}
               className={styles.techTag}
               style={{
-                background: `rgba(${cfg.accent.replace('rgb(', '').replace(')', '')}, 0.1)`,
-                borderColor: `rgba(${cfg.accent.replace('rgb(', '').replace(')', '')}, 0.3)`
+                background: cfg.tagBg,
+                borderColor: cfg.tagBorder,
+                color: cfg.accent
               }}
               initial={{ opacity: 0, scale: 0 }}
-              animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0.7, scale: 1 }}
+              animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0.85, scale: 1 }}
               transition={{ delay: tagIndex * 0.1 }}
             >
               {tag}
@@ -237,7 +241,7 @@ const Projects = () => {
           </div>
 
           <h2 className={styles.heading}>
-            Projects that <span className={styles.headingAccent}>Matter</span>
+            What I&apos;ve <span className={styles.headingAccent}>Built</span>
           </h2>
           <p className={styles.subheading}>
             Production-grade applications — React frontends, Java Spring Boot backends, REST APIs & more.

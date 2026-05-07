@@ -229,6 +229,24 @@
   z-index: 2;
 }
 
+.web3Badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a8f0ff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.45);
+  background: rgba(0, 212, 255, 0.14);
+  backdrop-filter: blur(8px);
+}
+
 /* Hover Content */
 .hoverContent {
   position: absolute;

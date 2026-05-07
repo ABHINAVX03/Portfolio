@@ -271,9 +271,9 @@ a.contactValue:hover {
 
 .input:focus,
 .textarea:focus {
-  border-color: rgba(79, 142, 247, 0.5);
-  background: rgba(79, 142, 247, 0.04);
-  box-shadow: 0 0 0 3px rgba(79, 142, 247, 0.1);
+  border-color: var(--c-primary);
+  background: rgba(79, 142, 247, 0.05);
+  box-shadow: 0 0 15px rgba(79, 142, 247, 0.3), inset 0 0 10px rgba(79, 142, 247, 0.1);
 }
 
 .submitBtn {

@@ -77,10 +77,8 @@ const Hero = () => {
 
           {/* Description */}
           <motion.p className={styles.description} variants={itemVariants}>
-            I craft high-performance web applications with{" "}
-            <strong>React & Next.js</strong> on the frontend and{" "}
-            <strong>Java Spring Boot</strong> powering scalable REST APIs on the
-            backend. Passionate about clean architecture and great UX.
+            <strong>MCA Student at IIIT Vadodara</strong> · Full Stack Developer ·{" "}
+            <strong>200+ DSA Problems</strong> · Codeforces Pupil
           </motion.p>
 
           {/* Tech badges */}

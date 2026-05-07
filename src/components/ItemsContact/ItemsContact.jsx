@@ -23,7 +23,7 @@ const ItemsContact = () => {
         <a href={socials.Location} target="_blank" rel="noopener noreferrer">
           <li>
             <LocationOnIcon className={styles.icon} style={{ fontSize: 45 }} />
-            Adrash Nagar, Delhi, India
+            Delhi, India
           </li>
         </a>
         <a href={socials.Linkedin} target="_blank" rel="noopener noreferrer">

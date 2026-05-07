@@ -48,7 +48,7 @@ const contactItems = [
   {
     icon: <LocationOnIcon style={{ fontSize: 22 }} />,
     label: "Location",
-    value: "Adarsh Nagar, Delhi, India",
+    value: "Delhi, India",
     href: null,
   },
 ];

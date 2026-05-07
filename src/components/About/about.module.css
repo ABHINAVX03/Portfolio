@@ -323,6 +323,253 @@
   border-top: 1px solid rgba(34, 196, 112, 0.1);
 }
 
+.proGithubSection {
+  margin-top: 4rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(34, 196, 112, 0.15);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(20, 25, 35, 0.6), rgba(10, 14, 22, 0.8));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.proGithubSection:hover {
+  border-color: rgba(34, 196, 112, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(34, 196, 112, 0.05);
+}
+
+.proGithubHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.activityTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 26px;
+  font-weight: 800;
+  color: #ececec;
+  letter-spacing: -0.02em;
+}
+
+.activitySubtitle {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #8a93a8;
+}
+
+.githubProBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(34, 196, 112, 0.1);
+  border: 1px solid rgba(34, 196, 112, 0.3);
+  color: #22c470;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.githubProBtn:hover {
+  background: rgba(34, 196, 112, 0.2);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(34, 196, 112, 0.2);
+}
+
+.proGithubStats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
+}
+
+.proStatItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.proStatValue {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.proStatLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #22c470;
+  font-weight: 600;
+}
+
+.proStatDivider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.proGithubGraphContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+}
+
+.proGithubGraph {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+.graphGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(34, 196, 112, 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.timelineItem {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.timelineHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.timelineHead h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #e8edf8;
+}
+
+.timelineHead span {
+  font-size: 12px;
+  color: #95a0b8;
+  font-family: var(--font-mono);
+}
+
+.timelineOrg {
+  margin: 0.3rem 0 0.6rem;
+  color: #b4bfd6;
+  font-size: 14px;
+}
+
+.timelineNote {
+  margin: 0;
+  color: #b4bfd6;
+  font-size: 14px;
+}
+
+.timelineItem ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: #c8d1e3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.splitGrid .activitySection {
+  margin-top: 0;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-decoration: none;
+  border: 1px solid rgba(34, 196, 112, 0.22);
+  background: rgba(34, 196, 112, 0.06);
+  color: #eaf5ee;
+  border-radius: 10px;
+  padding: 0.8rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.profileMeta {
+  color: #9db0d8;
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
+.certList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.certItem {
+  border: 1px solid rgba(79, 142, 247, 0.22);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  color: #d6e1f7;
+  background: rgba(79, 142, 247, 0.06);
+  font-size: 14px;
+}
+
 .sliderLabel {
   text-align: center;
   font-family: var(--font-mono);
@@ -354,8 +601,29 @@
     grid-template-columns: 1fr;
   }
 
+  .splitGrid {
+    grid-template-columns: 1fr;
+  }
+
   .socialsGrid {
     grid-template-columns: 1fr;
+  }
+
+  .activitySection {
+    padding: 1rem;
+  }
+
+  .activityCards {
+    grid-template-columns: 1fr;
+  }
+
+  .githubProfile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profileGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

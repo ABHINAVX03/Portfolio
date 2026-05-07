@@ -57,9 +57,9 @@
   --glow-cyan:        0 0 30px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.15);
 
   /* Typography */
-  --font-sans:  'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans:  var(--font-space-grotesk), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:  var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:  var(--font-jetbrains-mono), 'Fira Code', monospace;
   --font-proto: 'Prototype', sans-serif;
 
   /* Spacing scale */
