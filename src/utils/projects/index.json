@@ -19,7 +19,7 @@
       "id": "hospital-management",
       "name": "MediCore-Hospital Management",
       "type": "Full Stack · Java Backend",
-      "repo": "https://github.com/ABHINAVX03/MediCore-Hospital-Management",
+      "repo": "https://github.com/ABHINAVX03",
       "deploy": null,
       "image": "/projects/project3.png",
       "description": "Enterprise hospital management system with patient records, doctor scheduling, and billing modules. Java Spring Boot microservices architecture with PostgreSQL and secure JWT authentication.",
