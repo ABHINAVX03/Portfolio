@@ -241,7 +241,7 @@ const Projects = () => {
     const aPriority = typeof a.priority === "number" ? a.priority : 999;
     const bPriority = typeof b.priority === "number" ? b.priority : 999;
     if (aPriority !== bPriority) return aPriority - bPriority;
-    if (a.featured !== b.featured) return b.featured - a.featured;
+    if (a.featured !== b.featured) return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
     return b.year - a.year;
   });
   const stats = {
