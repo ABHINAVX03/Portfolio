@@ -16,21 +16,6 @@
       "status": "completed"
     },
     {
-      "id": "hospital-management",
-      "name": "MediCore-Hospital Management",
-      "type": "Full Stack · Java Backend",
-      "repo": "https://github.com/ABHINAVX03",
-      "deploy": null,
-      "image": "/projects/project3.png",
-      "description": "Enterprise hospital management system with patient records, doctor scheduling, and billing modules. Java Spring Boot microservices architecture with PostgreSQL and secure JWT authentication.",
-      "tags": ["Java", "Spring Boot", "JWT", "PostgreSQL", "React"],
-      "color": "emerald",
-      "priority": 5,
-      "featured": true,
-      "year": 2026,
-      "status": "completed"
-    },
-    {
       "id": "travel-world",
       "name": "Travel World",
       "type": "Full Stack · MERN",
@@ -70,16 +55,31 @@
       "description": "Blockchain-based voting system with end-to-end on-chain vote recording. Integrates Solidity smart contracts with React frontend, MetaMask, and admin controls for election timing and candidate management.",
       "tags": ["React", "Express.js", "Solidity", "MetaMask", "Ganache"],
       "color": "primary",
-      "priority": 2,
+      "priority": 4,
       "featured": true,
       "year": 2024,
+      "status": "completed"
+    },
+    {
+      "id": "hospital-management",
+      "name": "MediCore - Hospital Management",
+      "type": "Full Stack · Java Backend",
+      "repo": null,
+      "deploy": null,
+      "image": "/projects/project3.png",
+      "description": "Enterprise hospital management system with patient records, doctor scheduling, and billing modules. Java Spring Boot microservices architecture with PostgreSQL and secure JWT authentication.",
+      "tags": ["Java", "Spring Boot", "JWT", "PostgreSQL", "React"],
+      "color": "emerald",
+      "priority": 5,
+      "featured": true,
+      "year": 2026,
       "status": "completed"
     }
   ],
   "metadata": {
     "totalProjects": 5,
     "featuredProjects": 5,
-    "lastUpdated": "2024-12-19",
-    "version": "1.0.0"
+    "lastUpdated": "2026-05-16",
+    "version": "1.1.0"
   }
 }

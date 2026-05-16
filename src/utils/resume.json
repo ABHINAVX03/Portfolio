@@ -4,45 +4,50 @@
     "title": "Full Stack Developer",
     "email": "guptaabhinav697@gmail.com",
     "phone": "+91-XXXXXXXXXX",
-    "location": "India",
-    "summary": "Experienced Full Stack Developer with expertise in React, Java Spring Boot, and modern web technologies. Passionate about building scalable applications and delivering high-quality solutions."
+    "location": "Delhi, India",
+    "github": "https://github.com/ABHINAVX03",
+    "linkedin": "https://www.linkedin.com/in/abhinav-gupta-367369167",
+    "summary": "Full Stack Developer and MCA student at IIIT Vadodara specializing in React, Next.js, Java Spring Boot, and blockchain. Strong academic record (9.0 GPA), 200+ DSA problems solved, and hands-on internship experience in blockchain software development."
   },
   "experience": [
     {
       "id": 1,
-      "company": "Your Company",
-      "position": "Full Stack Developer",
-      "duration": "Jan 2024 - Present",
-      "description": "Develop and maintain web applications using React and Spring Boot. Implement RESTful APIs and optimize database queries.",
+      "company": "Your Internship Company",
+      "position": "Software Developer Intern (Blockchain)",
+      "duration": "Fill in dates",
+      "description": "Blockchain-focused internship involving smart contract development and Web3 integrations.",
       "responsibilities": [
-        "Built scalable backend services using Java Spring Boot",
-        "Developed responsive UI components with React",
-        "Optimized application performance by 40%"
+        "Developed Solidity smart contracts for decentralized applications",
+        "Integrated Web3.js with React frontends",
+        "Worked on blockchain data reading and transaction handling"
       ]
     }
   ],
   "education": [
     {
       "id": 1,
-      "institution": "Your University",
-      "degree": "Bachelor of Technology",
-      "field": "Computer Science",
-      "year": "2024",
-      "gpa": "8.5/10"
+      "institution": "IIIT Vadodara",
+      "degree": "Master of Computer Applications (MCA)",
+      "field": "Computer Applications",
+      "year": "2025–2027",
+      "gpa": "9.0/10"
+    },
+    {
+      "id": 2,
+      "institution": "GGSIPU",
+      "degree": "Bachelor of Computer Applications (BCA)",
+      "field": "Computer Applications",
+      "year": "2022–2025",
+      "gpa": "9.2/10"
     }
   ],
   "skills": {
-    "languages": ["JavaScript", "TypeScript", "Java", "Python"],
-    "frontend": ["React", "Next.js", "Tailwind CSS", "Framer Motion"],
-    "backend": ["Node.js", "Express", "Java Spring Boot", "PostgreSQL"],
-    "tools": ["Git", "Docker", "AWS", "Vercel"]
+    "languages": ["JavaScript", "TypeScript", "Java", "Solidity"],
+    "frontend": ["React", "Next.js", "Tailwind CSS", "Framer Motion", "Redux"],
+    "backend": ["Node.js", "Express", "Java Spring Boot", "REST APIs"],
+    "databases": ["PostgreSQL", "MongoDB", "MySQL"],
+    "blockchain": ["Solidity", "Web3.js", "MetaMask", "Ganache"],
+    "tools": ["Git", "Docker", "Vercel", "Postman"]
   },
-  "certifications": [
-    {
-      "id": 1,
-      "name": "Full Stack Web Development",
-      "issuer": "Udemy",
-      "year": "2024"
-    }
-  ]
+  "certifications": []
 }

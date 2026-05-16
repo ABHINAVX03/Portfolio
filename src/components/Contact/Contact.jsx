@@ -15,6 +15,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import socials from "@/utils/socials";
+import formValidation from "@/utils/formValidation";
 
 const containerVariants = {
   hidden: {},
@@ -69,15 +70,9 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.user_name || !formData.user_email || !formData.message) {
-      warnNotify();
-      return;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.user_email)) {
-      emailWarnNotify();
-      return;
-    }
+    e.preventDefault();
+    if (!formValidation(formData)) return;
+
     setIsSending(true);
     try {
       const response = await fetch("/api/send-email", {

@@ -1,9 +1,15 @@
 import nodemailer from "nodemailer";
 
-const GMAIL_USER = "guptaabhinav697@gmail.com";
-const GMAIL_PASSWORD = "kczkmyfinkvqcfef";
+// ✅ Credentials loaded from environment variables (never hardcode these)
+const GMAIL_USER = process.env.GMAIL_USER;
+const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD;
 
 function getTransporter() {
+  if (!GMAIL_USER || !GMAIL_PASSWORD) {
+    console.error("Missing GMAIL_USER or GMAIL_PASSWORD environment variables.");
+    return null;
+  }
+
   return nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -25,7 +31,6 @@ export async function POST(request) {
   try {
     const { user_name, user_email, message } = await request.json();
 
-    // Validate input
     if (!user_name || !user_email || !message) {
       return Response.json(
         { error: "Missing required fields" },
@@ -33,7 +38,6 @@ export async function POST(request) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(user_email)) {
       return Response.json({ error: "Invalid email format" }, { status: 400 });
@@ -42,24 +46,18 @@ export async function POST(request) {
     const transporter = getTransporter();
 
     if (!transporter) {
-      console.warn("Email service unavailable, but form data received:", {
-        user_name,
-        user_email,
-      });
       return Response.json(
         {
           success: false,
-          warning:
-            "Email service is unavailable. Please check the application settings.",
+          warning: "Email service is unavailable. Please check environment variables.",
         },
         { status: 503 }
       );
     }
 
-    // Email to admin with detailed HTML
     const adminMailOptions = {
       from: GMAIL_USER,
-      to: "guptaabhinav697@gmail.com",
+      to: GMAIL_USER, // Send to yourself
       replyTo: user_email,
       subject: `New Contact Form Submission from ${user_name}`,
       html: `
@@ -85,23 +83,20 @@ export async function POST(request) {
     try {
       await transporter.sendMail(adminMailOptions);
     } catch (error) {
-      console.error("Admin email error:", error);
+      console.error("Email send error:", error);
       return Response.json(
         {
           success: false,
           error: "Failed to send email. Please try again later.",
-          details: error.message,
         },
         { status: 502 }
       );
     }
 
-    // Respond after email is sent
     return Response.json(
       {
         success: true,
-        message:
-          "Thank you! Your message has been received. I'll get back to you soon.",
+        message: "Thank you! Your message has been received. I'll get back to you soon.",
       },
       { status: 200 }
     );

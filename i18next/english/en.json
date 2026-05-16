@@ -1,7 +1,7 @@
 {
   "about": {
     "title": "About me",
-    "text": "I am a web developer with strong skills in HTML, CSS, and JavaScript, enabling me to create appealing interfaces. Furthermore, I have experience developing with technologies such as React, Next, and Redux/Toolkit. On the server side, I use Express and relational databases like SQL, Prisma, and PostgreSQL to ensure efficient performance and effective data management."
+    "text": "I am a Full Stack Developer and MCA student at IIIT Vadodara with a 9.0 GPA, previously completing my BCA from GGSIPU with a 9.2 GPA. My core stack spans React, Next.js, TypeScript, and Tailwind on the frontend, with Java Spring Boot and Node.js/Express on the backend, backed by PostgreSQL and MongoDB. I have internship experience in blockchain-focused software development using Solidity and Web3.js, and I am actively solving DSA problems with 200+ questions completed."
   },
   "contact": {
     "title": "Let's get in touch!"
@@ -11,7 +11,7 @@
   },
   "navbar": {
     "home": "Home",
-    "project": "Project",
+    "project": "Projects",
     "about": "About",
     "contact": "Contact"
   },

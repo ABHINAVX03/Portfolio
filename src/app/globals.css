@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: "Prototype";
   src: url("../assets/fonts/Prototype.ttf") format("truetype");
@@ -101,6 +105,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+}
+
+html:not(.dark) body {
+  background: #f4f7fb;
+  color: #0f172a;
 }
 
 a {

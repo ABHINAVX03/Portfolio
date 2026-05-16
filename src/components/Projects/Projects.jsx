@@ -132,17 +132,20 @@ const ProjectCard = ({ project, index }) => {
           transition={{ duration: 0.3 }}
         >
           <div className={styles.hoverActions}>
-            <motion.a
-              href={project.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.actionBtn}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <GithubIcon /> Code
-            </motion.a>
+            {project.repo && (
+              <motion.a
+                href={project.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.actionBtn}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <GithubIcon /> Code
+              </motion.a>
+            )}
             {project.deploy && (
+
               <motion.a
                 href={project.deploy}
                 target="_blank"
