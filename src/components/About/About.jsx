@@ -318,7 +318,7 @@ const About = () => {
                   My latest activity and repository stats on GitHub.
                 </p>
               </div>
-              <a href="https://github.com/ABHINAVX03" target="_blank" rel="noopener noreferrer" className={styles.githubProBtn}>
+              <a href={socials.Github} target="_blank" rel="noopener noreferrer" className={styles.githubProBtn}>
                 <GitHubIcon style={{ fontSize: 20 }} />
                 <span>View Profile</span>
               </a>
@@ -458,9 +458,12 @@ const About = () => {
               </motion.a>
               
               <div className={styles.locationOrb}>
-                <LocationOnIcon style={{ fontSize: 20 }} />
-                <span>Delhi, India</span>
+                <a href={socials.Location} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <LocationOnIcon style={{ fontSize: 20 }} />
+                  <span>Delhi, India</span>
+                </a>
               </div>
+
             </div>
           </motion.div>
 

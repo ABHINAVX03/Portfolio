@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { FiArrowRight, FiDownload, FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import socials from "@/utils/socials";
 
 const skills = ["React", "Next.js", "TypeScript", "Java", "Spring Boot", "PostgreSQL"];
 const roles = ["Full Stack Developer", "Java Spring Boot Engineer", "React Developer"];
@@ -138,7 +139,7 @@ const Hero = () => {
 
           <div className="flex items-center gap-3">
             <a
-              href="https://github.com/ABHINAVX03"
+              href={socials.Github}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit GitHub profile"
@@ -147,7 +148,7 @@ const Hero = () => {
               <FiGithub size={18} />
             </a>
             <a
-              href="https://www.linkedin.com/in/abhinav-gupta-367369167"
+              href={socials.Linkedin}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Visit LinkedIn profile"
@@ -156,13 +157,14 @@ const Hero = () => {
               <FiLinkedin size={18} />
             </a>
             <a
-              href="mailto:guptaabhinav697@gmail.com"
+              href={socials.Mail}
               aria-label="Send an email"
               className="rounded-lg border border-white/15 bg-white/5 p-2.5 text-white/85 transition hover:text-white"
             >
               <FiMail size={18} />
             </a>
           </div>
+
         </motion.div>
 
         <motion.div

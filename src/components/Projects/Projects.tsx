@@ -6,6 +6,31 @@ import projectsData from "@/utils/projects/index.json";
 import Image from "next/image";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
+interface Project {
+  id: string;
+  name: string;
+  type: string;
+  repo: string | null;
+  deploy: string | null;
+  image: string;
+  description: string;
+  tags: string[];
+  color: 'primary' | 'cyan' | 'violet' | 'emerald';
+  priority: number;
+  featured: boolean;
+  year: number;
+  status: 'completed' | 'in-progress' | 'planned';
+}
+
+interface ColorConfig {
+  accent: string;
+  glow: string;
+  border: string;
+  tagBg: string;
+  tagBorder: string;
+  gradient: string;
+}
+
 const containerVariants = {
   hidden: {},
   show: {
@@ -38,7 +63,7 @@ const fadeUp = {
   },
 };
 
-const colorConfig = {
+const colorConfig: Record<string, ColorConfig> = {
   primary: {
     accent:      "#4f8ef7",
     glow:        "rgba(79,142,247,0.18)",
@@ -81,8 +106,10 @@ const GithubIcon = () => (
 );
 
 // Unique project card with reveal animation
-const ProjectCard = ({ project, index }) => {
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [imgSrc, setImgSrc] = useState(project.image);
+
   const cfg = colorConfig[project.color] || colorConfig.primary;
 
   return (
@@ -91,7 +118,7 @@ const ProjectCard = ({ project, index }) => {
       variants={fadeUp}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      style={{ "--accent": cfg.accent, "--glow": cfg.glow, "--border-c": cfg.border }}
+      style={{ "--accent": cfg.accent, "--glow": cfg.glow, "--border-c": cfg.border } as any}
       whileHover={{
         y: -8,
         scale: 1.02,
@@ -105,14 +132,16 @@ const ProjectCard = ({ project, index }) => {
           <span className={styles.web3Badge}>Web3 Highlight</span>
         )}
         <Image
-          src={project.image}
+          src={imgSrc}
           alt={project.name}
           width={400}
           height={250}
           className={styles.image}
           loading="lazy"
           unoptimized
+          onError={() => setImgSrc("/projects/default.png")}
         />
+
         <div className={styles.imageOverlay} />
 
         {/* Floating number */}
@@ -181,7 +210,7 @@ const ProjectCard = ({ project, index }) => {
                 background: cfg.tagBg,
                 borderColor: cfg.tagBorder,
                 color: cfg.accent
-              }}
+              } as any}
               initial={{ opacity: 0, scale: 0 }}
               animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0.85, scale: 1 }}
               transition={{ delay: tagIndex * 0.1 }}
@@ -195,7 +224,7 @@ const ProjectCard = ({ project, index }) => {
       {/* Animated border */}
       <motion.div
         className={styles.cardBorder}
-        style={{ background: cfg.gradient }}
+        style={{ background: cfg.gradient } as any}
         initial={{ scaleX: 0 }}
         animate={isHovered ? { scaleX: 1 } : { scaleX: 0 }}
         transition={{ duration: 0.4 }}
@@ -206,9 +235,9 @@ const ProjectCard = ({ project, index }) => {
 
 /* ---- Main section ---- */
 const Projects = () => {
-  const ref = useRef();
+  const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const projects = (projectsData.projects || []).slice().sort((a, b) => {
+  const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
     const aPriority = typeof a.priority === "number" ? a.priority : 999;
     const bPriority = typeof b.priority === "number" ? b.priority : 999;
     if (aPriority !== bPriority) return aPriority - bPriority;
@@ -218,7 +247,7 @@ const Projects = () => {
   const stats = {
     total: projects.length,
     featured: projects.filter((project) => project.featured).length,
-    technologies: projects.reduce((acc, project) => {
+    technologies: projects.reduce((acc: Record<string, number>, project) => {
       project.tags.forEach((tag) => {
         acc[tag] = (acc[tag] || 0) + 1;
       });

@@ -1,12 +1,10 @@
 "use client";
 import styles from "./contact.module.css";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import {
   successNotify,
-  warnNotify,
   errorNotify,
-  emailWarnNotify,
 } from "@/utils/toastify.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,7 +30,7 @@ const contactItems = [
     icon: <EmailIcon style={{ fontSize: 22 }} />,
     label: "Email",
     value: "guptaabhinav697@gmail.com",
-    href: "mailto:guptaabhinav697@gmail.com",
+    href: socials.Mail,
   },
   {
     icon: <LinkedInIcon style={{ fontSize: 22 }} />,
@@ -50,12 +48,12 @@ const contactItems = [
     icon: <LocationOnIcon style={{ fontSize: 22 }} />,
     label: "Location",
     value: "Delhi, India",
-    href: null,
+    href: socials.Location,
   },
 ];
 
 const Contact = () => {
-  const ref = useRef();
+  const ref = useRef<HTMLElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [isSending, setIsSending] = useState(false);
   const [formData, setFormData] = useState({
@@ -64,12 +62,11 @@ const Contact = () => {
     message: "",
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formValidation(formData)) return;
 
@@ -233,3 +230,4 @@ const Contact = () => {
 };
 
 export default Contact;
+

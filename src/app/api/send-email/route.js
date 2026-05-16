@@ -1,12 +1,12 @@
 import nodemailer from "nodemailer";
 
 // ✅ Credentials loaded from environment variables (never hardcode these)
-const GMAIL_USER = process.env.GMAIL_USER;
-const GMAIL_PASSWORD = process.env.GMAIL_PASSWORD;
+const EMAIL_USER = process.env.EMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS;
 
 function getTransporter() {
-  if (!GMAIL_USER || !GMAIL_PASSWORD) {
-    console.error("Missing GMAIL_USER or GMAIL_PASSWORD environment variables.");
+  if (!EMAIL_USER || !EMAIL_PASS) {
+    console.error("Missing EMAIL_USER or EMAIL_PASS environment variables.");
     return null;
   }
 
@@ -16,8 +16,8 @@ function getTransporter() {
     secure: false,
     requireTLS: true,
     auth: {
-      user: GMAIL_USER,
-      pass: GMAIL_PASSWORD,
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
     },
     tls: {
       rejectUnauthorized: false,
@@ -56,8 +56,8 @@ export async function POST(request) {
     }
 
     const adminMailOptions = {
-      from: GMAIL_USER,
-      to: GMAIL_USER, // Send to yourself
+      from: EMAIL_USER,
+      to: EMAIL_USER, // Send to yourself
       replyTo: user_email,
       subject: `New Contact Form Submission from ${user_name}`,
       html: `
