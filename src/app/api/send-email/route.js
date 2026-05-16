@@ -1,8 +1,8 @@
 import nodemailer from "nodemailer";
 
 // ✅ Credentials loaded from environment variables (never hardcode these)
-const EMAIL_USER = process.env.EMAIL_USER;
-const EMAIL_PASS = process.env.EMAIL_PASS;
+const EMAIL_USER = process.env.EMAIL_USER || process.env.GMAIL_USER;
+const EMAIL_PASS = process.env.EMAIL_PASS || process.env.GMAIL_PASSWORD;
 
 function getTransporter() {
   if (!EMAIL_USER || !EMAIL_PASS) {
