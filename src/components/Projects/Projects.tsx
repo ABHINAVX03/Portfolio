@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import projectsData from "@/utils/projects/index.json";
 import Image from "next/image";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { FiArrowRight, FiExternalLink } from "react-icons/fi";
 
 interface Project {
   id: string;
@@ -105,6 +105,100 @@ const GithubIcon = () => (
   </svg>
 );
 
+const uberCaseStudy = {
+  problem: "Design a backend that can coordinate riders, drivers, trips, and fare calculation with clear service boundaries.",
+  architecture: [
+    "Layered Spring Boot services for users, drivers, rides, and pricing",
+    "REST controllers separated from business logic and persistence",
+    "Dockerized deployment path for repeatable local and cloud setup",
+  ],
+  apis: ["Auth & rider onboarding", "Driver matching", "Ride booking", "Fare calculation", "Trip status updates"],
+  stack: ["Java", "Spring Boot", "REST APIs", "Docker", "OOP"],
+};
+
+const UberCaseStudy = ({ project }: { project?: Project }) => {
+  if (!project) return null;
+
+  return (
+    <motion.article
+      className={styles.flagship}
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.65, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
+    >
+      <div className={styles.flagshipContent}>
+        <div className={styles.flagshipEyebrow}>Flagship Case Study</div>
+        <h3 className={styles.flagshipTitle}>Uber-style Ride-Hailing Backend</h3>
+        <p className={styles.flagshipSummary}>{project.description}</p>
+
+        <div className={styles.caseGrid}>
+          <div className={styles.casePanel}>
+            <span>Problem</span>
+            <p>{uberCaseStudy.problem}</p>
+          </div>
+          <div className={styles.casePanel}>
+            <span>Architecture</span>
+            <ul>
+              {uberCaseStudy.architecture.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className={styles.casePanel}>
+            <span>Core APIs</span>
+            <div className={styles.apiList}>
+              {uberCaseStudy.apis.map((api) => (
+                <small key={api}>{api}</small>
+              ))}
+            </div>
+          </div>
+          <div className={styles.casePanel}>
+            <span>Tech Stack</span>
+            <div className={styles.apiList}>
+              {uberCaseStudy.stack.map((tech) => (
+                <small key={tech}>{tech}</small>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.flagshipActions}>
+          {project.repo && (
+            <a href={project.repo} target="_blank" rel="noopener noreferrer">
+              <GithubIcon /> GitHub
+            </a>
+          )}
+          {project.deploy && (
+            <a href={project.deploy} target="_blank" rel="noopener noreferrer">
+              <FiExternalLink size={16} /> Live Demo
+            </a>
+          )}
+          <a href="#contact">
+            Hire Me <FiArrowRight size={16} />
+          </a>
+        </div>
+      </div>
+
+      <div className={styles.flagshipVisual}>
+        <Image
+          src={project.image}
+          alt={`${project.name} screenshot`}
+          width={760}
+          height={480}
+          className={styles.flagshipImage}
+          priority
+          sizes="(max-width: 1024px) 100vw, 44vw"
+        />
+        <div className={styles.proofStrip}>
+          <span>Driver Matching</span>
+          <span>Fare Logic</span>
+          <span>REST APIs</span>
+        </div>
+      </div>
+    </motion.article>
+  );
+};
+
 // Unique project card with reveal animation
 const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -150,7 +244,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
           height={250}
           className={styles.image}
           loading="lazy"
-          unoptimized
+          sizes="(max-width: 768px) 100vw, (max-width: 1400px) 50vw, 380px"
           onError={() => setImgSrc("/projects/default.png")}
         />
 
@@ -195,7 +289,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <OpenInNewIcon /> Live
+                <FiExternalLink size={15} /> Live
               </motion.a>
             )}
           </div>
@@ -266,6 +360,7 @@ const Projects = () => {
       return acc;
     }, {}),
   };
+  const flagshipProject = projects.find((project) => project.id === "uber-ride-platform");
 
   return (
     <section className={styles.section} ref={ref}>
@@ -309,6 +404,8 @@ const Projects = () => {
             </div>
           </div>
         </motion.div>
+
+        <UberCaseStudy project={flagshipProject} />
 
         {/* ---- Unique Masonry Grid ---- */}
         <motion.div

@@ -200,6 +200,25 @@ a.contactValue:hover {
   margin-top: 2px;
 }
 
+.hireCard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: var(--radius-lg);
+  background: #10b981;
+  color: #04130c;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 800;
+  transition: var(--transition-base);
+}
+
+.hireCard:hover {
+  background: #34d399;
+  transform: translateY(-2px);
+}
+
 /* Right — Form */
 .formColumn {
   background: rgba(11, 15, 26, 0.7);
@@ -226,6 +245,15 @@ a.contactValue:hover {
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .formRow {
@@ -348,6 +376,26 @@ a.contactValue:hover {
   font-size: 11px;
   color: var(--c-text-muted);
   letter-spacing: 0.06em;
+}
+
+.footerCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgba(79, 142, 247, 0.35);
+  border-radius: 999px;
+  color: #dbe8ff;
+  background: rgba(79, 142, 247, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+  transition: var(--transition-base);
+}
+
+.footerCta:hover {
+  color: #fff;
+  background: rgba(79, 142, 247, 0.18);
 }
 
 /* Responsive */

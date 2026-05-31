@@ -8,10 +8,7 @@ import {
 } from "@/utils/toastify.js";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import EmailIcon from "@mui/icons-material/Email";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
 import socials from "@/utils/socials";
 import formValidation from "@/utils/formValidation";
 
@@ -27,25 +24,25 @@ const itemVariants = {
 
 const contactItems = [
   {
-    icon: <EmailIcon style={{ fontSize: 22 }} />,
+    icon: <FiMail size={22} />,
     label: "Email",
     value: "guptaabhinav697@gmail.com",
     href: socials.Mail,
   },
   {
-    icon: <LinkedInIcon style={{ fontSize: 22 }} />,
+    icon: <FiLinkedin size={22} />,
     label: "LinkedIn",
     value: "abhinav-gupta-367369167",
     href: socials.Linkedin,
   },
   {
-    icon: <GitHubIcon style={{ fontSize: 22 }} />,
+    icon: <FiGithub size={22} />,
     label: "GitHub",
     value: "ABHINAVX03",
     href: socials.Github,
   },
   {
-    icon: <LocationOnIcon style={{ fontSize: 22 }} />,
+    icon: <FiMapPin size={22} />,
     label: "Location",
     value: "Delhi, India",
     href: socials.Location,
@@ -60,6 +57,7 @@ const Contact = () => {
     user_name: "",
     user_email: "",
     message: "",
+    website: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -79,7 +77,7 @@ const Contact = () => {
       });
       const data = await response.json();
       if (response.ok) {
-        setFormData({ user_name: "", user_email: "", message: "" });
+        setFormData({ user_name: "", user_email: "", message: "", website: "" });
         successNotify();
       } else {
         console.error("Email error:", data);
@@ -148,11 +146,24 @@ const Contact = () => {
                   <p className={styles.availText}>Full-time · Freelance · Remote</p>
                 </div>
               </div>
+              <a href={socials.Mail} className={styles.hireCard}>
+                Hire Me
+              </a>
             </motion.div>
 
             {/* Right — form */}
             <motion.div className={styles.formColumn} variants={itemVariants}>
               <form onSubmit={handleSubmit} className={styles.form} id="contact-form">
+                <input
+                  type="text"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleChange}
+                  className={styles.honeypot}
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
                 <div className={styles.formRow}>
                   <div className={styles.fieldGroup}>
                     <label htmlFor="user_name" className={styles.label}>Name</label>
@@ -221,6 +232,7 @@ const Contact = () => {
             © {new Date().getFullYear()} Abhinav Gupta · Built with Next.js & Spring Boot
           </p>
           <p className={styles.footerSub}>Full Stack Developer · Delhi, India</p>
+          <a href={socials.Mail} className={styles.footerCta}>Email Me</a>
         </div>
       </footer>
 

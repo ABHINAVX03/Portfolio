@@ -149,6 +149,180 @@
 }
 
 /* ============================================
+   FLAGSHIP CASE STUDY
+   ============================================ */
+.flagship {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  gap: 2rem;
+  align-items: stretch;
+  margin-bottom: 4rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(8, 12, 22, 0.96), rgba(14, 24, 36, 0.82));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.flagshipContent {
+  padding: 1.25rem;
+}
+
+.flagshipEyebrow {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  padding: 6px 10px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #74f2b2;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.flagshipTitle {
+  margin: 0 0 0.9rem;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.flagshipSummary {
+  max-width: 680px;
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.caseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.casePanel {
+  min-height: 132px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.casePanel span {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #4f8ef7;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.casePanel p,
+.casePanel li {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.casePanel ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.apiList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.apiList small {
+  padding: 6px 8px;
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(0, 212, 255, 0.08);
+  color: #b7efff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.flagshipActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.flagshipActions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.flagshipActions a:hover {
+  border-color: rgba(79, 142, 247, 0.45);
+  background: rgba(79, 142, 247, 0.16);
+  transform: translateY(-2px);
+}
+
+.flagshipVisual {
+  position: relative;
+  min-height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.flagshipImage {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.proofStrip {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.proofStrip span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ============================================
    UNIQUE MASONRY GRID
    ============================================ */
 .masonryGrid {
@@ -361,6 +535,14 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .flagship {
+    grid-template-columns: 1fr;
+  }
+
+  .flagshipImage {
+    min-height: 320px;
+  }
+
   .masonryGrid {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1.5rem;
@@ -378,6 +560,34 @@
 
   .header {
     margin-bottom: 3rem;
+  }
+
+  .flagship {
+    gap: 1rem;
+    margin-bottom: 3rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+  }
+
+  .flagshipContent {
+    padding: 0.5rem;
+  }
+
+  .caseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .casePanel {
+    min-height: auto;
+  }
+
+  .flagshipImage {
+    min-height: 240px;
+  }
+
+  .flagshipActions a {
+    flex: 1 1 140px;
+    justify-content: center;
   }
 
   .masonryGrid {

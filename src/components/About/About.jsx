@@ -4,10 +4,7 @@ import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import StackSlider from "../StackSlider/StackSlider";
 import socials from "@/utils/socials";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import EmailIcon from "@mui/icons-material/Email";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
+import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
 
 const containerVariants = {
   hidden: {},
@@ -100,11 +97,11 @@ const education = [
 ];
 
 const codingProfiles = [
-  { name: "LeetCode", meta: "300+ DSA problems", url: "https://leetcode.com/" },
-  { name: "GeeksforGeeks", meta: "Active practice", url: "https://www.geeksforgeeks.org/" },
+  { name: "LeetCode", meta: "300+ DSA problems", url: "https://leetcode.com/u/ABHINAVX03/" },
+  { name: "GeeksforGeeks", meta: "Active practice", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
   { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
-  { name: "Codeforces", meta: "Pupil", url: "https://codeforces.com/" },
-  { name: "HackerRank", meta: "Java · React · Problem Solving", url: "https://www.hackerrank.com/" },
+  { name: "Codeforces", meta: "Pupil", url: "https://codeforces.com/profile/ABHINAVX03" },
+  { name: "HackerRank", meta: "Java · React · Problem Solving", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
 ];
 
 const certifications = [
@@ -322,7 +319,7 @@ const About = () => {
                 </p>
               </div>
               <a href={socials.Github} target="_blank" rel="noopener noreferrer" className={styles.githubProBtn}>
-                <GitHubIcon style={{ fontSize: 20 }} />
+                <FiGithub size={20} />
                 <span>View Profile</span>
               </a>
             </div>
@@ -434,7 +431,7 @@ const About = () => {
                 whileHover={{ scale: 1.1, y: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <GitHubIcon style={{ fontSize: 24 }} />
+                <FiGithub size={24} />
                 <span>GitHub</span>
               </motion.a>
               
@@ -446,7 +443,7 @@ const About = () => {
                 whileHover={{ scale: 1.1, y: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <LinkedInIcon style={{ fontSize: 24 }} />
+                <FiLinkedin size={24} />
                 <span>LinkedIn</span>
               </motion.a>
               
@@ -456,13 +453,13 @@ const About = () => {
                 whileHover={{ scale: 1.1, y: -5 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <EmailIcon style={{ fontSize: 24 }} />
+                <FiMail size={24} />
                 <span>Email</span>
               </motion.a>
               
               <div className={styles.locationOrb}>
                 <a href={socials.Location} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                  <LocationOnIcon style={{ fontSize: 20 }} />
+                  <FiMapPin size={20} />
                   <span>Delhi, India</span>
                 </a>
               </div>

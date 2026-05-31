@@ -1,9 +1,7 @@
 "use client";
 import styles from "./footer.module.css";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import LinkedInIcon from "@mui/icons-material/LinkedIn";
-import EmailIcon from "@mui/icons-material/Email";
 import { FaDiscord } from "react-icons/fa";
+import { FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import Image from "next/image";
 const socials = {
   discord: "https://discord.com/channels/abhinav3688",
@@ -18,16 +16,16 @@ const Footer = () => {
       <div className={styles.container}>
         <div className={styles.linksContainer}>
           <a href={socials.github} rel="noopener noreferrer">
-            <GitHubIcon />
+            <FiGithub />
           </a>
           <a href={socials.linkedin} rel="noopener noreferrer">
-            <LinkedInIcon />
+            <FiLinkedin />
           </a>
           <a href={socials.discord} rel="noopener noreferrer" target="_blank">
             <FaDiscord className={styles.discordIcon} />
           </a>
           <a href={socials.mail} rel="noopener noreferrer">
-            <EmailIcon alt="Email" className={styles.icon} />
+            <FiMail className={styles.icon} />
           </a>
         </div>
         <div className={styles.textContainer}>

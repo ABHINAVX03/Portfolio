@@ -119,6 +119,14 @@ const Hero = () => {
 
           <div className="flex flex-wrap items-center gap-3">
             <a
+              href={socials.Mail}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#22c470] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#32d983]"
+              aria-label="Email Abhinav for hiring opportunities"
+            >
+              Hire Me
+              <FiMail size={16} />
+            </a>
+            <a
               href="/resume/Resume.pdf"
               download
               className="inline-flex items-center gap-2 rounded-xl bg-[#4F8EF7] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3f7ee6]"
