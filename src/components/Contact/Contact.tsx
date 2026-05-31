@@ -57,7 +57,7 @@ const Contact = () => {
     user_name: "",
     user_email: "",
     message: "",
-    website: "",
+    company_url_confirm: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -76,8 +76,8 @@ const Contact = () => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      if (response.ok) {
-        setFormData({ user_name: "", user_email: "", message: "", website: "" });
+      if (response.ok && data.success) {
+        setFormData({ user_name: "", user_email: "", message: "", company_url_confirm: "" });
         successNotify();
       } else {
         console.error("Email error:", data);
@@ -156,12 +156,12 @@ const Contact = () => {
               <form onSubmit={handleSubmit} className={styles.form} id="contact-form">
                 <input
                   type="text"
-                  name="website"
-                  value={formData.website}
+                  name="company_url_confirm"
+                  value={formData.company_url_confirm}
                   onChange={handleChange}
                   className={styles.honeypot}
                   tabIndex={-1}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   aria-hidden="true"
                 />
                 <div className={styles.formRow}>

@@ -75,7 +75,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    if (body.website) {
+    if (body.company_url_confirm || body.website_url_confirm) {
       return Response.json({ success: true }, { status: 200 });
     }
 
