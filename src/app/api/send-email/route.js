@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
 
-const EMAIL_USER = process.env.EMAIL_USER || process.env.GMAIL_USER;
-const EMAIL_PASS = process.env.EMAIL_PASS || process.env.GMAIL_PASSWORD;
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_USER || "").trim();
+const EMAIL_PASS = (process.env.EMAIL_PASS || process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
+const EMAIL_TO = (process.env.EMAIL_TO || EMAIL_USER).trim();
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;
 const MAX_NAME_LENGTH = 80;
@@ -44,16 +45,16 @@ function isRateLimited(ip) {
 }
 
 function getTransporter() {
-  if (!EMAIL_USER || !EMAIL_PASS) {
-    console.error("Missing EMAIL_USER or EMAIL_PASS environment variables.");
+  if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
+    console.error("Missing EMAIL_USER, EMAIL_PASS, or EMAIL_TO environment variables.");
     return null;
   }
 
   return nodemailer.createTransport({
+    service: "gmail",
     host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    requireTLS: true,
+    port: 465,
+    secure: true,
     auth: {
       user: EMAIL_USER,
       pass: EMAIL_PASS,
@@ -111,10 +112,19 @@ export async function POST(request) {
     }
 
     const adminMailOptions = {
-      from: EMAIL_USER,
-      to: EMAIL_USER,
+      from: `"Abhinav Gupta Portfolio" <${EMAIL_USER}>`,
+      to: EMAIL_TO,
       replyTo: user_email,
       subject: `New portfolio inquiry from ${user_name}`,
+      text: [
+        "New Portfolio Inquiry",
+        "",
+        `Name: ${user_name}`,
+        `Email: ${user_email}`,
+        "",
+        "Message:",
+        message,
+      ].join("\n"),
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
           <h2 style="color: #333; border-bottom: 2px solid #4f8ef7; padding-bottom: 10px;">
@@ -139,10 +149,18 @@ export async function POST(request) {
       await transporter.sendMail(adminMailOptions);
     } catch (error) {
       console.error("Email send error:", error);
+      const errorCode =
+        error?.code === "EAUTH" || error?.responseCode === 535
+          ? "EMAIL_AUTH_FAILED"
+          : error?.code === "ETIMEDOUT" || error?.code === "ECONNECTION"
+            ? "EMAIL_CONNECTION_FAILED"
+            : "EMAIL_SEND_FAILED";
+
       return Response.json(
         {
           success: false,
           error: "Failed to send email. Please try again later.",
+          code: errorCode,
         },
         { status: 502 }
       );
