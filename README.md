@@ -22,6 +22,12 @@ A modern, responsive portfolio website showcasing projects with animations and i
 - 🌍 Multi-language support (i18n)
 - 🚀 Optimized for performance
 
+## Recent Improvements
+
+- **Accessibility:** Added focus-visible outlines and improved contrast for better WCAG compliance.
+- **SEO:** Included JSON‑LD Person schema in `layout.jsx` for richer search results.
+- **Performance:** Implemented `prefers-reduced-motion` media query to disable background animations for users who prefer reduced motion.
+
 ## Getting Started
 
 ### Development
