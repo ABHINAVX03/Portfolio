@@ -595,10 +595,45 @@
 @media (max-width: 768px) {
   .section {
     padding: 4rem 0;
+    align-items: flex-start;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .sectionLabel {
+    margin-bottom: 2rem;
+  }
+
+  .uniqueLayout {
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .typewriterContainer,
+  .skillGroup,
+  .proGithubSection {
+    border-radius: 14px;
+    padding: 1.2rem;
   }
 
   .animatedStats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .statCard {
+    border-radius: 14px;
+    padding: 1rem 0.65rem;
+  }
+
+  .statValue {
+    font-size: 30px;
+  }
+
+  .statLabel {
+    font-size: 10px;
   }
 
   .splitGrid {
@@ -606,7 +641,7 @@
   }
 
   .socialsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .activitySection {
@@ -623,7 +658,22 @@
   }
 
   .profileGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: 1fr;
+  }
+
+  .timelineHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .proGithubStats {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .proStatDivider {
+    display: none;
   }
 }
 
@@ -929,5 +979,14 @@
 
   .statsRow {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .animatedStats,
+  .socialsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .bio {
+    min-height: 190px;
   }
 }

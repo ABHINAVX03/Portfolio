@@ -42,11 +42,11 @@ const itemVariants = {
 
 const stats = [
   { value: "300+", label: "DSA Problems" },
-  { value: "8.5", label: "CGPA (MCA)" },
+  { value: "8.51", label: "CGPA (MCA)" },
   { value: "8", label: "Projects Shipped" },
-  { value: "1", label: "Internships" },
+  { value: "1", label: "Internship" },
   { value: "7" , label: "Deployments" },
-  { value: "2", label: "Hackthons" },
+  { value: "2", label: "Hackathons" },
   { value: "3", label: "Certifications" },
 ];
 
@@ -89,7 +89,7 @@ const education = [
     degree: "Master of Computer Applications (MCA)",
     school: "Indian Institute of Information Technology Vadodara (IIIT Vadodara)",
     period: "2025 - 2028",
-    highlight: "GPA: 8.5 / 10 · Gandhinagar, Gujarat",
+    highlight: "GPA: 8.51 / 10 · Gandhinagar, Gujarat",
   },
   {
     degree: "Bachelor of Computer Applications (BCA)",
@@ -100,7 +100,7 @@ const education = [
 ];
 
 const codingProfiles = [
-  { name: "LeetCode", meta: "200+ DSA solved", url: "https://leetcode.com/" },
+  { name: "LeetCode", meta: "300+ DSA problems", url: "https://leetcode.com/" },
   { name: "GeeksforGeeks", meta: "Active practice", url: "https://www.geeksforgeeks.org/" },
   { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
   { name: "Codeforces", meta: "Pupil", url: "https://codeforces.com/" },
@@ -138,7 +138,7 @@ const About = () => {
   const ref = useRef();
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   
-  const bioText = "I'm an MCA student at IIIT Vadodara and a Full Stack Developer focused on production-grade web applications. I build performant frontend experiences with React and architect scalable backend systems using Spring Boot, Node.js, and REST APIs, with additional hands-on blockchain development in Solidity and Web3.";
+  const bioText = "I'm an MCA student at IIIT Vadodara and a full stack developer focused on production-grade web applications. I build performant React interfaces and scalable backend systems with Spring Boot, Node.js, and REST APIs, with additional hands-on blockchain experience in Solidity and Web3.";
   const typewriterText = useTypewriter(bioText, 30);
 
   const [githubData, setGithubData] = useState(null);

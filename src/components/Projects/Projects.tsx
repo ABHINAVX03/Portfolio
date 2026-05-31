@@ -1,6 +1,6 @@
 "use client";
 import styles from "./projects.module.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import projectsData from "@/utils/projects/index.json";
 import Image from "next/image";
@@ -108,9 +108,21 @@ const GithubIcon = () => (
 // Unique project card with reveal animation
 const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [imgSrc, setImgSrc] = useState(project.image);
 
   const cfg = colorConfig[project.color] || colorConfig.primary;
+  const shouldShowActions = isHovered || isTouchDevice;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: none), (pointer: coarse)");
+    const updateInputMode = () => setIsTouchDevice(mediaQuery.matches);
+
+    updateInputMode();
+    mediaQuery.addEventListener("change", updateInputMode);
+
+    return () => mediaQuery.removeEventListener("change", updateInputMode);
+  }, []);
 
   return (
     <motion.article
@@ -157,7 +169,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
         <motion.div
           className={styles.hoverContent}
           initial={{ opacity: 0, y: 20 }}
-          animate={isHovered ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          animate={shouldShowActions ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.3 }}
         >
           <div className={styles.hoverActions}>
@@ -212,7 +224,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
                 color: cfg.accent
               } as any}
               initial={{ opacity: 0, scale: 0 }}
-              animate={isHovered ? { opacity: 1, scale: 1 } : { opacity: 0.85, scale: 1 }}
+              animate={shouldShowActions ? { opacity: 1, scale: 1 } : { opacity: 0.85, scale: 1 }}
               transition={{ delay: tagIndex * 0.1 }}
             >
               {tag}
@@ -226,7 +238,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
         className={styles.cardBorder}
         style={{ background: cfg.gradient } as any}
         initial={{ scaleX: 0 }}
-        animate={isHovered ? { scaleX: 1 } : { scaleX: 0 }}
+        animate={shouldShowActions ? { scaleX: 1 } : { scaleX: 0 }}
         transition={{ duration: 0.4 }}
       />
     </motion.article>

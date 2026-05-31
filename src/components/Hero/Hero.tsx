@@ -8,7 +8,7 @@ import socials from "@/utils/socials";
 
 const skills = ["React", "Next.js", "TypeScript", "Java", "Spring Boot", "PostgreSQL"];
 const roles = ["Full Stack Developer", "Java Spring Boot Engineer", "React Developer"];
-const stats = ["300+ DSA", "8.51 CGPA", "7 Live Demos", "1 Internships"];
+const stats = ["300+ DSA", "8.51 CGPA", "7 Live Demos", "1 Internship"];
 
 const Hero = () => {
   const [roleIndex, setRoleIndex] = useState(0);
@@ -102,8 +102,8 @@ const Hero = () => {
           </p>
 
           <p className="max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">
-            MCA student at IIIT Vadodara (9.0/10), BCA from GGSIPU (9.2/10), Codeforces Pupil, and problem
-            solver with 200+ DSA questions solved.
+            MCA student at IIIT Vadodara (8.51/10), BCA from GGSIPU (9.2/10), Codeforces Pupil, and problem
+            solver with 300+ DSA problems solved.
           </p>
 
           <div className="flex flex-wrap gap-2">

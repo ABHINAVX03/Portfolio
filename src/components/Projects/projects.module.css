@@ -369,11 +369,20 @@
 
 @media (max-width: 768px) {
   .section {
-    padding: 5rem 0;
+    padding: 4rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .header {
+    margin-bottom: 3rem;
   }
 
   .masonryGrid {
     grid-template-columns: 1fr;
+    gap: 1.25rem;
   }
 
   .heading {
@@ -382,7 +391,56 @@
 
   .statRow {
     flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
     padding: 16px 20px;
+    border-radius: 18px;
+  }
+
+  .statDivider {
+    display: none;
+  }
+
+  .cardImage {
+    height: 190px;
+  }
+
+  .cardContent {
+    padding: 1.15rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .projectType {
+    align-self: flex-start;
+    white-space: normal;
+  }
+
+  .hoverContent {
+    top: auto;
+    bottom: 12px;
+    justify-content: flex-start;
+    padding: 0 12px;
+    pointer-events: none;
+  }
+
+  .hoverActions {
+    gap: 0.5rem;
+  }
+
+  .actionBtn {
+    padding: 9px 12px;
+    font-size: 12px;
+    pointer-events: auto;
+    background: rgba(6, 8, 17, 0.82);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hoverContent {
+    opacity: 1;
   }
 }

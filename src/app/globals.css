@@ -16,6 +16,10 @@
 
 /* ============ Design Tokens ============ */
 :root {
+  --font-inter: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-space-grotesk: "Space Grotesk", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+
   /* Brand palette - deep blue-slate + electric accents */
   --c-bg:           #060811;
   --c-bg-secondary: #0b0f1a;
