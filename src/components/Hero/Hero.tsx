@@ -8,7 +8,7 @@ import socials from "@/utils/socials";
 
 const skills = ["React", "Next.js", "TypeScript", "Java", "Spring Boot", "PostgreSQL"];
 const roles = ["Full Stack Developer", "Java Spring Boot Engineer", "React Developer"];
-const stats = ["200+ DSA", "9.2 CGPA", "3 Live Demos", "2 Internships"];
+const stats = ["300+ DSA", "8.51 CGPA", "7 Live Demos", "1 Internships"];
 
 const Hero = () => {
   const [roleIndex, setRoleIndex] = useState(0);

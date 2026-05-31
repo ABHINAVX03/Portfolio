@@ -82,14 +82,6 @@ const Navbar = () => {
         </ul>
 
         <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-white transition hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8EF7]"
-            aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
-          >
-            {isDark ? <FiSun size={16} /> : <FiMoon size={16} />}
-          </button>
 
           <a
             href="/resume/Resume.pdf"

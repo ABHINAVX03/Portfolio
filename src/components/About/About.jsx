@@ -41,10 +41,13 @@ const itemVariants = {
 };
 
 const stats = [
-  { value: "200+", label: "DSA Problems" },
-  { value: "9.2", label: "CGPA (BCA)" },
-  { value: "5", label: "Projects Shipped" },
-  { value: "2", label: "Internships / Deployments" },
+  { value: "300+", label: "DSA Problems" },
+  { value: "8.5", label: "CGPA (MCA)" },
+  { value: "8", label: "Projects Shipped" },
+  { value: "1", label: "Internships" },
+  { value: "7" , label: "Deployments" },
+  { value: "2", label: "Hackthons" },
+  { value: "3", label: "Certifications" },
 ];
 
 const skills = [
@@ -86,7 +89,7 @@ const education = [
     degree: "Master of Computer Applications (MCA)",
     school: "Indian Institute of Information Technology Vadodara (IIIT Vadodara)",
     period: "2025 - 2028",
-    highlight: "GPA: 9.0 / 10 · Gandhinagar, Gujarat",
+    highlight: "GPA: 8.5 / 10 · Gandhinagar, Gujarat",
   },
   {
     degree: "Bachelor of Computer Applications (BCA)",
@@ -165,7 +168,7 @@ const About = () => {
           {/* Section label */}
           <motion.div className={styles.sectionLabel} variants={itemVariants}>
             <span className={styles.labelLine} />
-            <span>About Me</span>
+            <span style={{ color: 'white' }}>About Me</span>
             <span className={styles.labelLine} />
           </motion.div>
 
@@ -173,13 +176,13 @@ const About = () => {
           <div className={styles.uniqueLayout}>
             {/* Left — Hero content with typewriter */}
             <motion.div className={styles.heroContent} variants={itemVariants}>
-              <h2 className={styles.title}>
-                Crafting <span className={styles.titleAccent}>Full Stack</span>
+              <h2 className={styles.title} style={{color:"grey"}}>
+                Crafting <span className={styles.titleAccent} >Full Stack</span>
                 <br />Experiences
               </h2>
               
               <div className={styles.typewriterContainer}>
-                <p className={styles.bio}>
+                <p className={styles.bio} style={{color:"white"}}>
                   {typewriterText}
                   <span className={styles.cursor}>|</span>
                 </p>
