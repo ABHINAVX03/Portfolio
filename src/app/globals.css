@@ -286,3 +286,18 @@ a {
   0%   { transform: scale(1); opacity: 0.6; }
   100% { transform: scale(1.5); opacity: 0; }
 }
+/* ================== Accessibility Enhancements ================== */
+/* Focus-visible outlines for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-grid,
+  .bg-grid::before,
+  .bg-grid::after {
+    animation: none;
+  }
+}

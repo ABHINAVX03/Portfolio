@@ -1,5 +1,6 @@
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import Head from "next/head";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -58,9 +59,24 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <head>
+      <Head>
         <link rel="icon" href="/logo.png" type="image/png" sizes="32x32" />
-      </head>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          "name": "Abhinav Gupta",
+          "url": "https://abhinavgupta.dev",
+          "sameAs": [
+            "https://github.com/ABHINAVX03",
+            "https://www.linkedin.com/in/abhinav-gupta-367369167/"
+          ],
+          "jobTitle": "Full Stack Developer",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Freelance"
+          }
+        }) }} />
+      </Head>
       <body>{children}</body>
     </html>
   );
