@@ -51,7 +51,7 @@ const Navbar = () => {
 
   return (
     <header className="sticky top-0 z-50 px-4 py-4 sm:px-6">
-      <nav
+      <nav role="navigation"
         className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-6 ${
           isScrolled
             ? "border-black/10 bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.06)] backdrop-blur-xl dark:border-white/15 dark:bg-[#05070f]/70"
@@ -115,7 +115,7 @@ const Navbar = () => {
           <button
             type="button"
             onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-black/5 text-slate-800 md:hidden dark:border-white/15 dark:bg-white/5 dark:text-white"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-black/5 text-slate-800 md:hidden dark:border-white/15 dark:bg-white/5 dark:text-white" aria-controls="mobile-menu"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
           >
@@ -126,8 +126,7 @@ const Navbar = () => {
 
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
+          <motion.div id="mobile-menu" initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.2 }}

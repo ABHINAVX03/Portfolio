@@ -61,6 +61,16 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <Head>
         <link rel="icon" href="/logo.png" type="image/png" sizes="32x32" />
+<meta name="description" content="Portfolio of Abhinav Gupta, a Full Stack Developer specialized in React, Next.js, Java Spring Boot, and modern web engineering." />
+<meta property="og:title" content="Abhinav Gupta | Full Stack Developer" />
+<meta property="og:description" content="Portfolio of Abhinav Gupta, a Full Stack Developer specialized in React, Next.js, Java Spring Boot, and modern web engineering." />
+<meta property="og:image" content="/og-image.webp" />
+<meta property="og:url" content="https://abhinavgupta.dev" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Abhinav Gupta | Full Stack Developer" />
+<meta name="twitter:description" content="Portfolio of Abhinav Gupta, a Full Stack Developer specialized in React, Next.js, Java Spring Boot, and modern web engineering." />
+<meta name="twitter:image" content="/og-image.webp" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "Person",

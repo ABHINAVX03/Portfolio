@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import styles from "./about.module.css";
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
@@ -42,7 +43,7 @@ const stats = [
   { value: "8.51", label: "CGPA (MCA)" },
   { value: "8", label: "Projects Shipped" },
   { value: "1", label: "Internship" },
-  { value: "7" , label: "Deployments" },
+  { value: "7", label: "Deployments" },
   { value: "2", label: "Hackathons" },
   { value: "3", label: "Certifications" },
 ];
@@ -252,11 +253,12 @@ const About = () => {
                   </motion.div>
                 ))}
 
+                {/* Learning Now */}
                 <motion.div
                   className={styles.skillGroup}
                   initial={{ opacity: 0, x: -30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 1.6 }}
+                  transition={{ delay: 1.5 }}
                 >
                   <h3 className={styles.skillCategory}>Currently Learning</h3>
                   <div className={styles.skillItems}>
@@ -278,6 +280,7 @@ const About = () => {
                   </div>
                 </motion.div>
 
+                {/* Building Now */}
                 <motion.div
                   className={styles.skillGroup}
                   initial={{ opacity: 0, x: 30 }}
@@ -307,6 +310,7 @@ const About = () => {
             </motion.div>
           </div>
 
+          {/* GitHub Section */}
           <motion.div
             className={styles.proGithubSection}
             variants={itemVariants}
@@ -342,19 +346,9 @@ const About = () => {
                 </div>
               </div>
             )}
-
-            <div className={styles.proGithubGraphContainer}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://github-readme-activity-graph.vercel.app/graph?username=ABHINAVX03&theme=github-dark&hide_border=true&line=22c470&point=4f8ef7&area=true&area_color=22c470&bg_color=00000000"
-                alt="GitHub contribution activity graph for ABHINAVX03"
-                className={styles.proGithubGraph}
-                loading="lazy"
-              />
-              <div className={styles.graphGlow}></div>
-            </div>
           </motion.div>
 
+          {/* Experience Section */}
           <motion.div className={styles.activitySection} variants={itemVariants}>
             <h3 className={styles.activityTitle}>Experience</h3>
             <div className={styles.timelineList}>
@@ -375,6 +369,7 @@ const About = () => {
             </div>
           </motion.div>
 
+          {/* Education Section */}
           <motion.div className={styles.activitySection} variants={itemVariants}>
             <h3 className={styles.activityTitle}>Education</h3>
             <div className={styles.timelineList}>
@@ -391,6 +386,7 @@ const About = () => {
             </div>
           </motion.div>
 
+          {/* Coding Profiles & Certifications */}
           <div className={styles.splitGrid}>
             <motion.div className={styles.activitySection} variants={itemVariants}>
               <h3 className={styles.activityTitle}>Coding Profiles</h3>
