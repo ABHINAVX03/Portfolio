@@ -361,6 +361,9 @@ const Projects = () => {
     }, {}),
   };
   const flagshipProject = projects.find((project) => project.id === "uber-ride-platform");
+  const projectCards = flagshipProject
+    ? projects.filter((project) => project.id !== flagshipProject.id)
+    : projects;
 
   return (
     <section className={styles.section} ref={ref}>
@@ -414,7 +417,7 @@ const Projects = () => {
           initial="hidden"
           animate={isInView ? "show" : "hidden"}
         >
-          {projects.map((project, index) => (
+          {projectCards.map((project, index) => (
             <ProjectCard key={project.id} project={project} index={index} />
           ))}
         </motion.div>
