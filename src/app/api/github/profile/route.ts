@@ -2,7 +2,29 @@ import { NextResponse } from "next/server";
 
 const USERNAME = "ABHINAVX03";
 
-export async function GET() {
+export interface GithubLanguage {
+  name: string;
+  count: number;
+}
+
+export interface GithubProfileResponse {
+  username: string;
+  profileUrl: string;
+  avatarUrl: string;
+  publicRepos: number;
+  followers: number;
+  following: number;
+  totalStars: number;
+  topLanguages: GithubLanguage[];
+  error?: string;
+}
+
+interface GithubRepo {
+  stargazers_count?: number;
+  language?: string;
+}
+
+export async function GET(): Promise<NextResponse<GithubProfileResponse | { error: string }>> {
   try {
     const headers = {
       Accept: "application/vnd.github+json",
@@ -19,10 +41,10 @@ export async function GET() {
     }
 
     const user = await userRes.json();
-    const repos = await reposRes.json();
+    const repos: GithubRepo[] = await reposRes.json();
 
     const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
-    const languageCount = {};
+    const languageCount: Record<string, number> = {};
 
     repos.forEach((repo) => {
       if (repo.language) {

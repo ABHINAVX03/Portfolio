@@ -437,16 +437,27 @@
   overflow: hidden;
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid rgba(255, 255, 255, 0.03);
-  padding: 1rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
 }
 
 .proGithubGraph {
   width: 100%;
-  height: auto;
-  display: block;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
   position: relative;
   z-index: 2;
-  mix-blend-mode: screen;
+  scrollbar-width: thin;
+  padding: 0.5rem 0;
+}
+
+.proGithubGraph > div {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
 }
 
 .graphGlow {
@@ -456,7 +467,7 @@
   transform: translate(-50%, -50%);
   width: 80%;
   height: 50%;
-  background: radial-gradient(circle, rgba(34, 196, 112, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(34, 196, 112, 0.12) 0%, transparent 70%);
   filter: blur(40px);
   z-index: 1;
   pointer-events: none;
