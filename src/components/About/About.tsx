@@ -403,9 +403,9 @@ const About = () => {
                   username="ABHINAVX03"
                   theme={githubTheme}
                   colorScheme="dark"
-                  hideColorLegend={false}
-                  hideMonthLabels={false}
-                  hideTotalCount={false}
+                  showColorLegend={true}
+                  showMonthLabels={true}
+                  showTotalCount={true}
                   blockSize={12}
                   blockMargin={4}
                   blockRadius={3}
