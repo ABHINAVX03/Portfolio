@@ -1,53 +1,11 @@
 "use client";
+import Image from "next/image";
 import styles from "./about.module.css";
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import StackSlider from "../StackSlider/StackSlider";
 import socials from "@/utils/socials";
 import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
-import { GitHubCalendar } from "react-github-calendar";
-
-interface StatItem {
-  value: string;
-  label: string;
-}
-
-interface SkillGroupItem {
-  category: string;
-  items: string[];
-}
-
-interface ExperienceItem {
-  role: string;
-  org: string;
-  period: string;
-  points: string[];
-}
-
-interface EducationItem {
-  degree: string;
-  school: string;
-  period: string;
-  highlight: string;
-}
-
-interface CodingProfileItem {
-  name: string;
-  meta: string;
-  url: string;
-}
-
-interface GithubProfileData {
-  username: string;
-  profileUrl: string;
-  avatarUrl: string;
-  publicRepos: number;
-  followers: number;
-  following: number;
-  totalStars: number;
-  topLanguages: Array<{ name: string; count: number }>;
-  error?: string;
-}
 
 const containerVariants = {
   hidden: {},
@@ -80,7 +38,7 @@ const itemVariants = {
   },
 };
 
-const stats: StatItem[] = [
+const stats = [
   { value: "300+", label: "DSA Problems" },
   { value: "8.51", label: "CGPA (MCA)" },
   { value: "8", label: "Projects Shipped" },
@@ -90,27 +48,27 @@ const stats: StatItem[] = [
   { value: "3", label: "Certifications" },
 ];
 
-const skills: SkillGroupItem[] = [
+const skills = [
   { category: "Languages", items: ["C", "C++", "Java", "Python", "JavaScript", "TypeScript", "Solidity"] },
   { category: "Frontend", items: ["HTML", "CSS", "Bootstrap", "Tailwind CSS", "React.js", "Next.js"] },
   { category: "Backend & Database", items: ["Node.js", "Express.js", "Spring Boot", "MongoDB", "SQL", "REST APIs"] },
   { category: "Blockchain & Tools", items: ["Web3.js", "MetaMask", "Ganache", "Truffle", "Remix IDE", "Docker", "JWT", "GitHub"] },
 ];
 
-const learningNow: string[] = [
+const learningNow = [
   "Kafka event-driven architecture basics",
   "DSA preparation for placements",
   "Advanced Next.js performance patterns",
   "Microservices observability (OpenTelemetry)",
 ];
 
-const buildingNow: string[] = [
+const buildingNow = [
   "Kafka-backed notification pipeline prototype",
   "System design notes and backend case-study writeups",
   "Consistent DSA problem-solving routine",
 ];
 
-const experience: ExperienceItem[] = [
+const experience = [
   {
     role: "Software Developer Intern",
     org: "Blockchain Developer Trainee · Code Eater",
@@ -124,7 +82,7 @@ const experience: ExperienceItem[] = [
   },
 ];
 
-const education: EducationItem[] = [
+const education = [
   {
     degree: "Master of Computer Applications (MCA)",
     school: "Indian Institute of Information Technology Vadodara (IIIT Vadodara)",
@@ -139,7 +97,7 @@ const education: EducationItem[] = [
   },
 ];
 
-const codingProfiles: CodingProfileItem[] = [
+const codingProfiles = [
   { name: "LeetCode", meta: "300+ DSA problems", url: "https://leetcode.com/u/ABHINAVX03/" },
   { name: "GeeksforGeeks", meta: "Active practice", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
   { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
@@ -147,7 +105,7 @@ const codingProfiles: CodingProfileItem[] = [
   { name: "HackerRank", meta: "Java · React · Problem Solving", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
 ];
 
-const certifications: string[] = [
+const certifications = [
   "HackerRank Problem Solving",
   "HackerRank React Development",
   "Hackathon - HACKOUT '25",
@@ -156,14 +114,8 @@ const certifications: string[] = [
   "Coding Society Representative at GGSIPU",
 ];
 
-// Custom theme for the contribution graph matching the green palette
-const githubTheme = {
-  light: ["#ebedf0", "#b2f2bb", "#69db7c", "#2f9e44", "#2b8a3e"],
-  dark: ["#161b22", "#0e3e27", "#176f41", "#1fa05a", "#22c470"],
-};
-
 // Typewriter effect hook
-const useTypewriter = (text: string, speed = 50) => {
+const useTypewriter = (text, speed = 50) => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -181,13 +133,13 @@ const useTypewriter = (text: string, speed = 50) => {
 };
 
 const About = () => {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef();
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   
   const bioText = "I'm an MCA student at IIIT Vadodara and a full stack developer focused on production-grade web applications. I build performant React interfaces and scalable backend systems with Spring Boot, Node.js, and REST APIs, with additional hands-on blockchain experience in Solidity and Web3.";
   const typewriterText = useTypewriter(bioText, 30);
 
-  const [githubData, setGithubData] = useState<GithubProfileData | null>(null);
+  const [githubData, setGithubData] = useState(null);
   const [loadingGithub, setLoadingGithub] = useState(true);
 
   useEffect(() => {
@@ -251,7 +203,7 @@ const About = () => {
                       initial={{ scale: 0, rotateY: -90 }}
                       animate={isInView ? { scale: 1, rotateY: 0 } : {}}
                       transition={{
-                        delay: index * 0.15,
+                        delay: index * 0.2,
                         type: "spring",
                         stiffness: 200,
                         damping: 20
@@ -273,7 +225,7 @@ const About = () => {
                     className={styles.skillGroup}
                     initial={{ opacity: 0, x: groupIndex % 2 === 0 ? -50 : 50 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.6 + groupIndex * 0.15 }}
+                    transition={{ delay: 0.8 + groupIndex * 0.2 }}
                   >
                     <h3 className={styles.skillCategory}>{group.category}</h3>
                     <div className={styles.skillItems}>
@@ -284,7 +236,7 @@ const About = () => {
                           initial={{ opacity: 0, scale: 0 }}
                           animate={isInView ? { opacity: 1, scale: 1 } : {}}
                           transition={{ 
-                            delay: 0.8 + groupIndex * 0.15 + itemIndex * 0.08,
+                            delay: 1 + groupIndex * 0.2 + itemIndex * 0.1,
                             type: "spring",
                             stiffness: 300
                           }}
@@ -306,7 +258,7 @@ const About = () => {
                   className={styles.skillGroup}
                   initial={{ opacity: 0, x: -30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 1.2 }}
+                  transition={{ delay: 1.5 }}
                 >
                   <h3 className={styles.skillCategory}>Currently Learning</h3>
                   <div className={styles.skillItems}>
@@ -317,7 +269,7 @@ const About = () => {
                         initial={{ opacity: 0, scale: 0 }}
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
                         transition={{
-                          delay: 1.3 + topicIndex * 0.1,
+                          delay: 1.7 + topicIndex * 0.12,
                           type: "spring",
                           stiffness: 280
                         }}
@@ -333,7 +285,7 @@ const About = () => {
                   className={styles.skillGroup}
                   initial={{ opacity: 0, x: 30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 1.4 }}
+                  transition={{ delay: 1.9 }}
                 >
                   <h3 className={styles.skillCategory}>What I&apos;m Building</h3>
                   <div className={styles.skillItems}>
@@ -344,7 +296,7 @@ const About = () => {
                         initial={{ opacity: 0, scale: 0 }}
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
                         transition={{
-                          delay: 1.5 + itemIndex * 0.1,
+                          delay: 2 + itemIndex * 0.12,
                           type: "spring",
                           stiffness: 280
                         }}
@@ -394,24 +346,6 @@ const About = () => {
                 </div>
               </div>
             )}
-
-            {/* Premium Contribution Graph Section */}
-            <div className={styles.proGithubGraphContainer}>
-              <div className={styles.graphGlow} />
-              <div className={styles.proGithubGraph}>
-                <GitHubCalendar
-                  username="ABHINAVX03"
-                  theme={githubTheme}
-                  colorScheme="dark"
-                  showColorLegend={true}
-                  showMonthLabels={true}
-                  showTotalCount={true}
-                  blockSize={12}
-                  blockMargin={4}
-                  blockRadius={3}
-                />
-              </div>
-            </div>
           </motion.div>
 
           {/* Experience Section */}
