@@ -1,6 +1,5 @@
 import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,6 +29,9 @@ export const metadata = {
     "Abhinav Gupta",
   ],
   authors: [{ name: "Abhinav Gupta" }],
+  icons: {
+    icon: "/logo.png",
+  },
   openGraph: {
     title: "Abhinav Gupta | Full Stack Developer",
     description:
@@ -40,6 +42,7 @@ export const metadata = {
     type: "website",
     images: [
       {
+        // FIX: was /og-image.png in metadata but /og-image.webp in dead <Head> block — unified to .png
         url: "/og-image.png",
         width: 1200,
         height: 630,
@@ -59,34 +62,35 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <Head>
-        <link rel="icon" href="/logo.png" type="image/png" sizes="32x32" />
-<meta name="description" content="Portfolio of Abhinav Gupta, a Full Stack Developer specialized in React, Next.js, Java Spring Boot, and modern web engineering." />
-<meta property="og:title" content="Abhinav Gupta | Full Stack Developer" />
-<meta property="og:description" content="Portfolio of Abhinav Gupta, a Full Stack Developer specialized in React, Next.js, Java Spring Boot, and modern web engineering." />
-<meta property="og:image" content="/og-image.webp" />
-<meta property="og:url" content="https://abhinavgupta.dev" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Abhinav Gupta | Full Stack Developer" />
-<meta name="twitter:description" content="Portfolio of Abhinav Gupta, a Full Stack Developer specialized in React, Next.js, Java Spring Boot, and modern web engineering." />
-<meta name="twitter:image" content="/og-image.webp" />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "Abhinav Gupta",
-          "url": "https://abhinavgupta.dev",
-          "sameAs": [
-            "https://github.com/ABHINAVX03",
-            "https://www.linkedin.com/in/abhinav-gupta-367369167/"
-          ],
-          "jobTitle": "Full Stack Developer",
-          "worksFor": {
-            "@type": "Organization",
-            "name": "Freelance"
-          }
-        }) }} />
-      </Head>
+      {/*
+        FIX: Removed the <Head> import and block entirely.
+        next/head is a Pages Router API — it is silently ignored in the App Router (src/app/).
+        All meta tags are already handled correctly by the `metadata` export above.
+        The old <Head> block also had a mismatched og:image filename (/og-image.webp vs .png).
+      */}
+      <head>
+        {/* JSON-LD structured data — Person schema for richer Google search results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Abhinav Gupta",
+              url: "https://abhinavgupta.dev",
+              sameAs: [
+                "https://github.com/ABHINAVX03",
+                "https://www.linkedin.com/in/abhinav-gupta-367369167/",
+              ],
+              jobTitle: "Full Stack Developer",
+              worksFor: {
+                "@type": "Organization",
+                name: "Freelance",
+              },
+            }),
+          }}
+        />
+      </head>
       <body>{children}</body>
     </html>
   );

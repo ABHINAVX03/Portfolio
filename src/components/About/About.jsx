@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import styles from "./about.module.css";
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
@@ -9,32 +8,29 @@ import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
 
 const containerVariants = {
   hidden: {},
-  show: { 
-    transition: { 
-      staggerChildren: 0.15, 
-      delayChildren: 0.2,
-      staggerDirection: 1
-    } 
+  show: {
+    transition: {
+      staggerChildren: 0.08, // FIX: was 0.15 — 7 stat cards × 0.2s stagger = 1.4s total; now faster
+      delayChildren: 0.1,
+      staggerDirection: 1,
+    },
   },
 };
 
 const itemVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 40,
-    scale: 0.95,
-    filter: "blur(10px)"
+  hidden: {
+    opacity: 0,
+    y: 24,
+    filter: "blur(6px)",
   },
-  show: { 
-    opacity: 1, 
-    y: 0, 
-    scale: 1,
+  show: {
+    opacity: 1,
+    y: 0,
     filter: "blur(0px)",
-    transition: { 
-      duration: 0.8, 
+    transition: {
+      duration: 0.55,
       ease: [0.23, 1, 0.32, 1],
-      staggerChildren: 0.1
-    } 
+    },
   },
 };
 
@@ -114,45 +110,66 @@ const certifications = [
   "Coding Society Representative at GGSIPU",
 ];
 
-// Typewriter effect hook
+// FIX: Rewritten typewriter hook using refs to avoid stale-closure / reschedule bugs.
+// Old version: used currentIndex as state → effect re-ran on every keystroke from a stale closure.
+// New version: refs track index & whether component is still mounted; effect runs once and cleans up properly.
 const useTypewriter = (text, speed = 50) => {
-  const [displayText, setDisplayText] = useState('');
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const indexRef = useRef(0);
+  const mountedRef = useRef(true);
 
   useEffect(() => {
-    if (currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(prev => prev + text[currentIndex]);
-        setCurrentIndex(prev => prev + 1);
-      }, speed);
-      return () => clearTimeout(timeout);
-    }
-  }, [currentIndex, text, speed]);
+    mountedRef.current = true;
+    indexRef.current = 0;
+    setDisplayText("");
+
+    const tick = () => {
+      if (!mountedRef.current) return;
+      if (indexRef.current >= text.length) return;
+      indexRef.current += 1;
+      setDisplayText(text.slice(0, indexRef.current));
+      setTimeout(tick, speed);
+    };
+
+    const id = setTimeout(tick, speed);
+    return () => {
+      mountedRef.current = false;
+      clearTimeout(id);
+    };
+  }, [text, speed]);
 
   return displayText;
 };
 
 const About = () => {
-  const ref = useRef();
+  const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
-  
-  const bioText = "I'm an MCA student at IIIT Vadodara and a full stack developer focused on production-grade web applications. I build performant React interfaces and scalable backend systems with Spring Boot, Node.js, and REST APIs, with additional hands-on blockchain experience in Solidity and Web3.";
+
+  const bioText =
+    "I'm an MCA student at IIIT Vadodara and a full stack developer focused on production-grade web applications. I build performant React interfaces and scalable backend systems with Spring Boot, Node.js, and REST APIs, with additional hands-on blockchain experience in Solidity and Web3.";
   const typewriterText = useTypewriter(bioText, 30);
 
   const [githubData, setGithubData] = useState(null);
   const [loadingGithub, setLoadingGithub] = useState(true);
 
   useEffect(() => {
-    fetch('/api/github/profile')
-      .then(res => res.json())
-      .then(data => {
+    // FIX: AbortController prevents setState on unmounted component.
+    // Old code had no abort → React "Can't perform state update on unmounted component" warning.
+    const controller = new AbortController();
+
+    fetch("/api/github/profile", { signal: controller.signal })
+      .then((res) => res.json())
+      .then((data) => {
         setGithubData(data);
         setLoadingGithub(false);
       })
-      .catch(err => {
+      .catch((err) => {
+        if (err.name === "AbortError") return; // component unmounted — silently ignore
         console.error("Error fetching GitHub data:", err);
         setLoadingGithub(false);
       });
+
+    return () => controller.abort();
   }, []);
 
   return (
@@ -166,7 +183,7 @@ const About = () => {
           {/* Section label */}
           <motion.div className={styles.sectionLabel} variants={itemVariants}>
             <span className={styles.labelLine} />
-            <span style={{ color: 'white' }}>About Me</span>
+            <span style={{ color: "white" }}>About Me</span>
             <span className={styles.labelLine} />
           </motion.div>
 
@@ -174,76 +191,89 @@ const About = () => {
           <div className={styles.uniqueLayout}>
             {/* Left — Hero content with typewriter */}
             <motion.div className={styles.heroContent} variants={itemVariants}>
-              <h2 className={styles.title} style={{color:"grey"}}>
-                Crafting <span className={styles.titleAccent} >Full Stack</span>
-                <br />Experiences
+              <h2 className={styles.title} style={{ color: "grey" }}>
+                Crafting <span className={styles.titleAccent}>Full Stack</span>
+                <br />
+                Experiences
               </h2>
-              
-              <div className={styles.typewriterContainer}>
-                <p className={styles.bio} style={{color:"white"}}>
+
+              {/*
+                FIX: aria-live="polite" so screen readers announce the completed text once it's done,
+                rather than reading each character individually.
+                The visually-hidden span provides the full text immediately for AT,
+                while the visible typewriter plays for sighted users.
+              */}
+              <div
+                className={styles.typewriterContainer}
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {/* Visually hidden full text for screen readers — always present */}
+                <span className="sr-only">{bioText}</span>
+                {/* Visible typewriter — hidden from AT since sr-only covers it */}
+                <p className={styles.bio} style={{ color: "white" }} aria-hidden="true">
                   {typewriterText}
                   <span className={styles.cursor}>|</span>
                 </p>
               </div>
 
               <p className={styles.bioSecondary}>
-                I care deeply about clean code, system design, and delivering experiences that users love. Whether it&apos;s a complex backend architecture or a micro-interaction on a button — every detail matters to me.
+                I care deeply about clean code, system design, and delivering experiences that users love.
+                Whether it&apos;s a complex backend architecture or a micro-interaction on a button — every
+                detail matters to me.
               </p>
             </motion.div>
 
             {/* Right — Animated stats and skills */}
             <motion.div className={styles.statsSkillsContainer} variants={itemVariants}>
               {/* Animated Stats */}
+              {/* FIX: stagger reduced to 0.08s (was 0.2s) — 7 cards × 0.2 = 1.4s total delay */}
               <div className={styles.animatedStats}>
-                {stats.map((stat, index) => {
-                  return (
-                    <motion.div
-                      key={stat.label} 
-                      className={styles.statCard}
-                      initial={{ scale: 0, rotateY: -90 }}
-                      animate={isInView ? { scale: 1, rotateY: 0 } : {}}
-                      transition={{
-                        delay: index * 0.2,
-                        type: "spring",
-                        stiffness: 200,
-                        damping: 20
-                      }}
-                    >
-                      <div className={styles.statValue}>{stat.value}</div>
-                      <div className={styles.statLabel}>{stat.label}</div>
-                      <div className={styles.statGlow} />
-                    </motion.div>
-                  );
-                })}
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    className={styles.statCard}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{
+                      delay: index * 0.08,
+                      duration: 0.45,
+                      ease: [0.23, 1, 0.32, 1],
+                    }}
+                  >
+                    <div className={styles.statValue}>{stat.value}</div>
+                    <div className={styles.statLabel}>{stat.label}</div>
+                    <div className={styles.statGlow} />
+                  </motion.div>
+                ))}
               </div>
 
               {/* Skills with unique visualization */}
               <div className={styles.skillsVisualization}>
                 {skills.map((group, groupIndex) => (
-                  <motion.div 
-                    key={group.category} 
+                  <motion.div
+                    key={group.category}
                     className={styles.skillGroup}
-                    initial={{ opacity: 0, x: groupIndex % 2 === 0 ? -50 : 50 }}
+                    initial={{ opacity: 0, x: groupIndex % 2 === 0 ? -30 : 30 }}
                     animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ delay: 0.8 + groupIndex * 0.2 }}
+                    transition={{ delay: 0.4 + groupIndex * 0.1 }}
                   >
                     <h3 className={styles.skillCategory}>{group.category}</h3>
                     <div className={styles.skillItems}>
                       {group.items.map((item, itemIndex) => (
-                        <motion.span 
-                          key={item} 
+                        <motion.span
+                          key={item}
                           className={styles.skillItem}
-                          initial={{ opacity: 0, scale: 0 }}
+                          initial={{ opacity: 0, scale: 0.8 }}
                           animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                          transition={{ 
-                            delay: 1 + groupIndex * 0.2 + itemIndex * 0.1,
-                            type: "spring",
-                            stiffness: 300
+                          transition={{
+                            delay: 0.5 + groupIndex * 0.1 + itemIndex * 0.04,
+                            duration: 0.3,
                           }}
-                          whileHover={{ 
-                            scale: 1.1,
+                          whileHover={{
+                            scale: 1.08,
                             backgroundColor: "rgba(34, 196, 112, 0.2)",
-                            boxShadow: "0 8px 25px rgba(34, 196, 112, 0.3)"
+                            boxShadow: "0 8px 25px rgba(34, 196, 112, 0.3)",
                           }}
                         >
                           {item}
@@ -258,21 +288,17 @@ const About = () => {
                   className={styles.skillGroup}
                   initial={{ opacity: 0, x: -30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 1.5 }}
+                  transition={{ delay: 0.9 }}
                 >
                   <h3 className={styles.skillCategory}>Currently Learning</h3>
                   <div className={styles.skillItems}>
-                    {learningNow.map((topic, topicIndex) => (
+                    {learningNow.map((topic) => (
                       <motion.span
                         key={topic}
                         className={styles.skillItem}
-                        initial={{ opacity: 0, scale: 0 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{
-                          delay: 1.7 + topicIndex * 0.12,
-                          type: "spring",
-                          stiffness: 280
-                        }}
+                        transition={{ duration: 0.3 }}
                       >
                         {topic}
                       </motion.span>
@@ -285,21 +311,17 @@ const About = () => {
                   className={styles.skillGroup}
                   initial={{ opacity: 0, x: 30 }}
                   animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 1.9 }}
+                  transition={{ delay: 1.0 }}
                 >
                   <h3 className={styles.skillCategory}>What I&apos;m Building</h3>
                   <div className={styles.skillItems}>
-                    {buildingNow.map((item, itemIndex) => (
+                    {buildingNow.map((item) => (
                       <motion.span
                         key={item}
                         className={styles.skillItem}
-                        initial={{ opacity: 0, scale: 0 }}
+                        initial={{ opacity: 0, scale: 0.8 }}
                         animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{
-                          delay: 2 + itemIndex * 0.12,
-                          type: "spring",
-                          stiffness: 280
-                        }}
+                        transition={{ duration: 0.3 }}
                       >
                         {item}
                       </motion.span>
@@ -311,10 +333,7 @@ const About = () => {
           </div>
 
           {/* GitHub Section */}
-          <motion.div
-            className={styles.proGithubSection}
-            variants={itemVariants}
-          >
+          <motion.div className={styles.proGithubSection} variants={itemVariants}>
             <div className={styles.proGithubHeader}>
               <div>
                 <h3 className={styles.activityTitle}>Open Source Contributions</h3>
@@ -322,13 +341,45 @@ const About = () => {
                   My latest activity and repository stats on GitHub.
                 </p>
               </div>
-              <a href={socials.Github} target="_blank" rel="noopener noreferrer" className={styles.githubProBtn}>
+              <a
+                href={socials.Github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.githubProBtn}
+              >
                 <FiGithub size={20} />
                 <span>View Profile</span>
               </a>
             </div>
 
-            {!loadingGithub && githubData && !githubData.error && (
+            {/* FIX: skeleton loader while GitHub data fetches — prevents layout shift */}
+            {loadingGithub ? (
+              <div className={styles.proGithubStats} aria-busy="true" aria-label="Loading GitHub stats">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className={styles.proStatItem}>
+                    <div
+                      style={{
+                        width: 60,
+                        height: 32,
+                        borderRadius: 6,
+                        background: "rgba(255,255,255,0.07)",
+                        animation: "pulse 1.4s ease-in-out infinite",
+                        marginBottom: 6,
+                      }}
+                    />
+                    <div
+                      style={{
+                        width: 80,
+                        height: 10,
+                        borderRadius: 4,
+                        background: "rgba(255,255,255,0.05)",
+                        animation: "pulse 1.4s ease-in-out infinite",
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : githubData && !githubData.error ? (
               <div className={styles.proGithubStats}>
                 <div className={styles.proStatItem}>
                   <span className={styles.proStatValue}>{githubData.totalStars}</span>
@@ -345,7 +396,7 @@ const About = () => {
                   <span className={styles.proStatLabel}>Followers</span>
                 </div>
               </div>
-            )}
+            ) : null}
           </motion.div>
 
           {/* Experience Section */}
@@ -410,19 +461,21 @@ const About = () => {
               <h3 className={styles.activityTitle}>Certifications</h3>
               <div className={styles.certList}>
                 {certifications.map((cert) => (
-                  <div key={cert} className={styles.certItem}>{cert}</div>
+                  <div key={cert} className={styles.certItem}>
+                    {cert}
+                  </div>
                 ))}
               </div>
             </motion.div>
           </div>
 
-          {/* Socials with unique floating design */}
+          {/* Socials */}
           <motion.div className={styles.socialsContainer} variants={itemVariants}>
             <div className={styles.socialsGrid}>
-              <motion.a 
-                href={socials.Github} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <motion.a
+                href={socials.Github}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialOrb}
                 whileHover={{ scale: 1.1, y: -5 }}
                 whileTap={{ scale: 0.95 }}
@@ -430,11 +483,11 @@ const About = () => {
                 <FiGithub size={24} />
                 <span>GitHub</span>
               </motion.a>
-              
-              <motion.a 
-                href={socials.Linkedin} 
-                target="_blank" 
-                rel="noopener noreferrer" 
+
+              <motion.a
+                href={socials.Linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.socialOrb}
                 whileHover={{ scale: 1.1, y: -5 }}
                 whileTap={{ scale: 0.95 }}
@@ -442,9 +495,9 @@ const About = () => {
                 <FiLinkedin size={24} />
                 <span>LinkedIn</span>
               </motion.a>
-              
-              <motion.a 
-                href={socials.Mail} 
+
+              <motion.a
+                href={socials.Mail}
                 className={styles.socialOrb}
                 whileHover={{ scale: 1.1, y: -5 }}
                 whileTap={{ scale: 0.95 }}
@@ -452,14 +505,13 @@ const About = () => {
                 <FiMail size={24} />
                 <span>Email</span>
               </motion.a>
-              
+
               <div className={styles.locationOrb}>
                 <a href={socials.Location} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
                   <FiMapPin size={20} />
                   <span>Delhi, India</span>
                 </a>
               </div>
-
             </div>
           </motion.div>
 

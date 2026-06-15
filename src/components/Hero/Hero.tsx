@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FiArrowRight, FiDownload, FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import socials from "@/utils/socials";
 
@@ -15,6 +15,8 @@ const Hero = () => {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  // FIX: use a ref for throttle so no state churn on every mousemove
+  const rafRef = useRef<number | null>(null);
 
   const currentRole = roles[roleIndex];
 
@@ -33,7 +35,9 @@ const Hero = () => {
             return prev;
           }
 
-          return isDeleting ? currentRole.slice(0, prev.length - 1) : currentRole.slice(0, prev.length + 1);
+          return isDeleting
+            ? currentRole.slice(0, prev.length - 1)
+            : currentRole.slice(0, prev.length + 1);
         });
       },
       isDeleting ? 45 : 85,
@@ -43,11 +47,24 @@ const Hero = () => {
   }, [currentRole, isDeleting]);
 
   useEffect(() => {
+    // FIX: throttle mousemove to one setState per animation frame (~16 ms)
+    // Previously every move event fired setState → ~60 re-renders/sec
     const handleMouseMove = (event: MouseEvent) => {
-      setMouse({ x: event.clientX, y: event.clientY });
+      if (rafRef.current !== null) return;
+      rafRef.current = window.requestAnimationFrame(() => {
+        setMouse({ x: event.clientX, y: event.clientY });
+        rafRef.current = null;
+      });
     };
+
     window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      // FIX: cancel any pending raf on unmount to avoid setState on unmounted component
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   const codeSnippet = useMemo(
@@ -96,9 +113,10 @@ const Hero = () => {
             </span>
           </h1>
 
-          <p className="min-h-8 font-mono text-base text-[#9bc0ff] sm:text-lg">
+          {/* FIX: aria-hidden on blinking cursor — was announced as "pipe" by screen readers */}
+          <p className="min-h-8 font-mono text-base text-[#9bc0ff] sm:text-lg" aria-label={`Role: ${currentRole}`}>
             {displayText}
-            <span className="ml-1 animate-pulse text-[#4F8EF7]">|</span>
+            <span className="ml-1 animate-pulse text-[#4F8EF7]" aria-hidden="true">|</span>
           </p>
 
           <p className="max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">
@@ -172,7 +190,6 @@ const Hero = () => {
               <FiMail size={18} />
             </a>
           </div>
-
         </motion.div>
 
         <motion.div

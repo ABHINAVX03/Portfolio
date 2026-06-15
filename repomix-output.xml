@@ -1,0 +1,6144 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.env.example
+.eslintrc.json
+.gitignore
+i18next/english/en.json
+next-env.d.ts
+next.config.mjs
+package.json
+postcss.config.js
+public/discord.png
+public/icon.ico
+public/logo.png
+public/logos/css.png
+public/logos/docker.webp
+public/logos/express.png
+public/logos/framer.png
+public/logos/github.png
+public/logos/html.png
+public/logos/js.png
+public/logos/mongodb.png
+public/logos/mui.png
+public/logos/mysql.png
+public/logos/next.png
+public/logos/node-js.png
+public/logos/postgres.png
+public/logos/prisma.webp
+public/logos/react.png
+public/logos/ReactNative.png
+public/logos/reactquery.png
+public/logos/redux.png
+public/logos/stripe.webp
+public/logos/tailwind.png
+public/logos/ts.png
+public/og-image.png
+public/projects/default.png
+public/projects/project1.png
+public/projects/project2.png
+public/projects/project3.png
+public/projects/project4.png
+public/projects/project5.png
+public/projects/project6.png
+public/projects/project7.png
+public/projects/project8.png
+public/projects/Screenshot 2026-05-13 043145.png
+public/projects/uber_project_collage.png
+public/resume/Resume.pdf
+public/SVG/about.png
+public/SVG/contact.png
+README_FIXES.md
+README.md
+scripts/manage-projects.js
+src/app/api/github/profile/route.ts
+src/app/api/send-email/route.js
+src/app/globals.css
+src/app/layout.jsx
+src/app/page.jsx
+src/app/page.module.css
+src/app/robots.ts
+src/app/sitemap.ts
+src/assets/fonts/Prototype.ttf
+src/components/About/About.jsx
+src/components/About/about.module.css
+src/components/Contact/contact.module.css
+src/components/Contact/Contact.tsx
+src/components/Hero/hero.module.css
+src/components/Hero/Hero.tsx
+src/components/Navbar/navbar.module.css
+src/components/Navbar/Navbar.tsx
+src/components/Projects/projects.module.css
+src/components/Projects/Projects.tsx
+src/components/StackSlider/stackslider.module.css
+src/components/StackSlider/StackSlider.tsx
+src/utils/formValidation.js
+src/utils/logos.js
+src/utils/projects/index.json
+src/utils/socials.js
+src/utils/toastify.js
+tailwind.config.ts
+tsconfig.json
+VERCEL_SETUP.md
+vercel.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".eslintrc.json">
+{
+  "extends": "next/core-web-vitals"
+}
+</file>
+
+<file path="postcss.config.js">
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+</file>
+
+<file path="README_FIXES.md">
+# Portfolio Fixes — What Changed & Why
+
+## How to apply
+Copy each file from this zip into the **same path** in your project, replacing the old version.
+Then run: `npm install` (to apply package.json changes).
+
+---
+
+## 🚨 CRITICAL — Do these first
+
+### 1. `src/app/api/send-email/route.js`
+**Problem:** Your real Gmail credentials were hardcoded directly in the source file.
+Anyone with repo access could read them.
+
+**Fix:** Credentials are now read from `process.env.GMAIL_USER` and `process.env.GMAIL_PASSWORD`.
+
+**Action required:**
+- On Vercel → Project Settings → Environment Variables → add GMAIL_USER and GMAIL_PASSWORD
+- Locally → fill in `.env.local` with your new app password
+- **Revoke the old Gmail app password now at:** https://myaccount.google.com/apppasswords
+
+---
+
+## 📦 Dependencies
+
+### 2. `package.json`
+Removed three unnecessary packages:
+- `toastify` — duplicate of `react-toastify` (you already use react-toastify everywhere)
+- `@emailjs/browser` — unused; you use nodemailer instead
+- `dotenv` — unused; Next.js loads .env files natively
+
+After replacing, run `npm install` to clean up node_modules.
+
+---
+
+## ⚙️ Config
+
+### 3. `next.config.mjs`
+Added:
+- Security headers (X-Frame-Options, X-Content-Type-Options, XSS-Protection, Referrer-Policy)
+- `images.remotePatterns` for GitHub avatar URLs (prevents Next.js Image errors)
+
+---
+
+## 🔍 SEO
+
+### 4. `src/app/layout.jsx`
+Added Open Graph image (`/og-image.png`) to metadata so link previews work on
+LinkedIn, Twitter, Discord, and WhatsApp.
+
+**Action required:** Create a 1200×630px image and save it as `public/og-image.png`.
+You can make one free at: https://www.canva.com or https://og-playground.vercel.app
+
+### 5. `src/app/robots.ts` ← NEW FILE
+Tells search engine crawlers they can index your site and where the sitemap is.
+
+### 6. `src/app/sitemap.ts` ← NEW FILE
+Generates `/sitemap.xml` automatically — helps Google discover your portfolio.
+
+---
+
+## 🛠️ Bug Fixes
+
+### 7. `src/utils/formValidation.js`
+**Bug:** The function never returned `true` — it returned `undefined` on success.
+If your Contact component does `if (formValidation(data)) { submit() }`, it would
+**never submit**. Fixed to explicitly return `true`/`false`.
+
+### 8. `src/utils/logos.js`
+Removed `/logos/ReactNative .png` — the space in the filename causes 404 errors on Linux servers.
+**To re-add it:** rename the actual file to `ReactNative.png` (no space), then add it back here.
+
+### 9. `src/utils/socials.js`
+- Location now links to general "Delhi, India" instead of a precise home address pin
+- Discord URL format fixed — `discord.com/channels/...` is not a valid invite link.
+  Replace `YOUR_INVITE_CODE` with your real invite code, or remove the Discord entry.
+
+---
+
+## 📋 Data Updates
+
+### 10. `src/utils/projects/index.json`
+- Removed broken repo link for `hospital-management` (was pointing to your main GitHub profile, not a specific repo). Set to `null` so no broken button shows.
+- Fixed `lastUpdated` from 2024 → 2026-05-16
+
+### 11. `i18next/english/en.json`
+Updated the About section text to match your actual profile (MCA/IIIT Vadodara, BCA/GGSIPU, blockchain internship, 200+ DSA).
+
+### 12. `src/utils/resume.json`
+Updated with your real education and skills. Fill in your internship company name and dates.
+
+---
+
+## ✅ What you DON'T need to change
+- All component files (Hero.tsx, Navbar.tsx, etc.) are fine as-is
+- `tailwind.config.ts` — no issues
+- `tsconfig.json` — no issues
+- `vercel.json` — no issues
+- `.gitignore` — already correctly excludes .env.local
+
+## 📌 Remaining manual tasks (not code changes)
+1. Compress `public/projects/project2.png` (2 MB) and `project4.png` (4 MB) → use https://squoosh.app, target < 200 KB each
+2. Rename `public/logos/ReactNative .png` → `ReactNative.png` (remove the space)
+3. Make sure `public/resume/Resume1.pdf` matches the filename referenced in Hero.tsx (`/resume/Resume.pdf`) — rename one to match the other
+4. Create `public/og-image.png` (1200×630) for social link previews
+5. Revoke old Gmail app password and set up new one in environment variables
+</file>
+
+<file path="scripts/manage-projects.js">
+#!/usr/bin/env node
+
+/**
+ * Single-file Project Management Script
+ *
+ * Use the JSON file at src/utils/projects/index.json as the single source of project data.
+ * Run from repository root:
+ *   node scripts/manage-projects.js <command>
+ *
+ * Commands:
+ *   list                        List all projects
+ *   add <id>                    Add a new project to index.json
+ *   update <id> <field=value>   Update fields for a project
+ *   delete <id>                 Delete a project from index.json
+ *   validate                    Validate index.json project data
+ *   stats                       Show project statistics
+ *   sort-index | reindex        Sort index.json by priority, featured, and year
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const INDEX_FILE = path.join(__dirname, '../src/utils/projects/index.json');
+
+function loadJSON(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch (error) {
+    console.error(`Error loading ${filePath}:`, error.message);
+    return null;
+  }
+}
+
+function saveJSON(filePath, data) {
+  try {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+    console.log(`✅ Saved ${filePath}`);
+  } catch (error) {
+    console.error(`Error saving ${filePath}:`, error.message);
+  }
+}
+
+function getProjects() {
+  const index = loadJSON(INDEX_FILE);
+  return index ? index.projects || [] : [];
+}
+
+function writeIndex(projects) {
+  const indexData = {
+    projects,
+    metadata: {
+      totalProjects: projects.length,
+      featuredProjects: projects.filter((project) => project.featured).length,
+      lastUpdated: new Date().toISOString().split('T')[0],
+      version: '1.0.0'
+    }
+  };
+
+  saveJSON(INDEX_FILE, indexData);
+}
+
+function sortProjects(projects) {
+  return projects.slice().sort((a, b) => {
+    const aPriority = typeof a.priority === 'number' ? a.priority : 999;
+    const bPriority = typeof b.priority === 'number' ? b.priority : 999;
+    if (aPriority !== bPriority) return aPriority - bPriority;
+    if (a.featured !== b.featured) return b.featured - a.featured;
+    return b.year - a.year;
+  });
+}
+
+function listProjects() {
+  const projects = getProjects();
+  console.log('📋 Current Projects:\n');
+  projects.forEach((project, index) => {
+    console.log(`${index + 1}. ${project.name}`);
+    console.log(`   ID: ${project.id}`);
+    console.log(`   Status: ${project.status} (${project.year})`);
+    console.log(`   Featured: ${project.featured ? '⭐' : '❌'}`);
+    console.log(`   Priority: ${project.priority}`);
+    console.log(`   Tags: ${project.tags.join(', ')}\n`);
+  });
+}
+
+function formatProjectName(projectId) {
+  return projectId.replace(/-/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+function addProject(projectId) {
+  const projects = getProjects();
+  if (projects.some((project) => project.id === projectId)) {
+    console.error(`❌ Project ${projectId} already exists in index.json`);
+    return;
+  }
+
+  const project = {
+    id: projectId,
+    name: formatProjectName(projectId),
+    type: 'Full Stack · React',
+    repo: null,
+    deploy: null,
+    image: '/projects/default.png',
+    description: 'Write a short project description here.',
+    tags: ['React', 'JavaScript'],
+    color: 'primary',
+    priority: 99,
+    featured: false,
+    year: new Date().getFullYear(),
+    status: 'planned'
+  };
+
+  projects.push(project);
+  writeIndex(sortProjects(projects));
+  console.log(`✅ Added project ${projectId} to index.json`);
+}
+
+function parseUpdateArgs(args) {
+  const updates = {};
+  args.forEach((arg) => {
+    const [key, ...rest] = arg.split('=');
+    if (!key || rest.length === 0) return;
+    let value = rest.join('=');
+    const trimmed = value.trim();
+    if (trimmed === 'null') {
+      value = null;
+    } else if (trimmed === 'true' || trimmed === 'false') {
+      value = trimmed === 'true';
+    } else if (!Number.isNaN(Number(trimmed)) && trimmed !== '') {
+      value = Number(trimmed);
+    } else {
+      value = trimmed.replace(/^['\"]|['\"]$/g, '');
+    }
+    if (key === 'tags' && typeof value === 'string') {
+      value = value.split(',').map((item) => item.trim()).filter(Boolean);
+    }
+    updates[key] = value;
+  });
+  return updates;
+}
+
+function updateProject(projectId, updateArgs) {
+  const projects = getProjects();
+  const index = projects.findIndex((project) => project.id === projectId);
+  if (index === -1) {
+    console.error(`❌ Project ${projectId} not found in index.json`);
+    return;
+  }
+
+  const updates = parseUpdateArgs(updateArgs);
+  if (Object.keys(updates).length === 0) {
+    console.error('❌ No updates provided. Use key=value pairs.');
+    return;
+  }
+
+  const allowedFields = [
+    'name', 'type', 'repo', 'deploy', 'image', 'description',
+    'tags', 'color', 'priority', 'featured', 'year', 'status'
+  ];
+
+  Object.entries(updates).forEach(([key, value]) => {
+    if (!allowedFields.includes(key)) {
+      console.warn(`⚠️  Skipping unsupported field: ${key}`);
+      return;
+    }
+    projects[index][key] = value;
+  });
+
+  writeIndex(sortProjects(projects));
+  console.log(`✅ Updated project ${projectId} in index.json`);
+}
+
+function deleteProject(projectId) {
+  let projects = getProjects();
+  if (!projects.some((project) => project.id === projectId)) {
+    console.error(`❌ Project ${projectId} not found in index.json`);
+    return;
+  }
+
+  projects = projects.filter((project) => project.id !== projectId);
+  writeIndex(sortProjects(projects));
+  console.log(`✅ Deleted project ${projectId} from index.json`);
+}
+
+function validateProjects() {
+  const projects = getProjects();
+  console.log('🔍 Validating projects in index.json...\n');
+  let errors = 0;
+
+  projects.forEach((project) => {
+    const issues = [];
+    const requiredFields = [
+      'id', 'name', 'type', 'description', 'tags', 'color',
+      'featured', 'year', 'status', 'priority', 'image'
+    ];
+
+    requiredFields.forEach((field) => {
+      if (project[field] === undefined || project[field] === null) {
+        issues.push(`Missing required field: ${field}`);
+      }
+    });
+
+    if (typeof project.featured !== 'boolean') {
+      issues.push('featured must be a boolean');
+    }
+    if (typeof project.priority !== 'number' || Number.isNaN(project.priority)) {
+      issues.push('priority must be a valid number');
+    }
+
+    const validColors = ['primary', 'cyan', 'violet', 'emerald'];
+    if (!validColors.includes(project.color)) {
+      issues.push(`Invalid color: ${project.color}`);
+    }
+
+    const validStatuses = ['completed', 'in-progress', 'planned'];
+    if (!validStatuses.includes(project.status)) {
+      issues.push(`Invalid status: ${project.status}`);
+    }
+
+    if (issues.length > 0) {
+      console.log(`❌ ${project.name} (${project.id}):`);
+      issues.forEach((issue) => console.log(`   - ${issue}`));
+      errors += 1;
+    } else {
+      console.log(`✅ ${project.name} (${project.id})`);
+    }
+  });
+
+  console.log(`\n📊 Validation complete: ${errors} errors found`);
+}
+
+function showStats() {
+  const projects = getProjects();
+  const stats = {
+    total: projects.length,
+    featured: projects.filter((p) => p.featured).length,
+    completed: projects.filter((p) => p.status === 'completed').length,
+    inProgress: projects.filter((p) => p.status === 'in-progress').length,
+    technologies: {},
+    years: {}
+  };
+
+  projects.forEach((project) => {
+    project.tags.forEach((tag) => {
+      stats.technologies[tag] = (stats.technologies[tag] || 0) + 1;
+    });
+    stats.years[project.year] = (stats.years[project.year] || 0) + 1;
+  });
+
+  console.log('📊 Project Statistics:\n');
+  console.log(`Total Projects: ${stats.total}`);
+  console.log(`Featured Projects: ${stats.featured}`);
+  console.log(`Completed: ${stats.completed}`);
+  console.log(`In Progress: ${stats.inProgress}`);
+  console.log('\nTechnologies Used:');
+
+  Object.entries(stats.technologies)
+    .sort(([, a], [, b]) => b - a)
+    .forEach(([tech, count]) => {
+      console.log(`  ${tech}: ${count}`);
+    });
+
+  console.log('\nProjects by Year:');
+  Object.entries(stats.years)
+    .sort(([, a], [, b]) => b - a)
+    .forEach(([year, count]) => {
+      console.log(`  ${year}: ${count}`);
+    });
+}
+
+const [,, command, ...args] = process.argv;
+
+switch (command) {
+  case 'list':
+    listProjects();
+    break;
+  case 'add':
+    if (!args[0]) {
+      console.error('❌ Please provide a project ID: node scripts/manage-projects.js add <project-id>');
+      process.exit(1);
+    }
+    addProject(args[0]);
+    break;
+  case 'update':
+    if (!args[0]) {
+      console.error('❌ Please provide a project ID: node scripts/manage-projects.js update <project-id> <field=value>...');
+      process.exit(1);
+    }
+    updateProject(args[0], args.slice(1));
+    break;
+  case 'delete':
+    if (!args[0]) {
+      console.error('❌ Please provide a project ID: node scripts/manage-projects.js delete <project-id>');
+      process.exit(1);
+    }
+    deleteProject(args[0]);
+    break;
+  case 'validate':
+    validateProjects();
+    break;
+  case 'stats':
+    showStats();
+    break;
+  case 'sort-index':
+  case 'reindex':
+    writeIndex(sortProjects(getProjects()));
+    console.log('✅ index.json sorted');
+    break;
+  default:
+    console.log(`
+🛠️  Single-file Project Management Script
+
+Usage: node scripts/manage-projects.js <command>
+
+Commands:
+  list                           List all projects
+  add <id>                       Add a new project to index.json
+  update <id> <field=value>...   Update fields for a project
+  delete <id>                    Delete a project from index.json
+  validate                       Validate index.json project data
+  stats                          Show project statistics
+  sort-index | reindex           Sort index.json by priority, featured, year
+
+Examples:
+  node scripts/manage-projects.js list
+  node scripts/manage-projects.js add my-new-project
+  node scripts/manage-projects.js update hospital-management priority=2 featured=true
+  node scripts/manage-projects.js delete travel-world
+  node scripts/manage-projects.js reindex
+    `);
+}
+</file>
+
+<file path="src/app/api/github/profile/route.ts">
+import { NextResponse } from "next/server";
+
+const USERNAME = "ABHINAVX03";
+
+export interface GithubLanguage {
+  name: string;
+  count: number;
+}
+
+export interface GithubProfileResponse {
+  username: string;
+  profileUrl: string;
+  avatarUrl: string;
+  publicRepos: number;
+  followers: number;
+  following: number;
+  totalStars: number;
+  topLanguages: GithubLanguage[];
+  error?: string;
+}
+
+interface GithubRepo {
+  stargazers_count?: number;
+  language?: string;
+}
+
+export async function GET(): Promise<NextResponse<GithubProfileResponse | { error: string }>> {
+  try {
+    const headers = {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "portfolio-app",
+    };
+
+    const [userRes, reposRes] = await Promise.all([
+      fetch(`https://api.github.com/users/${USERNAME}`, { headers, next: { revalidate: 3600 } }),
+      fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, { headers, next: { revalidate: 3600 } }),
+    ]);
+
+    if (!userRes.ok || !reposRes.ok) {
+      return NextResponse.json({ error: "Failed to fetch GitHub data" }, { status: 502 });
+    }
+
+    const user = await userRes.json();
+    const repos: GithubRepo[] = await reposRes.json();
+
+    const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+    const languageCount: Record<string, number> = {};
+
+    repos.forEach((repo) => {
+      if (repo.language) {
+        languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
+      }
+    });
+
+    const topLanguages = Object.entries(languageCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([name, count]) => ({ name, count }));
+
+    return NextResponse.json({
+      username: user.login,
+      profileUrl: user.html_url,
+      avatarUrl: user.avatar_url,
+      publicRepos: user.public_repos,
+      followers: user.followers,
+      following: user.following,
+      totalStars,
+      topLanguages,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: "Unexpected GitHub API error" }, { status: 500 });
+  }
+}
+</file>
+
+<file path="src/app/page.jsx">
+import Navbar from "@/components/Navbar/Navbar";
+import Hero from "@/components/Hero/Hero";
+import Projects from "@/components/Projects/Projects";
+import About from "@/components/About/About";
+import Contact from "@/components/Contact/Contact";
+
+export default function Home() {
+  return (
+    <div>
+      {/* CSS-only animated background — zero JS, zero lag */}
+      <div className="bg-grid" aria-hidden="true" />
+
+      <section id="home">
+        <Navbar />
+        <Hero />
+      </section>
+
+      <section id="projects">
+        <Projects />
+      </section>
+
+      <section id="about">
+        <About />
+      </section>
+
+      <section id="contact">
+        <Contact />
+      </section>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/page.module.css">
+
+</file>
+
+<file path="src/app/robots.ts">
+import { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+    },
+    sitemap: "https://abhinavgupta.dev/sitemap.xml",
+  };
+}
+</file>
+
+<file path="src/app/sitemap.ts">
+import { MetadataRoute } from "next";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: "https://abhinavgupta.dev",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 1,
+    },
+  ];
+}
+</file>
+
+<file path="src/components/Navbar/navbar.module.css">
+.navbar {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 1160px;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans);
+  z-index: 1000;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  transition: var(--transition-smooth);
+  background: transparent;
+}
+
+.navbar.scrolled {
+  background: rgba(6, 8, 17, 0.8);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-color: rgba(79, 142, 247, 0.15);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(79, 142, 247, 0.05);
+}
+
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  color: var(--c-text-primary);
+}
+
+.logo img {
+  border-radius: 10px;
+  transition: var(--transition-smooth);
+}
+
+.logo:hover img {
+  transform: rotate(6deg) scale(1.08);
+}
+
+.logoText {
+  font-family: var(--font-sans);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.logoAccent {
+  color: var(--c-primary);
+}
+
+/* Desktop links */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+
+.navLink {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  transition: var(--transition-base);
+  user-select: none;
+}
+
+.navLink:hover {
+  color: var(--c-text-primary);
+  background: rgba(79, 142, 247, 0.08);
+}
+
+.navLinkActive {
+  color: var(--c-primary) !important;
+  background: var(--c-primary-dim) !important;
+}
+
+.navDot {
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c-primary);
+  box-shadow: 0 0 8px var(--c-primary);
+}
+
+/* CTA */
+.ctaBtn {
+  padding: 9px 20px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  background: linear-gradient(135deg, var(--c-primary), var(--c-cyan));
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-base);
+  box-shadow: 0 0 20px rgba(79, 142, 247, 0.25);
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(79, 142, 247, 0.5);
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 1001;
+}
+
+.bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--c-text-primary);
+  border-radius: 2px;
+  transition: var(--transition-base);
+}
+
+.bar1Open { transform: translateY(7px) rotate(45deg); }
+.bar2Open { opacity: 0; }
+.bar3Open { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile menu drawer */
+.mobileMenu {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(6, 8, 17, 0.97);
+  backdrop-filter: blur(20px);
+  z-index: 999;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobileMenuOpen {
+  opacity: 1 !important;
+  pointer-events: all !important;
+}
+
+.mobileLink {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--c-text-secondary);
+  cursor: pointer;
+  transition: var(--transition-base);
+  letter-spacing: -0.02em;
+}
+
+.mobileLink:hover {
+  color: var(--c-primary);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .navbar {
+    width: calc(100% - 32px);
+    top: 12px;
+  }
+
+  .navLinks,
+  .ctaBtn {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .mobileMenu {
+    display: flex;
+  }
+}
+</file>
+
+<file path="src/components/StackSlider/StackSlider.tsx">
+import styles from "./stackslider.module.css";
+import Image from "next/image";
+import logos from "@/utils/logos";
+
+const StackSlider = () => {
+  return (
+    <div className={styles.slider}>
+      <div className={styles.track}>
+        {[0, 1].map((groupIndex) => (
+          <div
+            key={groupIndex}
+            className={styles.group}
+            aria-hidden={groupIndex === 1}
+          >
+            {logos.map((logo) => (
+              <Image
+                key={`${groupIndex}-${logo}`}
+                src={logo}
+                alt="Tech logo"
+                width={80}
+                height={44}
+                className={styles.img}
+                loading="lazy"
+              />
+            ))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default StackSlider;
+</file>
+
+<file path="src/utils/toastify.js">
+import { toast } from "react-toastify";
+
+export const successNotify = () => {
+  toast.success("Thanks for communicating. I'll be in touch soon", {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
+};
+
+export const errorNotify = () => {
+  toast.error("There was a mistake. Please try again", {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
+};
+
+export const warnNotify = () => {
+  toast.warn("Make sure you have completed all fields.", {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
+};
+
+export const emailWarnNotify = () => {
+  toast.warn("Make sure you have entered a valid email format.", {
+    position: "bottom-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: "dark",
+  });
+};
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="VERCEL_SETUP.md">
+# Vercel Deployment Setup
+
+This guide ensures your portfolio deploys smoothly with email functionality working without manual setup.
+
+## Prerequisites
+
+Before deploying to Vercel, you need:
+
+1. **Gmail Account** with 2-factor authentication enabled
+2. **Gmail App Password** (not your regular Gmail password)
+3. **Vercel Account** connected to your GitHub repository
+
+## Step 1: Get Gmail App Password
+
+1. Go to [Google Account Security](https://myaccount.google.com/security)
+2. Enable 2-factor authentication (if not already enabled)
+3. Go to [App passwords](https://myaccount.google.com/apppasswords)
+4. Select "Mail" and "Windows Computer"
+5. Google will generate a 16-character password
+6. Copy this password (you'll need it in Step 2)
+
+## Step 2: Configure Environment Variables in Vercel
+
+### Option A: Via Vercel Dashboard (Recommended)
+
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Select your portfolio project
+3. Go to **Settings** → **Environment Variables**
+4. Add the following variables:
+
+   | Variable Name | Value |
+   |---|---|
+   | `GMAIL_USER` | your_gmail@gmail.com |
+   | `GMAIL_PASSWORD` | paste_the_16_char_password_here |
+
+5. Make sure both variables are set for **Production**, **Preview**, and **Development**
+6. Click **Save**
+
+### Option B: Via Vercel CLI
+
+```bash
+vercel env add GMAIL_USER
+# Enter: your_gmail@gmail.com
+
+vercel env add GMAIL_PASSWORD
+# Enter: your_16_character_app_password
+```
+
+## Step 3: Deploy to Vercel
+
+After setting environment variables, your deployment is ready:
+
+```bash
+git push origin master
+```
+
+Vercel will automatically:
+1. Detect changes in GitHub
+2. Build your Next.js application
+3. Use the environment variables you configured
+4. Deploy to production
+
+## Step 4: Test Email Functionality
+
+1. Go to your deployed portfolio
+2. Fill out the contact form
+3. Submit a test email
+4. Check your Gmail inbox for the notification
+
+If email doesn't work:
+- ✅ Verify `GMAIL_USER` and `GMAIL_PASSWORD` are set in Vercel
+- ✅ Check that the 16-character password is correct (no extra spaces)
+- ✅ Ensure Gmail 2-factor authentication is enabled
+- ✅ Check Vercel logs: **Project** → **Deployments** → **Logs**
+
+## Step 5: Update Contact Email (Optional)
+
+If you want to receive emails at a different address:
+
+1. Edit `src/app/api/send-email/route.js`
+2. Find the line: `to: "guptaabhinav697@gmail.com",`
+3. Replace with your email address
+4. Commit and push to GitHub
+5. Vercel will auto-redeploy
+
+## Troubleshooting
+
+### Email Not Working After Deploy
+
+**Check 1: Verify Environment Variables**
+```bash
+vercel env list
+```
+Both `GMAIL_USER` and `GMAIL_PASSWORD` should be listed.
+
+**Check 2: View Vercel Logs**
+1. Vercel Dashboard → Your Project → Deployments
+2. Click on the latest deployment
+3. Go to **Functions** tab
+4. Check `/api/send-email` logs for errors
+
+**Check 3: Verify Gmail Settings**
+- 2-factor authentication is enabled
+- App password is set (not regular Gmail password)
+- The app password doesn't have spaces when copied
+
+### Password Was Wrong
+
+1. Go back to [Google App passwords](https://myaccount.google.com/apppasswords)
+2. Generate a new app password
+3. Update it in Vercel dashboard
+4. Trigger a redeployment (push a commit to GitHub)
+
+## Automatic Deployments
+
+After initial setup, deployments are fully automatic:
+
+1. **Push to GitHub**: `git push origin master`
+2. **Vercel detects changes** and starts building
+3. **Environment variables are automatically injected**
+4. **Your portfolio deploys** with working email
+
+No manual setup needed on subsequent deployments!
+
+## Support
+
+For more information:
+- [Vercel Docs](https://vercel.com/docs)
+- [Next.js Deployment](https://nextjs.org/docs/deployment/vercel)
+- [Gmail App Passwords](https://support.google.com/accounts/answer/185833)
+</file>
+
+<file path=".gitignore">
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js build output
+.next/
+out/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Build outputs
+build/
+dist/
+
+# Temporary files
+*.tmp
+*.temp
+*.tsbuildinfo
+</file>
+
+<file path="i18next/english/en.json">
+{
+  "about": {
+    "title": "About me",
+    "text": "I am a Full Stack Developer and MCA student at IIIT Vadodara with a 9.0 GPA, previously completing my BCA from GGSIPU with a 9.2 GPA. My core stack spans React, Next.js, TypeScript, and Tailwind on the frontend, with Java Spring Boot and Node.js/Express on the backend, backed by PostgreSQL and MongoDB. I have internship experience in blockchain-focused software development using Solidity and Web3.js, and I am actively solving DSA problems with 200+ questions completed."
+  },
+  "contact": {
+    "title": "Let's get in touch!"
+  },
+  "hero": {
+    "span": "resume"
+  },
+  "navbar": {
+    "home": "Home",
+    "project": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "projects": {
+    "title": "Projects",
+    "subTitle": "See my latest work"
+  }
+}
+</file>
+
+<file path="next-env.d.ts">
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/building-your-application/configuring/typescript for more information.
+</file>
+
+<file path="src/components/Hero/hero.module.css">
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 1;
+  padding-top: 80px;
+  padding-bottom: 4rem;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+
+/* ---- Left content ---- */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+/* Status badge */
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.08);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--c-emerald);
+  letter-spacing: 0.04em;
+  width: fit-content;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c-emerald);
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3); }
+  50%       { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+}
+
+/* Heading */
+.headingBlock {
+  line-height: 1;
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-size: clamp(52px, 7vw, 88px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--c-text-primary);
+  line-height: 0.95;
+}
+
+.nameAccent {
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-cyan) 60%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 30px rgba(79, 142, 247, 0.4));
+}
+
+/* Role typewriter */
+.roleBlock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: clamp(16px, 2vw, 22px);
+  font-weight: 500;
+}
+
+.rolePrefix {
+  color: var(--c-text-muted);
+}
+
+.role {
+  color: var(--c-cyan);
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+/* Description */
+.description {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.75;
+  color: var(--c-text-secondary);
+  max-width: 480px;
+}
+
+.description strong {
+  color: var(--c-text-primary);
+  font-weight: 600;
+}
+
+/* Tech badges */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid;
+  transition: var(--transition-base);
+}
+
+.badge:hover {
+  transform: translateY(-1px);
+}
+
+.badge_primary {
+  color: var(--c-primary);
+  border-color: rgba(79, 142, 247, 0.3);
+  background: rgba(79, 142, 247, 0.08);
+}
+
+.badge_cyan {
+  color: var(--c-cyan);
+  border-color: rgba(0, 212, 255, 0.3);
+  background: rgba(0, 212, 255, 0.08);
+}
+
+.badge_violet {
+  color: var(--c-violet);
+  border-color: rgba(139, 92, 246, 0.3);
+  background: rgba(139, 92, 246, 0.08);
+}
+
+.badge_emerald {
+  color: var(--c-emerald);
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-cyan));
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-base);
+  box-shadow: 0 4px 20px rgba(79, 142, 247, 0.3);
+  letter-spacing: 0.01em;
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(79, 142, 247, 0.5);
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--c-text-primary);
+  background: transparent;
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  text-decoration: none;
+  transition: var(--transition-base);
+}
+
+.btnOutline:hover {
+  border-color: rgba(79, 142, 247, 0.4);
+  background: rgba(79, 142, 247, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Social links */
+.socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  transition: var(--transition-base);
+  cursor: pointer;
+}
+
+.socialLink:hover {
+  color: var(--c-primary);
+  border-color: rgba(79, 142, 247, 0.4);
+  background: rgba(79, 142, 247, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(79, 142, 247, 0.2);
+}
+
+/* ---- Right: Code card ---- */
+.codeCard {
+  background: rgba(10, 13, 23, 0.9);
+  border: 1px solid rgba(79, 142, 247, 0.15);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(79, 142, 247, 0.05), inset 0 1px 0 rgba(255,255,255,0.04);
+  animation: floatY 5s ease-in-out infinite;
+}
+
+.codeHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(79, 142, 247, 0.1);
+}
+
+.codeDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.codeFileName {
+  margin-left: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--c-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.codeBody {
+  padding: 20px 24px;
+  overflow: hidden;
+}
+
+.codeBody code {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.85;
+  color: #e2e8f0;
+  white-space: pre;
+  display: block;
+}
+
+/* Syntax color hints */
+.codeBody code {
+  color: #94a3b8;
+}
+
+/* Scroll indicator */
+.scrollIndicator {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--c-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--c-primary), transparent);
+  animation: scrollLineAnim 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollLineAnim {
+  0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+  50%  { opacity: 1; transform: scaleY(1); }
+  100% { opacity: 0; transform: scaleY(0); transform-origin: bottom; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-14px); }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 3rem;
+    padding-top: 40px;
+  }
+
+  .content {
+    align-items: center;
+  }
+
+  .description {
+    text-align: center;
+  }
+
+  .badges {
+    justify-content: center;
+  }
+
+  .actions {
+    justify-content: center;
+  }
+
+  .socials {
+    justify-content: center;
+  }
+
+  .codeCard {
+    max-width: 420px;
+    margin: 0 auto;
+    animation: none;
+  }
+
+  .scrollIndicator {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding-top: 90px;
+  }
+
+  .name {
+    font-size: 48px;
+  }
+
+  .codeBody code {
+    font-size: 11px;
+  }
+}
+</file>
+
+<file path="src/components/StackSlider/stackslider.module.css">
+@keyframes slide {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.slider {
+  position: relative;
+  overflow: hidden;
+  padding: 16px 0;
+  /* fade edges */
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+
+.track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: max-content;
+  animation: slide 28s linear infinite;
+  will-change: transform;
+}
+
+.track:hover {
+  animation-play-state: paused;
+}
+
+.group {
+  display: flex;
+  align-items: center;
+}
+
+.img {
+  height: 44px;
+  width: auto;
+  margin: 0 28px;
+  filter: brightness(40%) grayscale(20%) invert(0);
+  transition: filter 0.35s ease, transform 0.35s ease;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.img:hover {
+  filter: brightness(100%) drop-shadow(0 0 10px rgba(79, 142, 247, 0.5));
+  transform: scale(1.18) translateY(-4px);
+}
+
+@media (max-width: 768px) {
+  .img {
+    height: 34px;
+    margin: 0 20px;
+  }
+}
+</file>
+
+<file path="src/utils/formValidation.js">
+import { warnNotify, emailWarnNotify } from "./toastify";
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/**
+ * Validates contact form data.
+ * Shows a toast notification on failure.
+ * @returns {boolean} true if valid, false if not
+ */
+const formValidation = (formData) => {
+  if (
+    formData.user_name === "" ||
+    formData.user_email === "" ||
+    formData.message === ""
+  ) {
+    warnNotify();
+    return false; // ✅ was: return (undefined) — caused silent failures
+  }
+
+  if (!emailRegex.test(formData.user_email)) {
+
+    emailWarnNotify();
+    return false;
+  }
+
+  return true; // ✅ explicit success signal
+};
+
+export default formValidation;
+</file>
+
+<file path="src/utils/socials.js">
+const socials = {
+  // ✅ General location — avoids exposing a precise home address
+  Location: "https://www.google.com/maps/place/Delhi,+India",
+
+  // ✅ Fix: Discord invite links use discord.gg/invite-code — replace YOUR_INVITE with your actual invite code
+  // If you don't have a public server, remove the Discord entry entirely
+  Discord: "https://discord.gg/YOUR_INVITE_CODE",
+
+  Github: "https://github.com/ABHINAVX03",
+  Linkedin: "https://www.linkedin.com/in/abhinav-gupta-367369167",
+  Mail: "mailto:guptaabhinav697@gmail.com",
+};
+
+export default socials;
+</file>
+
+<file path="vercel.json">
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "functions": {
+    "src/app/api/**/*.js": {
+      "maxDuration": 10
+    }
+  }
+}
+</file>
+
+<file path="next.config.mjs">
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    formats: ["image/webp", "image/avif"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+      },
+    ],
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "DENY",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "X-XSS-Protection",
+            value: "1; mode=block",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "strict-origin-when-cross-origin",
+          },
+        ],
+      },
+    ];
+  },
+};
+
+export default nextConfig;
+</file>
+
+<file path="README.md">
+# Portfolio
+
+A modern, responsive portfolio website showcasing projects with animations and interactive UI components.
+
+## Tech Stack
+
+- **Framework**: Next.js 14.1.0 with App Router
+- **Frontend**: React 18 with Framer Motion animations
+- **Styling**: Tailwind CSS with CSS Modules
+- **Email**: EmailJS and Nodemailer integration
+- **Internationalization**: i18next
+- **UI Components**: Material-UI icons
+- **Deployment**: Vercel
+
+## Project Features
+
+- ✨ Smooth animations and transitions using Framer Motion
+- 📱 Fully responsive design with Tailwind CSS
+- 🎨 Modern glass morphism and 3D UI effects
+- ✉️ Contact form with email notifications
+- 🔄 Project management system with single JSON source
+- 🌍 Multi-language support (i18n)
+- 🚀 Optimized for performance
+
+## Recent Improvements
+
+- **Accessibility:** Added focus-visible outlines and improved contrast for better WCAG compliance.
+- **SEO:** Included JSON‑LD Person schema in `layout.jsx` for richer search results.
+- **Performance:** Implemented `prefers-reduced-motion` media query to disable background animations for users who prefer reduced motion.
+
+## Getting Started
+
+### Development
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:4000](http://localhost:4000) to see your portfolio.
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## Project Management
+
+Manage projects using the provided CLI script:
+
+```bash
+# List all projects
+node scripts/manage-projects.js list
+
+# Add a new project
+node scripts/manage-projects.js add my-project
+
+# Update a project
+node scripts/manage-projects.js update my-project priority=1 featured=true
+
+# Delete a project
+node scripts/manage-projects.js delete my-project
+
+# Validate project data
+node scripts/manage-projects.js validate
+
+# View statistics
+node scripts/manage-projects.js stats
+```
+
+All project data is stored in `src/utils/projects/index.json`.
+
+## Environment Variables
+
+Create a `.env.local` file with:
+
+```env
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+GMAIL_USER=your_email
+GMAIL_PASSWORD=your_app_password
+```
+
+## Deployment on Vercel
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Vercel will auto-detect Next.js configuration
+4. Deploy with a single click
+
+Visit [Vercel Dashboard](https://vercel.com/dashboard) to manage your deployments.
+</file>
+
+<file path="src/components/Contact/Contact.tsx">
+"use client";
+import styles from "./contact.module.css";
+import React, { useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import {
+  successNotify,
+  errorNotify,
+} from "@/utils/toastify.js";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
+import socials from "@/utils/socials";
+import formValidation from "@/utils/formValidation";
+
+const containerVariants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.23, 1, 0.32, 1] } },
+};
+
+const contactItems = [
+  {
+    icon: <FiMail size={22} />,
+    label: "Email",
+    value: "guptaabhinav697@gmail.com",
+    href: socials.Mail,
+  },
+  {
+    icon: <FiLinkedin size={22} />,
+    label: "LinkedIn",
+    value: "abhinav-gupta-367369167",
+    href: socials.Linkedin,
+  },
+  {
+    icon: <FiGithub size={22} />,
+    label: "GitHub",
+    value: "ABHINAVX03",
+    href: socials.Github,
+  },
+  {
+    icon: <FiMapPin size={22} />,
+    label: "Location",
+    value: "Delhi, India",
+    href: socials.Location,
+  },
+];
+
+const Contact = () => {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const [isSending, setIsSending] = useState(false);
+  const [formData, setFormData] = useState({
+    user_name: "",
+    user_email: "",
+    message: "",
+    company_url_confirm: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formValidation(formData)) return;
+
+    setIsSending(true);
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setFormData({ user_name: "", user_email: "", message: "", company_url_confirm: "" });
+        successNotify();
+      } else {
+        console.error("Email error:", data);
+        errorNotify();
+      }
+    } catch (err) {
+      console.error("Error sending email:", err);
+      errorNotify();
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  return (
+    <section className={styles.section} ref={ref}>
+      <div className={styles.container}>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "show" : "hidden"}
+        >
+          {/* Header */}
+          <motion.div className={styles.header} variants={itemVariants}>
+            <div className={styles.sectionLabel}>
+              <span className={styles.labelLine} />
+              <span>Get In Touch</span>
+              <span className={styles.labelLine} />
+            </div>
+            <h2 className={styles.title}>
+              Let&apos;s <span className={styles.titleAccent}>Work Together</span>
+            </h2>
+            <p className={styles.subtitle}>
+              Open to full-time roles, freelance projects, and collaborations.
+              Drop me a message and I&apos;ll get back to you promptly.
+            </p>
+          </motion.div>
+
+          {/* Two columns */}
+          <div className={styles.grid}>
+            {/* Left — contact info */}
+            <motion.div className={styles.infoColumn} variants={itemVariants}>
+              <h3 className={styles.infoTitle}>Contact Details</h3>
+              <div className={styles.contactItems}>
+                {contactItems.map((item) => (
+                  <div key={item.label} className={styles.contactItem}>
+                    <div className={styles.contactIcon}>{item.icon}</div>
+                    <div className={styles.contactText}>
+                      <span className={styles.contactLabel}>{item.label}</span>
+                      {item.href ? (
+                        <a href={item.href} target="_blank" rel="noopener noreferrer" className={styles.contactValue}>
+                          {item.value}
+                        </a>
+                      ) : (
+                        <span className={styles.contactValue}>{item.value}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Availability card */}
+              <div className={styles.availCard}>
+                <div className={styles.availDot} />
+                <div>
+                  <p className={styles.availTitle}>Available for opportunities</p>
+                  <p className={styles.availText}>Full-time · Freelance · Remote</p>
+                </div>
+              </div>
+              <a href={socials.Mail} className={styles.hireCard}>
+                Hire Me
+              </a>
+            </motion.div>
+
+            {/* Right — form */}
+            <motion.div className={styles.formColumn} variants={itemVariants}>
+              <form onSubmit={handleSubmit} className={styles.form} id="contact-form">
+                <input
+                  type="text"
+                  name="company_url_confirm"
+                  value={formData.company_url_confirm}
+                  onChange={handleChange}
+                  className={styles.honeypot}
+                  tabIndex={-1}
+                  autoComplete="new-password"
+                  aria-hidden="true"
+                />
+                <div className={styles.formRow}>
+                  <div className={styles.fieldGroup}>
+                    <label htmlFor="user_name" className={styles.label}>Name</label>
+                    <input
+                      id="user_name"
+                      type="text"
+                      name="user_name"
+                      value={formData.user_name}
+                      onChange={handleChange}
+                      placeholder="Your name"
+                      className={styles.input}
+                      autoComplete="name"
+                    />
+                  </div>
+                  <div className={styles.fieldGroup}>
+                    <label htmlFor="user_email" className={styles.label}>Email</label>
+                    <input
+                      id="user_email"
+                      type="email"
+                      name="user_email"
+                      value={formData.user_email}
+                      onChange={handleChange}
+                      placeholder="your@email.com"
+                      className={styles.input}
+                      autoComplete="email"
+                    />
+                  </div>
+                </div>
+                <div className={styles.fieldGroup}>
+                  <label htmlFor="message" className={styles.label}>Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={6}
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell me about your project or opportunity..."
+                    className={styles.textarea}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className={styles.submitBtn}
+                  disabled={isSending}
+                  id="contact-submit-btn"
+                >
+                  {isSending ? (
+                    <>
+                      <span className={styles.spinner} />
+                      Sending...
+                    </>
+                  ) : (
+                    <>Send Message →</>
+                  )}
+                </button>
+              </form>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <div className={styles.footerInner}>
+          <p className={styles.footerText}>
+            © {new Date().getFullYear()} Abhinav Gupta · Built with Next.js & Spring Boot
+          </p>
+          <p className={styles.footerSub}>Full Stack Developer · Delhi, India</p>
+          <a href={socials.Mail} className={styles.footerCta}>Email Me</a>
+        </div>
+      </footer>
+
+      <ToastContainer theme="dark" position="bottom-right" />
+    </section>
+  );
+};
+
+export default Contact;
+</file>
+
+<file path="src/utils/logos.js">
+const logos = [
+  "/logos/react.png",
+  "/logos/next.png",
+  "/logos/js.png",
+  "/logos/ts.png",
+  "/logos/html.png",
+  "/logos/css.png",
+  "/logos/tailwind.png",
+  "/logos/redux.png",
+  "/logos/framer.png",
+  "/logos/node-js.png",
+  "/logos/express.png",
+  "/logos/postgres.png",
+  "/logos/prisma.webp",
+  "/logos/mongodb.png",
+  "/logos/mysql.png",
+  "/logos/docker.webp",
+  "/logos/ReactNative.png",
+  "/logos/mui.png",
+];
+
+export default logos;
+</file>
+
+<file path="src/components/Contact/contact.module.css">
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 0 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+  flex: 1;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+  margin-bottom: 1.4rem;
+}
+
+.labelLine {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-primary));
+}
+
+.labelLine:last-child {
+  background: linear-gradient(90deg, var(--c-primary), transparent);
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: clamp(32px, 5vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--c-text-primary);
+  margin-bottom: 1rem;
+}
+
+.titleAccent {
+  background: linear-gradient(135deg, var(--c-primary), var(--c-cyan));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 16px;
+  color: var(--c-text-secondary);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Two columns */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 3rem;
+  align-items: start;
+  padding-bottom: 6rem;
+}
+
+/* Left — Info */
+.infoColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.infoTitle {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.contactItems {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-lg);
+  transition: var(--transition-base);
+}
+
+.contactItem:hover {
+  background: rgba(79,142,247,0.05);
+  border-color: rgba(79,142,247,0.25);
+}
+
+.contactIcon {
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  background: rgba(79,142,247,0.1);
+  color: var(--c-primary);
+  flex-shrink: 0;
+}
+
+.contactText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.contactLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+}
+
+.contactValue {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--c-text-secondary);
+  text-decoration: none;
+  transition: var(--transition-base);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+a.contactValue:hover {
+  color: var(--c-primary);
+}
+
+/* Availability card */
+.availCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  background: rgba(16, 185, 129, 0.06);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-lg);
+}
+
+.availDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #10b981;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(16,185,129,0.2); }
+  50%       { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+}
+
+.availTitle {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.availText {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--c-text-muted);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.hireCard {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: var(--radius-lg);
+  background: #10b981;
+  color: #04130c;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 800;
+  transition: var(--transition-base);
+}
+
+.hireCard:hover {
+  background: #34d399;
+  transform: translateY(-2px);
+}
+
+/* Right — Form */
+.formColumn {
+  background: rgba(11, 15, 26, 0.7);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  position: relative;
+  overflow: hidden;
+}
+
+.formColumn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-primary), var(--c-cyan), transparent);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+}
+
+.input,
+.textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--c-text-primary);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  outline: none;
+  transition: var(--transition-base);
+  resize: none;
+  width: 100%;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--c-text-muted);
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--c-primary);
+  background: rgba(79, 142, 247, 0.05);
+  box-shadow: 0 0 15px rgba(79, 142, 247, 0.3), inset 0 0 10px rgba(79, 142, 247, 0.1);
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 28px;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-cyan));
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: var(--transition-base);
+  box-shadow: 0 4px 20px rgba(79, 142, 247, 0.3);
+  letter-spacing: 0.01em;
+  align-self: flex-end;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(79, 142, 247, 0.5);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Footer */
+.footer {
+  margin-top: auto;
+  border-top: 1px solid var(--c-border);
+  padding: 2rem 0;
+}
+
+.footerInner {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.footerText {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--c-text-muted);
+}
+
+.footerSub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--c-text-muted);
+  letter-spacing: 0.06em;
+}
+
+.footerCta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 0 14px;
+  border: 1px solid rgba(79, 142, 247, 0.35);
+  border-radius: 999px;
+  color: #dbe8ff;
+  background: rgba(79, 142, 247, 0.08);
+  font-size: 12px;
+  font-weight: 700;
+  transition: var(--transition-base);
+}
+
+.footerCta:hover {
+  color: #fff;
+  background: rgba(79, 142, 247, 0.18);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .submitBtn {
+    align-self: stretch;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 4rem 0 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .header {
+    margin-bottom: 2.5rem;
+  }
+
+  .grid {
+    gap: 2rem;
+    padding-bottom: 4rem;
+  }
+
+  .contactItem {
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .formColumn {
+    padding: 1.25rem;
+    border-radius: 18px;
+  }
+
+  .footerInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+</file>
+
+<file path="src/components/Navbar/Navbar.tsx">
+"use client";
+
+import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FiMenu, FiMoon, FiSun, FiX } from "react-icons/fi";
+
+const NAV_ITEMS = [
+  { label: "Home", href: "#home" },
+  { label: "Projects", href: "#projects" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
+];
+
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 10);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("theme");
+    const shouldUseDark = storedTheme ? storedTheme === "dark" : true;
+    setIsDark(shouldUseDark);
+    document.documentElement.classList.toggle("dark", shouldUseDark);
+  }, []);
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
+  const toggleTheme = () => {
+    const next = !isDark;
+    setIsDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    window.localStorage.setItem("theme", next ? "dark" : "light");
+  };
+
+  return (
+    <header className="sticky top-0 z-50 px-4 py-4 sm:px-6">
+      <nav role="navigation"
+        className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-6 ${
+          isScrolled
+            ? "border-black/10 bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.06)] backdrop-blur-xl dark:border-white/15 dark:bg-[#05070f]/70"
+            : "border-black/5 bg-white/35 backdrop-blur-lg dark:border-white/10 dark:bg-[#05070f]/45"
+        }`}
+        aria-label="Main navigation"
+      >
+        <Link
+          href="#home"
+          className="inline-flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c470]"
+          aria-label="Go to home section"
+        >
+          <span className="grid h-10 w-10 place-items-center rounded-xl border border-black/15 bg-black/5 text-sm font-bold text-slate-800 dark:border-white/20 dark:bg-white/5 dark:text-white">
+            AG
+          </span>
+          <div className="hidden sm:block">
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">Abhinav Gupta</p>
+            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-white/70">
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#22c470] opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22c470]" />
+              </span>
+              Available for opportunities
+            </div>
+          </div>
+        </Link>
+
+        <ul className="hidden items-center gap-6 md:flex">
+          {NAV_ITEMS.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="text-sm font-medium text-slate-700 transition hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8EF7] dark:text-white/80 dark:hover:text-white"
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex items-center gap-2">
+          {/* Theme Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-black/5 text-slate-800 transition hover:bg-black/10 hover:text-[#22c470] dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-[#22c470] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c470]"
+            aria-label="Toggle theme"
+          >
+            {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+          </button>
+
+          <a
+            href="/resume/Resume.pdf"
+            download
+            className="hidden rounded-xl bg-[#22c470] px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-[#32d983] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c470] md:inline-block"
+            aria-label="Download resume"
+          >
+            Resume
+          </a>
+
+          <button
+            type="button"
+            onClick={() => setIsMenuOpen((prev) => !prev)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-black/5 text-slate-800 md:hidden dark:border-white/15 dark:bg-white/5 dark:text-white" aria-controls="mobile-menu"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={isMenuOpen}
+          >
+            {isMenuOpen ? <FiX size={18} /> : <FiMenu size={18} />}
+          </button>
+        </div>
+      </nav>
+
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div id="mobile-menu" initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: 0.2 }}
+            className="mx-auto mt-2 w-full max-w-7xl rounded-2xl border border-black/10 bg-white/95 p-4 backdrop-blur-xl dark:border-white/15 dark:bg-[#05070f]/95 md:hidden"
+          >
+            <ul className="space-y-2">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block rounded-lg px-3 py-2 text-sm text-slate-800 transition hover:bg-slate-100 hover:text-slate-950 dark:text-white/85 dark:hover:bg-white/10 dark:hover:text-white"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="/resume/Resume.pdf"
+              download
+              className="mt-3 block rounded-lg bg-[#22c470] px-4 py-2 text-center text-sm font-semibold text-black hover:bg-[#32d983]"
+              aria-label="Download resume from mobile menu"
+            >
+              Download Resume
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
+  );
+};
+
+export default Navbar;
+</file>
+
+<file path="src/components/Projects/projects.module.css">
+/* ============================================
+   UNIQUE PROJECTS SECTION — Masonry Grid
+   ============================================ */
+
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 7rem 0;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 30% 70%, rgba(79, 142, 247, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 70% 30%, rgba(0, 212, 255, 0.06) 0%, transparent 50%);
+  animation: projectGlow 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes projectGlow {
+  0%, 100% {
+    background:
+      radial-gradient(circle at 30% 70%, rgba(79, 142, 247, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 70% 30%, rgba(0, 212, 255, 0.06) 0%, transparent 50%);
+  }
+  50% {
+    background:
+      radial-gradient(circle at 40% 60%, rgba(79, 142, 247, 0.09) 0%, transparent 50%),
+      radial-gradient(circle at 60% 40%, rgba(0, 212, 255, 0.09) 0%, transparent 50%);
+  }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+/* ---- Header ---- */
+.header {
+  text-align: center;
+  margin-bottom: 5rem;
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+
+.labelLine {
+  width: 56px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c-primary));
+  display: block;
+}
+
+.labelLine:last-child {
+  background: linear-gradient(90deg, var(--c-primary), transparent);
+}
+
+.labelText {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--c-primary);
+}
+
+.heading {
+  font-family: var(--font-sans);
+  font-size: clamp(40px, 5.5vw, 64px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--c-text-primary);
+  margin-bottom: 1rem;
+}
+
+.headingAccent {
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-cyan) 60%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.subheading {
+  font-family: var(--font-body);
+  font-size: 17px;
+  color: var(--c-text-secondary);
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.7;
+}
+
+/* Stat pills */
+.statRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--c-border);
+  border-radius: var(--radius-full);
+  padding: 12px 28px;
+  gap: 24px;
+}
+
+.statPill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.statNum {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--c-primary), var(--c-cyan));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+}
+
+.statDivider {
+  width: 1px;
+  height: 32px;
+  background: var(--c-border);
+}
+
+/* ============================================
+   FLAGSHIP CASE STUDY
+   ============================================ */
+.flagship {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+  gap: 2rem;
+  align-items: stretch;
+  margin-bottom: 4rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(8, 12, 22, 0.96), rgba(14, 24, 36, 0.82));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.flagshipContent {
+  padding: 1.25rem;
+}
+
+.flagshipEyebrow {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  padding: 6px 10px;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #74f2b2;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.flagshipTitle {
+  margin: 0 0 0.9rem;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.flagshipSummary {
+  max-width: 680px;
+  margin: 0 0 1.5rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.caseGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.casePanel {
+  min-height: 132px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.casePanel span {
+  display: block;
+  margin-bottom: 0.6rem;
+  color: #4f8ef7;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.casePanel p,
+.casePanel li {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.casePanel ul {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.apiList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.apiList small {
+  padding: 6px 8px;
+  border: 1px solid rgba(0, 212, 255, 0.22);
+  border-radius: 8px;
+  background: rgba(0, 212, 255, 0.08);
+  color: #b7efff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.flagshipActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+.flagshipActions a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.flagshipActions a:hover {
+  border-color: rgba(79, 142, 247, 0.45);
+  background: rgba(79, 142, 247, 0.16);
+  transform: translateY(-2px);
+}
+
+.flagshipVisual {
+  position: relative;
+  min-height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.flagshipImage {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  object-fit: cover;
+  display: block;
+}
+
+.proofStrip {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.proofStrip span {
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   UNIQUE MASONRY GRID
+   ============================================ */
+.masonryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+/* ============================================
+   UNIQUE PROJECT CARD
+   ============================================ */
+.projectCard {
+  position: relative;
+  background: rgba(11, 15, 26, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.projectCard:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4), 0 0 40px var(--glow);
+}
+
+/* Card Image */
+.cardImage {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.projectCard:hover .image {
+  transform: scale(1.05);
+}
+
+.imageOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.3) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.projectCard:hover .imageOverlay {
+  opacity: 1;
+}
+
+/* Project Number */
+.projectNumber {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 2;
+}
+
+.web3Badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #a8f0ff;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 212, 255, 0.45);
+  background: rgba(0, 212, 255, 0.14);
+  backdrop-filter: blur(8px);
+}
+
+/* Hover Content */
+.hoverContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.hoverActions {
+  display: flex;
+  gap: 1rem;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: white;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.actionBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Card Content */
+.cardContent {
+  padding: 1.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.projectTitle {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--c-text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.projectType {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.projectDesc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--c-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+/* Tech Stack */
+.techStack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.techTag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  color: var(--c-text-primary);
+  transition: all 0.3s ease;
+}
+
+/* Animated Border */
+.cardBorder {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  transform-origin: left;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .flagship {
+    grid-template-columns: 1fr;
+  }
+
+  .flagshipImage {
+    min-height: 320px;
+  }
+
+  .masonryGrid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .header {
+    margin-bottom: 3rem;
+  }
+
+  .flagship {
+    gap: 1rem;
+    margin-bottom: 3rem;
+    padding: 0.9rem;
+    border-radius: 18px;
+  }
+
+  .flagshipContent {
+    padding: 0.5rem;
+  }
+
+  .caseGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .casePanel {
+    min-height: auto;
+  }
+
+  .flagshipImage {
+    min-height: 240px;
+  }
+
+  .flagshipActions a {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
+
+  .masonryGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .heading {
+    font-size: clamp(32px, 6vw, 48px);
+  }
+
+  .statRow {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    padding: 16px 20px;
+    border-radius: 18px;
+  }
+
+  .statDivider {
+    display: none;
+  }
+
+  .cardImage {
+    height: 190px;
+  }
+
+  .cardContent {
+    padding: 1.15rem;
+  }
+
+  .cardHeader {
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .projectType {
+    align-self: flex-start;
+    white-space: normal;
+  }
+
+  .hoverContent {
+    top: auto;
+    bottom: 12px;
+    justify-content: flex-start;
+    padding: 0 12px;
+    pointer-events: none;
+  }
+
+  .hoverActions {
+    gap: 0.5rem;
+  }
+
+  .actionBtn {
+    padding: 9px 12px;
+    font-size: 12px;
+    pointer-events: auto;
+    background: rgba(6, 8, 17, 0.82);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .hoverContent {
+    opacity: 1;
+  }
+}
+</file>
+
+<file path=".env.example">
+# Email Credentials for Contact Form
+# For Gmail, get an App Password from: https://myaccount.google.com/apppasswords
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+EMAIL_TO=your-email@gmail.com
+# (Alternative names: GMAIL_USER and GMAIL_PASSWORD are also supported)
+
+
+
+# Optional: Port for local development
+PORT=4000
+</file>
+
+<file path="package.json">
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "framer-motion": "11.0.5",
+    "i18next": "23.9.0",
+    "next": "^14.2.35",
+    "nodemailer": "^8.0.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-github-calendar": "^5.0.6",
+    "react-i18next": "14.0.5",
+    "react-icons": "5.0.1",
+    "react-magic-motion": "1.1.2",
+    "react-scroll": "1.9.0",
+    "react-simple-typewriter": "5.0.1",
+    "react-slick": "0.30.2",
+    "react-toastify": "10.0.4",
+    "react-ui-scrollspy": "2.3.0",
+    "repomix": "^1.14.0",
+    "slick-carousel": "1.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "^14.2.35",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="src/app/globals.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Prototype";
+  src: url("../assets/fonts/Prototype.ttf") format("truetype");
+}
+
+/* ============ Reset ============ */
+*, *::before, *::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* ============ Design Tokens ============ */
+:root {
+  --font-inter: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-space-grotesk: "Space Grotesk", Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-jetbrains-mono: "JetBrains Mono", "Fira Code", Consolas, monospace;
+
+  /* Brand palette - deep blue-slate + electric accents */
+  --c-bg:           #060811;
+  --c-bg-secondary: #0b0f1a;
+  --c-bg-card:      rgba(13, 17, 30, 0.75);
+  --c-surface:      rgba(15, 20, 35, 0.85);
+
+  /* Primary — electric blue-cyan */
+  --c-primary:      #4f8ef7;
+  --c-primary-dim:  rgba(79, 142, 247, 0.15);
+  --c-primary-glow: rgba(79, 142, 247, 0.35);
+
+  /* Accent — vivid cyan */
+  --c-cyan:         #00d4ff;
+  --c-cyan-dim:     rgba(0, 212, 255, 0.12);
+  --c-cyan-glow:    rgba(0, 212, 255, 0.3);
+
+  /* Accent 2 — violet */
+  --c-violet:       #8b5cf6;
+  --c-violet-dim:   rgba(139, 92, 246, 0.12);
+
+  /* Accent 3 — emerald (for Java/backend badge) */
+  --c-emerald:      #10b981;
+  --c-emerald-dim:  rgba(16, 185, 129, 0.12);
+
+  /* Text */
+  --c-text-primary:   #f1f5f9;
+  --c-text-secondary: #94a3b8;
+  --c-text-muted:     #475569;
+
+  /* Borders */
+  --c-border:         rgba(255, 255, 255, 0.06);
+  --c-border-active:  rgba(79, 142, 247, 0.4);
+  --c-border-glow:    rgba(0, 212, 255, 0.35);
+
+  /* Glass */
+  --glass-bg:         rgba(13, 17, 30, 0.6);
+  --glass-border:     rgba(79, 142, 247, 0.15);
+  --glass-blur:       blur(20px);
+  --glass-shadow:     0 8px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(79, 142, 247, 0.06);
+
+  /* Glows */
+  --glow-primary:     0 0 30px rgba(79, 142, 247, 0.4), 0 0 80px rgba(79, 142, 247, 0.15);
+  --glow-cyan:        0 0 30px rgba(0, 212, 255, 0.4), 0 0 80px rgba(0, 212, 255, 0.15);
+
+  /* Typography */
+  --font-sans:  var(--font-space-grotesk), var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body:  var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono:  var(--font-jetbrains-mono), 'Fira Code', monospace;
+  --font-proto: 'Prototype', sans-serif;
+
+  /* Spacing scale */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   40px;
+  --space-2xl:  64px;
+  --space-3xl:  96px;
+
+  /* Radius */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --transition-fast:   all 0.15s ease;
+  --transition-base:   all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ============ Base ============ */
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: var(--c-primary) var(--c-bg-secondary);
+  background: var(--c-bg);
+  /* Removed scroll-snap-type to prevent janky scrolling */
+}
+
+body {
+  background: var(--c-bg);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--c-text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+html:not(.dark) body {
+  background: #f4f7fb;
+  color: #0f172a;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ============ Scrollbar ============ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--c-bg); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--c-primary), var(--c-cyan));
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--c-cyan), var(--c-primary));
+}
+
+/* ============ Selection ============ */
+::selection {
+  background: var(--c-primary-dim);
+  color: var(--c-text-primary);
+}
+
+/* ============ CSS Animated Background ============ */
+/* Pure CSS star/grid background — zero JS, zero lag */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(79, 142, 247, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 100% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 0% 60%, rgba(0, 212, 255, 0.06) 0%, transparent 50%);
+  background-color: var(--c-bg);
+}
+
+.bg-grid::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(79, 142, 247, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 142, 247, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+
+.bg-grid::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle 2px at 15% 25%, rgba(79, 142, 247, 0.6) 0%, transparent 100%),
+    radial-gradient(circle 1px at 85% 15%, rgba(0, 212, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 70% 70%, rgba(139, 92, 246, 0.4) 0%, transparent 100%),
+    radial-gradient(circle 1px at 30% 80%, rgba(79, 142, 247, 0.4) 0%, transparent 100%),
+    radial-gradient(circle 2px at 50% 50%, rgba(0, 212, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(circle 1px at 90% 50%, rgba(139, 92, 246, 0.5) 0%, transparent 100%),
+    radial-gradient(circle 1.5px at 10% 60%, rgba(79, 142, 247, 0.4) 0%, transparent 100%),
+    radial-gradient(circle 1px at 60% 30%, rgba(0, 212, 255, 0.5) 0%, transparent 100%);
+  animation: twinkle 8s ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  0%   { opacity: 0.4; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+/* ============ Glassmorphism Utility ============ */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+}
+
+/* ============ Gradient Text Utility ============ */
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.gradientText {
+  background: linear-gradient(135deg, var(--c-primary) 0%, var(--c-cyan) 40%, var(--c-violet) 70%, var(--c-primary) 100%);
+  background-size: 300% 300%;
+  animation: gradientShift 6s ease infinite;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* ============ Badge Utility ============ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid;
+}
+
+.badge-primary {
+  color: var(--c-primary);
+  border-color: var(--c-primary-dim);
+  background: var(--c-primary-dim);
+}
+
+.badge-cyan {
+  color: var(--c-cyan);
+  border-color: var(--c-cyan-dim);
+  background: var(--c-cyan-dim);
+}
+
+.badge-violet {
+  color: var(--c-violet);
+  border-color: var(--c-violet-dim);
+  background: var(--c-violet-dim);
+}
+
+.badge-emerald {
+  color: var(--c-emerald);
+  border-color: var(--c-emerald-dim);
+  background: var(--c-emerald-dim);
+}
+
+/* ============ Section Utility ============ */
+.section {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============ Container Utility ============ */
+.container-max {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ============ Floating Animation ============ */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-14px); }
+}
+
+/* ============ Shimmer ============ */
+@keyframes shimmer {
+  0%   { transform: translateX(-100%) rotate(20deg); }
+  100% { transform: translateX(200%) rotate(20deg); }
+}
+
+/* ============ Fade-in Up ============ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ Pulse Ring ============ */
+@keyframes pulseRing {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+/* ================== Accessibility Enhancements ================== */
+/* Focus-visible outlines for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--c-primary);
+  outline-offset: 2px;
+}
+
+/* Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-grid,
+  .bg-grid::before,
+  .bg-grid::after {
+    animation: none;
+  }
+}
+</file>
+
+<file path="src/components/Hero/Hero.tsx">
+"use client";
+
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { FiArrowRight, FiDownload, FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import socials from "@/utils/socials";
+
+const skills = ["React", "Next.js", "TypeScript", "Java", "Spring Boot", "PostgreSQL"];
+const roles = ["Full Stack Developer", "Java Spring Boot Engineer", "React Developer"];
+const stats = ["300+ DSA", "8.51 CGPA", "7 Live Demos", "1 Internship"];
+
+const Hero = () => {
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayText, setDisplayText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [mouse, setMouse] = useState({ x: 0, y: 0 });
+  // FIX: use a ref for throttle so no state churn on every mousemove
+  const rafRef = useRef<number | null>(null);
+
+  const currentRole = roles[roleIndex];
+
+  useEffect(() => {
+    const interval = window.setInterval(
+      () => {
+        setDisplayText((prev) => {
+          if (!isDeleting && prev === currentRole) {
+            window.setTimeout(() => setIsDeleting(true), 900);
+            return prev;
+          }
+
+          if (isDeleting && prev.length === 0) {
+            setIsDeleting(false);
+            setRoleIndex((idx) => (idx + 1) % roles.length);
+            return prev;
+          }
+
+          return isDeleting
+            ? currentRole.slice(0, prev.length - 1)
+            : currentRole.slice(0, prev.length + 1);
+        });
+      },
+      isDeleting ? 45 : 85,
+    );
+
+    return () => window.clearInterval(interval);
+  }, [currentRole, isDeleting]);
+
+  useEffect(() => {
+    // FIX: throttle mousemove to one setState per animation frame (~16 ms)
+    // Previously every move event fired setState → ~60 re-renders/sec
+    const handleMouseMove = (event: MouseEvent) => {
+      if (rafRef.current !== null) return;
+      rafRef.current = window.requestAnimationFrame(() => {
+        setMouse({ x: event.clientX, y: event.clientY });
+        rafRef.current = null;
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      // FIX: cancel any pending raf on unmount to avoid setState on unmounted component
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  const codeSnippet = useMemo(
+    () =>
+      `public class PortfolioProfile {
+  private final String name = "Abhinav Gupta";
+  private final String role = "Full Stack Developer";
+  private final String location = "Delhi, India";
+
+  public List<String> stack() {
+    return List.of("React", "Next.js", "Spring Boot", "TypeScript");
+  }
+
+  public String availability() {
+    return "Open to full-time, freelance, remote";
+  }
+}`,
+    [],
+  );
+
+  return (
+    <section id="home" className="relative overflow-hidden px-4 pb-20 pt-8 sm:px-6 md:pt-12">
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top,_rgba(79,142,247,0.25),_transparent_60%)]" />
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none absolute -z-10 hidden h-56 w-56 rounded-full bg-[#4F8EF7]/20 blur-3xl md:block"
+        animate={{ x: mouse.x - 160, y: mouse.y - 140 }}
+        transition={{ type: "spring", damping: 28, stiffness: 90, mass: 0.5 }}
+      />
+
+      <div className="mx-auto grid w-full max-w-7xl gap-10 md:grid-cols-[1.1fr_0.9fr] md:items-center">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+          className="space-y-6"
+        >
+          <p className="inline-flex items-center gap-2 rounded-full border border-[#22c470]/50 bg-[#22c470]/10 px-4 py-1 text-xs font-semibold uppercase tracking-[0.14em] text-[#77efaa]">
+            <span className="h-2 w-2 rounded-full bg-[#22c470]" />
+            Full Stack Engineer
+          </p>
+
+          <h1 className="text-4xl font-semibold leading-tight text-white sm:text-5xl md:text-6xl">
+            <span className="bg-gradient-to-r from-white via-[#b6cdfd] to-[#4F8EF7] bg-clip-text text-transparent">
+              Abhinav Gupta
+            </span>
+          </h1>
+
+          {/* FIX: aria-hidden on blinking cursor — was announced as "pipe" by screen readers */}
+          <p className="min-h-8 font-mono text-base text-[#9bc0ff] sm:text-lg" aria-label={`Role: ${currentRole}`}>
+            {displayText}
+            <span className="ml-1 animate-pulse text-[#4F8EF7]" aria-hidden="true">|</span>
+          </p>
+
+          <p className="max-w-xl text-sm leading-relaxed text-white/75 sm:text-base">
+            MCA student at IIIT Vadodara (8.51/10), BCA from GGSIPU (9.2/10), Codeforces Pupil, and problem
+            solver with 300+ DSA problems solved.
+          </p>
+
+          <div className="flex flex-wrap gap-2">
+            {skills.map((skill) => (
+              <span
+                key={skill}
+                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-medium text-white/90"
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              href={socials.Mail}
+              className="inline-flex items-center gap-2 rounded-xl bg-[#22c470] px-5 py-3 text-sm font-semibold text-black transition hover:bg-[#32d983]"
+              aria-label="Email Abhinav for hiring opportunities"
+            >
+              Hire Me
+              <FiMail size={16} />
+            </a>
+            <a
+              href="/resume/Resume.pdf"
+              download
+              className="inline-flex items-center gap-2 rounded-xl bg-[#4F8EF7] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#3f7ee6]"
+              aria-label="Download resume"
+            >
+              <FiDownload size={16} />
+              Download Resume
+            </a>
+            <Link
+              href="#projects"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              aria-label="View projects section"
+            >
+              View Projects
+              <FiArrowRight size={16} />
+            </Link>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <a
+              href={socials.Github}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit GitHub profile"
+              className="rounded-lg border border-white/15 bg-white/5 p-2.5 text-white/85 transition hover:text-white"
+            >
+              <FiGithub size={18} />
+            </a>
+            <a
+              href={socials.Linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Visit LinkedIn profile"
+              className="rounded-lg border border-white/15 bg-white/5 p-2.5 text-white/85 transition hover:text-white"
+            >
+              <FiLinkedin size={18} />
+            </a>
+            <a
+              href={socials.Mail}
+              aria-label="Send an email"
+              className="rounded-lg border border-white/15 bg-white/5 p-2.5 text-white/85 transition hover:text-white"
+            >
+              <FiMail size={18} />
+            </a>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 28 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.65, delay: 0.1, ease: "easeOut" }}
+          className="rounded-2xl border border-white/15 bg-[#080b14]/80 p-4 shadow-[0_15px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:p-5"
+        >
+          <div className="mb-4 flex items-center gap-2">
+            <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
+            <span className="h-3 w-3 rounded-full bg-[#ffbd2e]" />
+            <span className="h-3 w-3 rounded-full bg-[#28c840]" />
+            <span className="ml-2 text-xs text-white/60">Profile.java</span>
+          </div>
+          <pre className="overflow-x-auto rounded-xl border border-white/10 bg-black/40 p-4 text-xs leading-6 text-[#dbe7ff] sm:text-sm">
+            <code>{codeSnippet}</code>
+          </pre>
+        </motion.div>
+      </div>
+
+      <div className="mx-auto mt-8 grid w-full max-w-7xl grid-cols-2 gap-2 rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur md:grid-cols-4">
+        {stats.map((stat) => (
+          <div
+            key={stat}
+            className="rounded-xl border border-white/10 bg-black/20 px-3 py-3 text-center text-sm text-white/90"
+          >
+            {stat}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default Hero;
+</file>
+
+<file path="src/components/Projects/Projects.tsx">
+"use client";
+import styles from "./projects.module.css";
+import { useEffect, useRef, useState } from "react";
+import { motion, useInView } from "framer-motion";
+import projectsData from "@/utils/projects/index.json";
+import Image from "next/image";
+import { FiArrowRight, FiExternalLink } from "react-icons/fi";
+
+interface Project {
+  id: string;
+  name: string;
+  type: string;
+  repo: string | null;
+  deploy: string | null;
+  image: string;
+  description: string;
+  tags: string[];
+  color: 'primary' | 'cyan' | 'violet' | 'emerald';
+  priority: number;
+  featured: boolean;
+  year: number;
+  status: 'completed' | 'in-progress' | 'planned';
+}
+
+interface ColorConfig {
+  accent: string;
+  glow: string;
+  border: string;
+  tagBg: string;
+  tagBorder: string;
+  gradient: string;
+}
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+      staggerDirection: 1
+    }
+  },
+};
+
+const fadeUp = {
+  hidden: {
+    opacity: 0,
+    y: 60,
+    scale: 0.9,
+    filter: "blur(10px)"
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.8,
+      ease: [0.23, 1, 0.32, 1],
+      type: "spring",
+      stiffness: 100
+    }
+  },
+};
+
+const colorConfig: Record<string, ColorConfig> = {
+  primary: {
+    accent:      "#4f8ef7",
+    glow:        "rgba(79,142,247,0.18)",
+    border:      "rgba(79,142,247,0.22)",
+    tagBg:       "rgba(79,142,247,0.1)",
+    tagBorder:   "rgba(79,142,247,0.28)",
+    gradient:    "linear-gradient(135deg, #4f8ef7 0%, #00d4ff 100%)",
+  },
+  cyan: {
+    accent:      "#00d4ff",
+    glow:        "rgba(0,212,255,0.16)",
+    border:      "rgba(0,212,255,0.22)",
+    tagBg:       "rgba(0,212,255,0.08)",
+    tagBorder:   "rgba(0,212,255,0.28)",
+    gradient:    "linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)",
+  },
+  violet: {
+    accent:      "#8b5cf6",
+    glow:        "rgba(139,92,246,0.16)",
+    border:      "rgba(139,92,246,0.22)",
+    tagBg:       "rgba(139,92,246,0.08)",
+    tagBorder:   "rgba(139,92,246,0.28)",
+    gradient:    "linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%)",
+  },
+  emerald: {
+    accent:      "#10b981",
+    glow:        "rgba(16,185,129,0.16)",
+    border:      "rgba(16,185,129,0.22)",
+    tagBg:       "rgba(16,185,129,0.08)",
+    tagBorder:   "rgba(16,185,129,0.28)",
+    gradient:    "linear-gradient(135deg, #10b981 0%, #34d399 100%)",
+  },
+};
+
+/* ---- GitHub SVG ---- */
+const GithubIcon = () => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+  </svg>
+);
+
+const uberCaseStudy = {
+  problem: "Design a backend that can coordinate riders, drivers, trips, and fare calculation with clear service boundaries.",
+  architecture: [
+    "Layered Spring Boot services for users, drivers, rides, and pricing",
+    "REST controllers separated from business logic and persistence",
+    "Dockerized deployment path for repeatable local and cloud setup",
+  ],
+  apis: ["Auth & rider onboarding", "Driver matching", "Ride booking", "Fare calculation", "Trip status updates"],
+  stack: ["Java", "Spring Boot", "REST APIs", "Docker", "OOP"],
+};
+
+const UberCaseStudy = ({ project }: { project?: Project }) => {
+  if (!project) return null;
+
+  return (
+    <motion.article
+      className={styles.flagship}
+      initial={{ opacity: 0, y: 28 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.65, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
+    >
+      <div className={styles.flagshipContent}>
+        <div className={styles.flagshipEyebrow}>Flagship Case Study</div>
+        <h3 className={styles.flagshipTitle}>Uber-style Ride-Hailing Backend</h3>
+        <p className={styles.flagshipSummary}>{project.description}</p>
+
+        <div className={styles.caseGrid}>
+          <div className={styles.casePanel}>
+            <span>Problem</span>
+            <p>{uberCaseStudy.problem}</p>
+          </div>
+          <div className={styles.casePanel}>
+            <span>Architecture</span>
+            <ul>
+              {uberCaseStudy.architecture.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </div>
+          <div className={styles.casePanel}>
+            <span>Core APIs</span>
+            <div className={styles.apiList}>
+              {uberCaseStudy.apis.map((api) => (
+                <small key={api}>{api}</small>
+              ))}
+            </div>
+          </div>
+          <div className={styles.casePanel}>
+            <span>Tech Stack</span>
+            <div className={styles.apiList}>
+              {uberCaseStudy.stack.map((tech) => (
+                <small key={tech}>{tech}</small>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.flagshipActions}>
+          {project.repo && (
+            <a href={project.repo} target="_blank" rel="noopener noreferrer">
+              <GithubIcon /> GitHub
+            </a>
+          )}
+          {project.deploy && (
+            <a href={project.deploy} target="_blank" rel="noopener noreferrer">
+              <FiExternalLink size={16} /> Live Demo
+            </a>
+          )}
+          <a href="#contact">
+            Hire Me <FiArrowRight size={16} />
+          </a>
+        </div>
+      </div>
+
+      <div className={styles.flagshipVisual}>
+        <Image
+          src={project.image}
+          alt={`${project.name} screenshot`}
+          width={760}
+          height={480}
+          className={styles.flagshipImage}
+          priority
+          sizes="(max-width: 1024px) 100vw, 44vw"
+        />
+        <div className={styles.proofStrip}>
+          <span>Driver Matching</span>
+          <span>Fare Logic</span>
+          <span>REST APIs</span>
+        </div>
+      </div>
+    </motion.article>
+  );
+};
+
+// Unique project card with reveal animation
+const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [imgSrc, setImgSrc] = useState(project.image);
+
+  const cfg = colorConfig[project.color] || colorConfig.primary;
+  const shouldShowActions = isHovered || isTouchDevice;
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(hover: none), (pointer: coarse)");
+    const updateInputMode = () => setIsTouchDevice(mediaQuery.matches);
+
+    updateInputMode();
+    mediaQuery.addEventListener("change", updateInputMode);
+
+    return () => mediaQuery.removeEventListener("change", updateInputMode);
+  }, []);
+
+  return (
+    <motion.article
+      className={styles.projectCard}
+      variants={fadeUp}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      style={{ "--accent": cfg.accent, "--glow": cfg.glow, "--border-c": cfg.border } as any}
+      whileHover={{
+        y: -8,
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 300, damping: 20 }
+      }}
+      layout
+    >
+      {/* Image with overlay */}
+      <div className={styles.cardImage}>
+        {project.type.includes("Blockchain") && (
+          <span className={styles.web3Badge}>Web3 Highlight</span>
+        )}
+        <Image
+          src={imgSrc}
+          alt={project.name}
+          width={400}
+          height={250}
+          className={styles.image}
+          loading="lazy"
+          sizes="(max-width: 768px) 100vw, (max-width: 1400px) 50vw, 380px"
+          onError={() => setImgSrc("/projects/default.png")}
+        />
+
+        <div className={styles.imageOverlay} />
+
+        {/* Floating number */}
+        <motion.div
+          className={styles.projectNumber}
+          animate={isHovered ? { scale: 1.2, rotate: 5 } : { scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </motion.div>
+
+        {/* Hover reveal content */}
+        <motion.div
+          className={styles.hoverContent}
+          initial={{ opacity: 0, y: 20 }}
+          animate={shouldShowActions ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.3 }}
+        >
+          <div className={styles.hoverActions}>
+            {project.repo && (
+              <motion.a
+                href={project.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.actionBtn}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <GithubIcon /> Code
+              </motion.a>
+            )}
+            {project.deploy && (
+
+              <motion.a
+                href={project.deploy}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.actionBtn}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FiExternalLink size={15} /> Live
+              </motion.a>
+            )}
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Content */}
+      <div className={styles.cardContent}>
+        <div className={styles.cardHeader}>
+          <h3 className={styles.projectTitle}>{project.name}</h3>
+          <span className={styles.projectType} style={{ color: cfg.accent }}>
+            {project.type}
+          </span>
+        </div>
+
+        <p className={styles.projectDesc}>{project.description}</p>
+
+        <div className={styles.techStack}>
+          {project.tags.slice(0, 3).map((tag, tagIndex) => (
+            <motion.span
+              key={tag}
+              className={styles.techTag}
+              style={{
+                background: cfg.tagBg,
+                borderColor: cfg.tagBorder,
+                color: cfg.accent
+              } as any}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={shouldShowActions ? { opacity: 1, scale: 1 } : { opacity: 0.85, scale: 1 }}
+              transition={{ delay: tagIndex * 0.1 }}
+            >
+              {tag}
+            </motion.span>
+          ))}
+        </div>
+      </div>
+
+      {/* Animated border */}
+      <motion.div
+        className={styles.cardBorder}
+        style={{ background: cfg.gradient } as any}
+        initial={{ scaleX: 0 }}
+        animate={shouldShowActions ? { scaleX: 1 } : { scaleX: 0 }}
+        transition={{ duration: 0.4 }}
+      />
+    </motion.article>
+  );
+};
+
+/* ---- Main section ---- */
+const Projects = () => {
+  const ref = useRef<HTMLElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
+    const aPriority = typeof a.priority === "number" ? a.priority : 999;
+    const bPriority = typeof b.priority === "number" ? b.priority : 999;
+    if (aPriority !== bPriority) return aPriority - bPriority;
+    if (a.featured !== b.featured) return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+    return b.year - a.year;
+  });
+  const stats = {
+    total: projects.length,
+    featured: projects.filter((project) => project.featured).length,
+    technologies: projects.reduce((acc: Record<string, number>, project) => {
+      project.tags.forEach((tag) => {
+        acc[tag] = (acc[tag] || 0) + 1;
+      });
+      return acc;
+    }, {}),
+  };
+  const flagshipProject = projects.find((project) => project.id === "uber-ride-platform");
+  const projectCards = flagshipProject
+    ? projects.filter((project) => project.id !== flagshipProject.id)
+    : projects;
+
+  return (
+    <section className={styles.section} ref={ref}>
+      <div className={styles.container}>
+
+        {/* ---- Header ---- */}
+        <motion.div
+          className={styles.header}
+          initial={{ opacity: 0, y: 28 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.65, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <div className={styles.labelRow}>
+            <span className={styles.labelLine} />
+            <span className={styles.labelText}>Featured Work</span>
+            <span className={styles.labelLine} />
+          </div>
+
+          <h2 className={styles.heading}>
+            What I&apos;ve <span className={styles.headingAccent}>Built</span>
+          </h2>
+          <p className={styles.subheading}>
+            Production-grade applications — React frontends, Java Spring Boot backends, REST APIs & more.
+          </p>
+
+          {/* Count pills */}
+          <div className={styles.statRow}>
+            <div className={styles.statPill}>
+              <span className={styles.statNum}>{stats.total}</span>
+              <span className={styles.statLabel}>Projects</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statPill}>
+              <span className={styles.statNum}>{stats.featured}</span>
+              <span className={styles.statLabel}>Featured</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statPill}>
+              <span className={styles.statNum}>{Object.keys(stats.technologies).length}</span>
+              <span className={styles.statLabel}>Technologies</span>
+            </div>
+          </div>
+        </motion.div>
+
+        <UberCaseStudy project={flagshipProject} />
+
+        {/* ---- Unique Masonry Grid ---- */}
+        <motion.div
+          className={styles.masonryGrid}
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "show" : "hidden"}
+        >
+          {projectCards.map((project, index) => (
+            <ProjectCard key={project.id} project={project} index={index} />
+          ))}
+        </motion.div>
+
+      </div>
+    </section>
+  );
+};
+
+export default Projects;
+</file>
+
+<file path="src/components/About/about.module.css">
+/* ============================================
+   UNIQUE ABOUT SECTION — Typewriter & Animated Stats
+   ============================================ */
+
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 6rem 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(34, 196, 112, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(79, 142, 247, 0.05) 0%, transparent 50%);
+  animation: gentlePulse 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes gentlePulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+/* Section label */
+.sectionLabel {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin-bottom: 4rem;
+  justify-content: center;
+}
+
+.labelLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-primary), transparent);
+  max-width: 100px;
+}
+
+.labelLine:last-child {
+  background: linear-gradient(90deg, transparent, var(--color-primary));
+}
+
+/* Unique Layout */
+.uniqueLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+  margin-bottom: 4rem;
+}
+
+/* Hero Content with Typewriter */
+.heroContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.title {
+  font-family: var(--font-sans);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--color-text-color);
+}
+
+.titleAccent {
+  background: linear-gradient(135deg, #22c470, #11a759);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.typewriterContainer {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(34, 196, 112, 0.1);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+}
+
+.bio {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--color-text-color);
+  margin: 0;
+  min-height: 120px;
+}
+
+.cursor {
+  animation: blink 1s infinite;
+  color: #22c470;
+  font-weight: bold;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.bioSecondary {
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+  color: #8a8484;
+  margin: 0;
+}
+
+/* Stats & Skills Container */
+.statsSkillsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* Animated Stats */
+.animatedStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.statCard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 196, 112, 0.15);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.statCard:hover {
+  border-color: rgba(34, 196, 112, 0.3);
+  background: rgba(34, 196, 112, 0.05);
+}
+
+.statValue {
+  font-family: var(--font-sans);
+  font-size: 42px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #22c470, #11a759);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #8a8484;
+  font-weight: 600;
+}
+
+.statGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(34, 196, 112, 0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.statCard:hover .statGlow {
+  opacity: 1;
+}
+
+/* Skills Visualization */
+.skillsVisualization {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.skillGroup {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(34, 196, 112, 0.1);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.skillCategory {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #22c470;
+  margin-bottom: 1rem;
+}
+
+.skillItems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.skillItem {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(34, 196, 112, 0.08);
+  border: 1px solid rgba(34, 196, 112, 0.15);
+  color: #ececec;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.skillItem:hover {
+  background: rgba(34, 196, 112, 0.15);
+  border-color: rgba(34, 196, 112, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34, 196, 112, 0.2);
+}
+
+/* Socials Container */
+.socialsContainer {
+  margin-bottom: 4rem;
+}
+
+.socialsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.socialOrb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(34, 196, 112, 0.1);
+  border-radius: 16px;
+  text-decoration: none;
+  color: #ececec;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.socialOrb:hover {
+  border-color: rgba(34, 196, 112, 0.3);
+  background: rgba(34, 196, 112, 0.05);
+  box-shadow: 0 12px 30px rgba(34, 196, 112, 0.15);
+}
+
+.socialOrb span {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.locationOrb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(34, 196, 112, 0.08);
+  border-radius: 16px;
+  color: #8a8484;
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+
+.locationOrb span {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Stack slider section */
+.sliderWrap {
+  margin-top: 4rem;
+  padding-top: 3rem;
+  border-top: 1px solid rgba(34, 196, 112, 0.1);
+}
+
+.proGithubSection {
+  margin-top: 4rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(34, 196, 112, 0.15);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(20, 25, 35, 0.6), rgba(10, 14, 22, 0.8));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.proGithubSection:hover {
+  border-color: rgba(34, 196, 112, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(34, 196, 112, 0.05);
+}
+
+.proGithubHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.activityTitle {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 26px;
+  font-weight: 800;
+  color: #ececec;
+  letter-spacing: -0.02em;
+}
+
+.activitySubtitle {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #8a93a8;
+}
+
+.githubProBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(34, 196, 112, 0.1);
+  border: 1px solid rgba(34, 196, 112, 0.3);
+  color: #22c470;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.githubProBtn:hover {
+  background: rgba(34, 196, 112, 0.2);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(34, 196, 112, 0.2);
+}
+
+.proGithubStats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  flex-wrap: wrap;
+}
+
+.proStatItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.proStatValue {
+  font-family: var(--font-sans);
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.02em;
+}
+
+.proStatLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #22c470;
+  font-weight: 600;
+}
+
+.proStatDivider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.proGithubGraphContainer {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 1rem;
+}
+
+.proGithubGraph {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: relative;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+.graphGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 50%;
+  background: radial-gradient(circle, rgba(34, 196, 112, 0.15) 0%, transparent 70%);
+  filter: blur(40px);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.timelineList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.timelineItem {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.timelineHead {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.timelineHead h4 {
+  margin: 0;
+  font-size: 16px;
+  color: #e8edf8;
+}
+
+.timelineHead span {
+  font-size: 12px;
+  color: #95a0b8;
+  font-family: var(--font-mono);
+}
+
+.timelineOrg {
+  margin: 0.3rem 0 0.6rem;
+  color: #b4bfd6;
+  font-size: 14px;
+}
+
+.timelineNote {
+  margin: 0;
+  color: #b4bfd6;
+  font-size: 14px;
+}
+
+.timelineItem ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: #c8d1e3;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.splitGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.splitGrid .activitySection {
+  margin-top: 0;
+}
+
+.profileGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.7rem;
+}
+
+.profileCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  text-decoration: none;
+  border: 1px solid rgba(34, 196, 112, 0.22);
+  background: rgba(34, 196, 112, 0.06);
+  color: #eaf5ee;
+  border-radius: 10px;
+  padding: 0.8rem;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.profileMeta {
+  color: #9db0d8;
+  font-size: 10px;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
+.certList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.certItem {
+  border: 1px solid rgba(79, 142, 247, 0.22);
+  border-radius: 10px;
+  padding: 0.7rem 0.85rem;
+  color: #d6e1f7;
+  background: rgba(79, 142, 247, 0.06);
+  font-size: 14px;
+}
+
+.sliderLabel {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #8a8484;
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .uniqueLayout {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+
+  .socialsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0;
+    align-items: flex-start;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .sectionLabel {
+    margin-bottom: 2rem;
+  }
+
+  .uniqueLayout {
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .typewriterContainer,
+  .skillGroup,
+  .proGithubSection {
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+
+  .animatedStats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.8rem;
+  }
+
+  .statCard {
+    border-radius: 14px;
+    padding: 1rem 0.65rem;
+  }
+
+  .statValue {
+    font-size: 30px;
+  }
+
+  .statLabel {
+    font-size: 10px;
+  }
+
+  .splitGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .socialsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .activitySection {
+    padding: 1rem;
+  }
+
+  .activityCards {
+    grid-template-columns: 1fr;
+  }
+
+  .githubProfile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profileGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .timelineHead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .proGithubStats {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .proStatDivider {
+    display: none;
+  }
+}
+</file>
+
+<file path="src/app/layout.jsx">
+import { Inter, Space_Grotesk } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+export const metadata = {
+  metadataBase: new URL("https://abhinavgupta.dev"),
+  title: "Abhinav Gupta | Full Stack Developer — React & Java Spring Boot",
+  description:
+    "Portfolio of Abhinav Gupta, a Full Stack Developer specializing in React, Next.js, Java Spring Boot, REST APIs and modern web engineering.",
+  keywords: [
+    "Full Stack Developer",
+    "React",
+    "Java",
+    "Spring Boot",
+    "Next.js",
+    "Portfolio",
+    "Software Engineer",
+    "Abhinav Gupta",
+  ],
+  authors: [{ name: "Abhinav Gupta" }],
+  icons: {
+    icon: "/logo.png",
+  },
+  openGraph: {
+    title: "Abhinav Gupta | Full Stack Developer",
+    description:
+      "Portfolio of Abhinav Gupta, a Full Stack Developer specializing in React, Next.js, Java Spring Boot, and modern web engineering.",
+    url: "https://abhinavgupta.dev",
+    siteName: "Abhinav Gupta Portfolio",
+    locale: "en_US",
+    type: "website",
+    images: [
+      {
+        // FIX: was /og-image.png in metadata but /og-image.webp in dead <Head> block — unified to .png
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Abhinav Gupta — Full Stack Developer",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Abhinav Gupta | Full Stack Developer",
+    description:
+      "Portfolio of Abhinav Gupta, a Full Stack Developer specializing in React, Next.js, and Java Spring Boot.",
+    images: ["/og-image.png"],
+  },
+};
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
+      {/*
+        FIX: Removed the <Head> import and block entirely.
+        next/head is a Pages Router API — it is silently ignored in the App Router (src/app/).
+        All meta tags are already handled correctly by the `metadata` export above.
+        The old <Head> block also had a mismatched og:image filename (/og-image.webp vs .png).
+      */}
+      <head>
+        {/* JSON-LD structured data — Person schema for richer Google search results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Abhinav Gupta",
+              url: "https://abhinavgupta.dev",
+              sameAs: [
+                "https://github.com/ABHINAVX03",
+                "https://www.linkedin.com/in/abhinav-gupta-367369167/",
+              ],
+              jobTitle: "Full Stack Developer",
+              worksFor: {
+                "@type": "Organization",
+                name: "Freelance",
+              },
+            }),
+          }}
+        />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+</file>
+
+<file path="src/components/About/About.jsx">
+"use client";
+import styles from "./about.module.css";
+import { useRef, useState, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import StackSlider from "../StackSlider/StackSlider";
+import socials from "@/utils/socials";
+import { FiGithub, FiLinkedin, FiMail, FiMapPin } from "react-icons/fi";
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.08, // FIX: was 0.15 — 7 stat cards × 0.2s stagger = 1.4s total; now faster
+      delayChildren: 0.1,
+      staggerDirection: 1,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: {
+    opacity: 0,
+    y: 24,
+    filter: "blur(6px)",
+  },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.55,
+      ease: [0.23, 1, 0.32, 1],
+    },
+  },
+};
+
+const stats = [
+  { value: "300+", label: "DSA Problems" },
+  { value: "8.51", label: "CGPA (MCA)" },
+  { value: "8", label: "Projects Shipped" },
+  { value: "1", label: "Internship" },
+  { value: "7", label: "Deployments" },
+  { value: "2", label: "Hackathons" },
+  { value: "3", label: "Certifications" },
+];
+
+const skills = [
+  { category: "Languages", items: ["C", "C++", "Java", "Python", "JavaScript", "TypeScript", "Solidity"] },
+  { category: "Frontend", items: ["HTML", "CSS", "Bootstrap", "Tailwind CSS", "React.js", "Next.js"] },
+  { category: "Backend & Database", items: ["Node.js", "Express.js", "Spring Boot", "MongoDB", "SQL", "REST APIs"] },
+  { category: "Blockchain & Tools", items: ["Web3.js", "MetaMask", "Ganache", "Truffle", "Remix IDE", "Docker", "JWT", "GitHub"] },
+];
+
+const learningNow = [
+  "Kafka event-driven architecture basics",
+  "DSA preparation for placements",
+  "Advanced Next.js performance patterns",
+  "Microservices observability (OpenTelemetry)",
+];
+
+const buildingNow = [
+  "Kafka-backed notification pipeline prototype",
+  "System design notes and backend case-study writeups",
+  "Consistent DSA problem-solving routine",
+];
+
+const experience = [
+  {
+    role: "Software Developer Intern",
+    org: "Blockchain Developer Trainee · Code Eater",
+    period: "Aug 2023 - Oct 2023",
+    points: [
+      "Built Ethereum smart contracts in Solidity for a marketplace and a Twitter-style dApp.",
+      "Tested and deployed contracts locally with Ganache and Truffle for reliability and correctness.",
+      "Integrated contracts with React frontend using Web3.js and MetaMask for seamless UX.",
+      "Wrote modular code with focus on security best practices and gas efficiency.",
+    ],
+  },
+];
+
+const education = [
+  {
+    degree: "Master of Computer Applications (MCA)",
+    school: "Indian Institute of Information Technology Vadodara (IIIT Vadodara)",
+    period: "2025 - 2028",
+    highlight: "GPA: 8.51 / 10 · Gandhinagar, Gujarat",
+  },
+  {
+    degree: "Bachelor of Computer Applications (BCA)",
+    school: "Guru Gobind Singh Indraprastha University (GGSIPU)",
+    period: "2021 - 2024",
+    highlight: "GPA: 9.2 / 10 · Rohini, Delhi-NCT",
+  },
+];
+
+const codingProfiles = [
+  { name: "LeetCode", meta: "300+ DSA problems", url: "https://leetcode.com/u/ABHINAVX03/" },
+  { name: "GeeksforGeeks", meta: "Active practice", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
+  { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
+  { name: "Codeforces", meta: "Pupil", url: "https://codeforces.com/profile/ABHINAVX03" },
+  { name: "HackerRank", meta: "Java · React · Problem Solving", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
+];
+
+const certifications = [
+  "HackerRank Problem Solving",
+  "HackerRank React Development",
+  "Hackathon - HACKOUT '25",
+  "TLE Eliminators - Level 1",
+  "TLE Eliminators - Level 2",
+  "Coding Society Representative at GGSIPU",
+];
+
+// FIX: Rewritten typewriter hook using refs to avoid stale-closure / reschedule bugs.
+// Old version: used currentIndex as state → effect re-ran on every keystroke from a stale closure.
+// New version: refs track index & whether component is still mounted; effect runs once and cleans up properly.
+const useTypewriter = (text, speed = 50) => {
+  const [displayText, setDisplayText] = useState("");
+  const indexRef = useRef(0);
+  const mountedRef = useRef(true);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    indexRef.current = 0;
+    setDisplayText("");
+
+    const tick = () => {
+      if (!mountedRef.current) return;
+      if (indexRef.current >= text.length) return;
+      indexRef.current += 1;
+      setDisplayText(text.slice(0, indexRef.current));
+      setTimeout(tick, speed);
+    };
+
+    const id = setTimeout(tick, speed);
+    return () => {
+      mountedRef.current = false;
+      clearTimeout(id);
+    };
+  }, [text, speed]);
+
+  return displayText;
+};
+
+const About = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
+  const bioText =
+    "I'm an MCA student at IIIT Vadodara and a full stack developer focused on production-grade web applications. I build performant React interfaces and scalable backend systems with Spring Boot, Node.js, and REST APIs, with additional hands-on blockchain experience in Solidity and Web3.";
+  const typewriterText = useTypewriter(bioText, 30);
+
+  const [githubData, setGithubData] = useState(null);
+  const [loadingGithub, setLoadingGithub] = useState(true);
+
+  useEffect(() => {
+    // FIX: AbortController prevents setState on unmounted component.
+    // Old code had no abort → React "Can't perform state update on unmounted component" warning.
+    const controller = new AbortController();
+
+    fetch("/api/github/profile", { signal: controller.signal })
+      .then((res) => res.json())
+      .then((data) => {
+        setGithubData(data);
+        setLoadingGithub(false);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") return; // component unmounted — silently ignore
+        console.error("Error fetching GitHub data:", err);
+        setLoadingGithub(false);
+      });
+
+    return () => controller.abort();
+  }, []);
+
+  return (
+    <section className={styles.section} ref={ref}>
+      <div className={styles.container}>
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? "show" : "hidden"}
+        >
+          {/* Section label */}
+          <motion.div className={styles.sectionLabel} variants={itemVariants}>
+            <span className={styles.labelLine} />
+            <span style={{ color: "white" }}>About Me</span>
+            <span className={styles.labelLine} />
+          </motion.div>
+
+          {/* Unique layout with floating elements */}
+          <div className={styles.uniqueLayout}>
+            {/* Left — Hero content with typewriter */}
+            <motion.div className={styles.heroContent} variants={itemVariants}>
+              <h2 className={styles.title} style={{ color: "grey" }}>
+                Crafting <span className={styles.titleAccent}>Full Stack</span>
+                <br />
+                Experiences
+              </h2>
+
+              {/*
+                FIX: aria-live="polite" so screen readers announce the completed text once it's done,
+                rather than reading each character individually.
+                The visually-hidden span provides the full text immediately for AT,
+                while the visible typewriter plays for sighted users.
+              */}
+              <div
+                className={styles.typewriterContainer}
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {/* Visually hidden full text for screen readers — always present */}
+                <span className="sr-only">{bioText}</span>
+                {/* Visible typewriter — hidden from AT since sr-only covers it */}
+                <p className={styles.bio} style={{ color: "white" }} aria-hidden="true">
+                  {typewriterText}
+                  <span className={styles.cursor}>|</span>
+                </p>
+              </div>
+
+              <p className={styles.bioSecondary}>
+                I care deeply about clean code, system design, and delivering experiences that users love.
+                Whether it&apos;s a complex backend architecture or a micro-interaction on a button — every
+                detail matters to me.
+              </p>
+            </motion.div>
+
+            {/* Right — Animated stats and skills */}
+            <motion.div className={styles.statsSkillsContainer} variants={itemVariants}>
+              {/* Animated Stats */}
+              {/* FIX: stagger reduced to 0.08s (was 0.2s) — 7 cards × 0.2 = 1.4s total delay */}
+              <div className={styles.animatedStats}>
+                {stats.map((stat, index) => (
+                  <motion.div
+                    key={stat.label}
+                    className={styles.statCard}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{
+                      delay: index * 0.08,
+                      duration: 0.45,
+                      ease: [0.23, 1, 0.32, 1],
+                    }}
+                  >
+                    <div className={styles.statValue}>{stat.value}</div>
+                    <div className={styles.statLabel}>{stat.label}</div>
+                    <div className={styles.statGlow} />
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Skills with unique visualization */}
+              <div className={styles.skillsVisualization}>
+                {skills.map((group, groupIndex) => (
+                  <motion.div
+                    key={group.category}
+                    className={styles.skillGroup}
+                    initial={{ opacity: 0, x: groupIndex % 2 === 0 ? -30 : 30 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: 0.4 + groupIndex * 0.1 }}
+                  >
+                    <h3 className={styles.skillCategory}>{group.category}</h3>
+                    <div className={styles.skillItems}>
+                      {group.items.map((item, itemIndex) => (
+                        <motion.span
+                          key={item}
+                          className={styles.skillItem}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                          transition={{
+                            delay: 0.5 + groupIndex * 0.1 + itemIndex * 0.04,
+                            duration: 0.3,
+                          }}
+                          whileHover={{
+                            scale: 1.08,
+                            backgroundColor: "rgba(34, 196, 112, 0.2)",
+                            boxShadow: "0 8px 25px rgba(34, 196, 112, 0.3)",
+                          }}
+                        >
+                          {item}
+                        </motion.span>
+                      ))}
+                    </div>
+                  </motion.div>
+                ))}
+
+                {/* Learning Now */}
+                <motion.div
+                  className={styles.skillGroup}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.9 }}
+                >
+                  <h3 className={styles.skillCategory}>Currently Learning</h3>
+                  <div className={styles.skillItems}>
+                    {learningNow.map((topic) => (
+                      <motion.span
+                        key={topic}
+                        className={styles.skillItem}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {topic}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Building Now */}
+                <motion.div
+                  className={styles.skillGroup}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 1.0 }}
+                >
+                  <h3 className={styles.skillCategory}>What I&apos;m Building</h3>
+                  <div className={styles.skillItems}>
+                    {buildingNow.map((item) => (
+                      <motion.span
+                        key={item}
+                        className={styles.skillItem}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {item}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* GitHub Section */}
+          <motion.div className={styles.proGithubSection} variants={itemVariants}>
+            <div className={styles.proGithubHeader}>
+              <div>
+                <h3 className={styles.activityTitle}>Open Source Contributions</h3>
+                <p className={styles.activitySubtitle}>
+                  My latest activity and repository stats on GitHub.
+                </p>
+              </div>
+              <a
+                href={socials.Github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.githubProBtn}
+              >
+                <FiGithub size={20} />
+                <span>View Profile</span>
+              </a>
+            </div>
+
+            {/* FIX: skeleton loader while GitHub data fetches — prevents layout shift */}
+            {loadingGithub ? (
+              <div className={styles.proGithubStats} aria-busy="true" aria-label="Loading GitHub stats">
+                {[0, 1, 2].map((i) => (
+                  <div key={i} className={styles.proStatItem}>
+                    <div
+                      style={{
+                        width: 60,
+                        height: 32,
+                        borderRadius: 6,
+                        background: "rgba(255,255,255,0.07)",
+                        animation: "pulse 1.4s ease-in-out infinite",
+                        marginBottom: 6,
+                      }}
+                    />
+                    <div
+                      style={{
+                        width: 80,
+                        height: 10,
+                        borderRadius: 4,
+                        background: "rgba(255,255,255,0.05)",
+                        animation: "pulse 1.4s ease-in-out infinite",
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : githubData && !githubData.error ? (
+              <div className={styles.proGithubStats}>
+                <div className={styles.proStatItem}>
+                  <span className={styles.proStatValue}>{githubData.totalStars}</span>
+                  <span className={styles.proStatLabel}>Total Stars</span>
+                </div>
+                <div className={styles.proStatDivider} />
+                <div className={styles.proStatItem}>
+                  <span className={styles.proStatValue}>{githubData.publicRepos}</span>
+                  <span className={styles.proStatLabel}>Repositories</span>
+                </div>
+                <div className={styles.proStatDivider} />
+                <div className={styles.proStatItem}>
+                  <span className={styles.proStatValue}>{githubData.followers}</span>
+                  <span className={styles.proStatLabel}>Followers</span>
+                </div>
+              </div>
+            ) : null}
+          </motion.div>
+
+          {/* Experience Section */}
+          <motion.div className={styles.activitySection} variants={itemVariants}>
+            <h3 className={styles.activityTitle}>Experience</h3>
+            <div className={styles.timelineList}>
+              {experience.map((item) => (
+                <div key={item.role} className={styles.timelineItem}>
+                  <div className={styles.timelineHead}>
+                    <h4>{item.role}</h4>
+                    <span>{item.period}</span>
+                  </div>
+                  <p className={styles.timelineOrg}>{item.org}</p>
+                  <ul>
+                    {item.points.map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Education Section */}
+          <motion.div className={styles.activitySection} variants={itemVariants}>
+            <h3 className={styles.activityTitle}>Education</h3>
+            <div className={styles.timelineList}>
+              {education.map((item) => (
+                <div key={item.degree} className={styles.timelineItem}>
+                  <div className={styles.timelineHead}>
+                    <h4>{item.degree}</h4>
+                    <span>{item.period}</span>
+                  </div>
+                  <p className={styles.timelineOrg}>{item.school}</p>
+                  <p className={styles.timelineNote}>{item.highlight}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Coding Profiles & Certifications */}
+          <div className={styles.splitGrid}>
+            <motion.div className={styles.activitySection} variants={itemVariants}>
+              <h3 className={styles.activityTitle}>Coding Profiles</h3>
+              <div className={styles.profileGrid}>
+                {codingProfiles.map((profile) => (
+                  <a
+                    key={profile.name}
+                    href={profile.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.profileCard}
+                  >
+                    <span>{profile.name}</span>
+                    <small className={styles.profileMeta}>{profile.meta}</small>
+                  </a>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div className={styles.activitySection} variants={itemVariants}>
+              <h3 className={styles.activityTitle}>Certifications</h3>
+              <div className={styles.certList}>
+                {certifications.map((cert) => (
+                  <div key={cert} className={styles.certItem}>
+                    {cert}
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Socials */}
+          <motion.div className={styles.socialsContainer} variants={itemVariants}>
+            <div className={styles.socialsGrid}>
+              <motion.a
+                href={socials.Github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialOrb}
+                whileHover={{ scale: 1.1, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FiGithub size={24} />
+                <span>GitHub</span>
+              </motion.a>
+
+              <motion.a
+                href={socials.Linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialOrb}
+                whileHover={{ scale: 1.1, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FiLinkedin size={24} />
+                <span>LinkedIn</span>
+              </motion.a>
+
+              <motion.a
+                href={socials.Mail}
+                className={styles.socialOrb}
+                whileHover={{ scale: 1.1, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FiMail size={24} />
+                <span>Email</span>
+              </motion.a>
+
+              <div className={styles.locationOrb}>
+                <a href={socials.Location} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
+                  <FiMapPin size={20} />
+                  <span>Delhi, India</span>
+                </a>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Tech stack slider */}
+          <motion.div className={styles.sliderWrap} variants={itemVariants}>
+            <p className={styles.sliderLabel}>Technologies I work with</p>
+            <StackSlider />
+          </motion.div>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default About;
+</file>
+
+<file path="src/utils/projects/index.json">
+{
+  "projects": [
+    {
+      "id": "uber-ride-platform",
+      "name": "Uber Backend - Ride-Hailing REST API",
+      "type": "Backend · Java + Spring Boot",
+      "repo": "https://github.com/ABHINAVX03/Book_Karo-backend-Spring-boot-",
+      "deploy": "https://book-car-frontend.vercel.app",
+      "image": "/projects/uber_project_collage.png",
+      "description": "Ride-hailing backend with Spring Boot APIs for rider onboarding, driver matching, trip booking, fare calculation, and Dockerized deployment.",
+      "tags": ["Java", "Spring Boot", "REST APIs", "OOP", "Docker"],
+      "color": "cyan",
+      "priority": 1,
+      "featured": true,
+      "year": 2026,
+      "status": "in-progress"
+    },
+    {
+      "id": "travel-world",
+      "name": "Travel World",
+      "type": "Full Stack · MERN",
+      "repo": "https://github.com/ABHINAVX03/Travel_World",
+      "deploy": "https://traveling-world-client.vercel.app/",
+      "image": "/projects/project2.png",
+      "description": "MERN travel booking app with JWT auth, bcrypt-secured accounts, package discovery, booking flows, and admin CRUD controls.",
+      "tags": ["MongoDB", "Express.js", "React", "Node.js", "JWT"],
+      "color": "violet",
+      "priority": 2,
+      "featured": true,
+      "year": 2025,
+      "status": "completed"
+    },
+    {
+      "id": "chat-app",
+      "name": "Chat App",
+      "type": "Full Stack · Real-time",
+      "repo": "https://github.com/ABHINAVX03/ChatApp-Socket.io",
+      "deploy": null,
+      "image": "/projects/project4.png",
+      "description": "Socket.io chat app with room-based messaging, live presence indicators, and an Express backend for real-time communication.",
+      "tags": ["Socket.io", "Node.js", "Express", "React", "WebSockets"],
+      "color": "emerald",
+      "priority": 3,
+      "featured": true,
+      "year": 2024,
+      "status": "in-progress"
+    },
+    {
+      "id": "voting-dapp",
+      "name": "Voting DApp",
+      "type": "Blockchain · Web3",
+      "repo": "https://github.com/ABHINAVX03/Voting_Dapp",
+      "deploy": "https://votingbeta.netlify.app/",
+      "image": "/projects/project5.png",
+      "description": "Voting DApp with Solidity contracts, MetaMask integration, on-chain vote recording, and admin controls for candidates and election timing.",
+      "tags": ["React", "Express.js", "Solidity", "MetaMask", "Ganache"],
+      "color": "emerald",
+      "priority": 4,
+      "featured": true,
+      "year": 2024,
+      "status": "completed"
+    },
+    {
+      "id": "hospital-management",
+      "name": "MediCore - Hospital Management",
+      "type": "Full Stack · Java Backend",
+      "repo": "https://github.com/ABHINAVX03/Hospital_Mangement_backend",
+      "deploy": null,
+      "image": "/projects/project3.png",
+      "description": "Hospital management backend with patient records, doctor scheduling, billing modules, PostgreSQL persistence, and JWT authentication.",
+      "tags": ["Java", "Spring Boot", "JWT", "PostgreSQL", "React"],
+      "color": "cyan",
+      "priority": 5,
+      "featured": true,
+      "year": 2026,
+      "status": "completed"
+    },
+    {
+      "id": "movie-ticket",
+      "name": "Movie Ticket",
+      "type": "Full Stack · React",
+      "repo": "https://github.com/ABHINAVX03/Movie-Ticket",
+      "deploy": "https://movie-ticket-phi-tan.vercel.app/",
+      "image": "/projects/project6.png",
+      "description": "Movie booking interface with seat selection, Clerk authentication, Tailwind UI, Docker support, and blockchain-backed transaction flow.",
+      "tags": ["React", "Docker", "Tailwind CSS", "Clerk"],
+      "color": "violet",
+      "priority": 6,
+      "featured": true,
+      "year": 2026,
+      "status": "completed"
+    },
+    {
+      "id": "lead-dashboard",
+      "name": "Lead Dashboard",
+      "type": "Full Stack · React",
+      "repo": "https://github.com/ABHINAVX03/lead_dashboard",
+      "deploy": "https://lead-dashboard-jet.vercel.app/dashboard",
+      "image": "/projects/project7.png",
+      "description": "Lead management dashboard for tracking sales pipelines, protected API data, JWT auth, and PostgreSQL-backed lead records.",
+      "tags": ["React", "TypeScript", "Tailwind CSS", "JWT", "Express.js", "Supabase", "PostgreSQL"],
+      "color": "primary",
+      "priority": 7,
+      "featured": true,
+      "year": 2026,
+      "status": "completed"
+    },
+    {
+      "id": "gen-ai-dashboard",
+      "name": "Gen AI Dashboard",
+      "type": "Frontend · Next.js",
+      "repo": "https://github.com/ABHINAVX03/gen-ai-dashboard",
+      "deploy": "https://gen-ai-dashboard-lyart.vercel.app/dashboard",
+      "image": "/projects/project8.png",
+      "description": "Next.js AI dashboard with typed components, protected dashboard routes, analytics views, and PostgreSQL-backed data screens.",
+      "tags": ["React", "TypeScript", "Tailwind CSS", "Next.js", "Supabase", "PostgreSQL"],
+      "color": "emerald",
+      "priority": 8,
+      "featured": true,
+      "year": 2026,
+      "status": "completed"
+    }
+  ],
+  "metadata": {
+    "totalProjects": 8,
+    "featuredProjects": 8,
+    "lastUpdated": "2026-05-31",
+    "version": "1.1.0"
+  }
+}
+</file>
+
+<file path="src/app/api/send-email/route.js">
+import nodemailer from "nodemailer";
+
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_USER || "").trim();
+const EMAIL_PASS = (process.env.EMAIL_PASS || process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
+const EMAIL_TO = (process.env.EMAIL_TO || EMAIL_USER).trim();
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const MAX_NAME_LENGTH = 80;
+const MAX_EMAIL_LENGTH = 120;
+const MAX_MESSAGE_LENGTH = 2000;
+
+const rateLimitStore = globalThis.__portfolioEmailRateLimit || new Map();
+globalThis.__portfolioEmailRateLimit = rateLimitStore;
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function cleanText(value = "", maxLength) {
+  return String(value).trim().slice(0, maxLength);
+}
+
+function getClientIp(request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  return forwardedFor?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
+}
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const existing = rateLimitStore.get(ip) || [];
+  const recent = existing.filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS);
+
+  if (recent.length >= RATE_LIMIT_MAX_REQUESTS) {
+    rateLimitStore.set(ip, recent);
+    return true;
+  }
+
+  rateLimitStore.set(ip, [...recent, now]);
+  return false;
+}
+
+function getTransporter() {
+  if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
+    console.error("Missing EMAIL_USER, EMAIL_PASS, or EMAIL_TO environment variables.");
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
+    },
+    greetingTimeout: 30000,
+    connectionTimeout: 30000,
+  });
+}
+
+export async function POST(request) {
+  try {
+    const clientIp = getClientIp(request);
+    if (isRateLimited(clientIp)) {
+      return Response.json(
+        { error: "Too many messages. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json();
+    if (body.company_url_confirm || body.website_url_confirm) {
+      return Response.json({ success: true }, { status: 200 });
+    }
+
+    const user_name = cleanText(body.user_name, MAX_NAME_LENGTH);
+    const user_email = cleanText(body.user_email, MAX_EMAIL_LENGTH).toLowerCase();
+    const message = cleanText(body.message, MAX_MESSAGE_LENGTH);
+
+    if (!user_name || !user_email || !message) {
+      return Response.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user_email)) {
+      return Response.json({ error: "Invalid email format" }, { status: 400 });
+    }
+
+    const safeName = escapeHtml(user_name);
+    const safeEmail = escapeHtml(user_email);
+    const safeMessage = escapeHtml(message);
+
+    const transporter = getTransporter();
+
+    if (!transporter) {
+      return Response.json(
+        {
+          success: false,
+          warning: "Email service is unavailable. Please check environment variables.",
+        },
+        { status: 503 }
+      );
+    }
+
+    const adminMailOptions = {
+      from: `"Abhinav Gupta Portfolio" <${EMAIL_USER}>`,
+      to: EMAIL_TO,
+      replyTo: user_email,
+      subject: `New portfolio inquiry from ${user_name}`,
+      text: [
+        "New Portfolio Inquiry",
+        "",
+        `Name: ${user_name}`,
+        `Email: ${user_email}`,
+        "",
+        "Message:",
+        message,
+      ].join("\n"),
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333; border-bottom: 2px solid #4f8ef7; padding-bottom: 10px;">
+            New Portfolio Inquiry
+          </h2>
+          <div style="margin: 20px 0; background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+            <p><strong style="color: #333;">Name:</strong> <span style="color: #666;">${safeName}</span></p>
+            <p><strong style="color: #333;">Email:</strong> <span style="color: #666;"><a href="mailto:${safeEmail}">${safeEmail}</a></span></p>
+            <p><strong style="color: #333;">Message:</strong></p>
+            <p style="color: #666; white-space: pre-wrap; background-color: #fff; padding: 10px; border-left: 4px solid #4f8ef7;">
+              ${safeMessage}
+            </p>
+          </div>
+          <p style="color: #999; font-size: 12px; margin-top: 30px;">
+            This email was sent from your portfolio contact form.
+          </p>
+        </div>
+      `,
+    };
+
+    try {
+      await transporter.sendMail(adminMailOptions);
+    } catch (error) {
+      console.error("Email send error:", error);
+      const errorCode =
+        error?.code === "EAUTH" || error?.responseCode === 535
+          ? "EMAIL_AUTH_FAILED"
+          : error?.code === "ETIMEDOUT" || error?.code === "ECONNECTION"
+            ? "EMAIL_CONNECTION_FAILED"
+            : "EMAIL_SEND_FAILED";
+
+      return Response.json(
+        {
+          success: false,
+          error: "Failed to send email. Please try again later.",
+          code: errorCode,
+        },
+        { status: 502 }
+      );
+    }
+
+    return Response.json(
+      {
+        success: true,
+        message: "Thank you! Your message has been received. I'll get back to you soon.",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Email processing error:", error);
+    return Response.json(
+      { error: "Failed to process email" },
+      { status: 500 }
+    );
+  }
+}
+</file>
+
+</files>
