@@ -19,6 +19,11 @@ const StackSlider = () => {
                 alt="Tech logo"
                 width={80}
                 height={44}
+                style={{
+                  width: "80px",
+                  height: "44px",
+                  objectFit: "contain",
+                }}
                 className={styles.img}
                 loading="lazy"
               />

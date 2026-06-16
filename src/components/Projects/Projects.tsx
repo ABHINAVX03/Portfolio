@@ -1,10 +1,9 @@
 "use client";
-import styles from "./projects.module.css";
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import projectsData from "@/utils/projects/index.json";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
-import { FiArrowRight, FiExternalLink } from "react-icons/fi";
+import { FiExternalLink, FiGithub, FiArrowRight } from "react-icons/fi";
+import projectsData from "@/utils/projects/index.json";
 
 interface Project {
   id: string;
@@ -15,414 +14,409 @@ interface Project {
   image: string;
   description: string;
   tags: string[];
-  color: 'primary' | 'cyan' | 'violet' | 'emerald';
+  color: "primary" | "cyan" | "violet" | "emerald";
   priority: number;
   featured: boolean;
   year: number;
-  status: 'completed' | 'in-progress' | 'planned';
+  status: "completed" | "in-progress" | "planned";
 }
 
-interface ColorConfig {
-  accent: string;
-  glow: string;
-  border: string;
-  tagBg: string;
-  tagBorder: string;
-  gradient: string;
+/* ── colour map (indigo/violet/rose/emerald palette) ── */
+const COLOR: Record<string, { accent: string; glow: string; dim: string; border: string }> = {
+  primary: { accent: "#6366f1", glow: "rgba(99,102,241,0.25)",  dim: "rgba(99,102,241,0.08)",  border: "rgba(99,102,241,0.25)" },
+  cyan:    { accent: "#6366f1", glow: "rgba(99,102,241,0.25)",  dim: "rgba(99,102,241,0.08)",  border: "rgba(99,102,241,0.25)" },
+  violet:  { accent: "#8b5cf6", glow: "rgba(139,92,246,0.25)",  dim: "rgba(139,92,246,0.08)",  border: "rgba(139,92,246,0.25)" },
+  emerald: { accent: "#34d399", glow: "rgba(52,211,153,0.2)",   dim: "rgba(52,211,153,0.07)",  border: "rgba(52,211,153,0.25)" },
+};
+
+/* ── 3-D tilt hook ── */
+function useTilt3D() {
+  const ref = useRef<HTMLDivElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rotX = useSpring(useTransform(my, [-0.5, 0.5], [8, -8]),  { stiffness: 260, damping: 28 });
+  const rotY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), { stiffness: 260, damping: 28 });
+  const onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = ref.current?.getBoundingClientRect();
+    if (!r) return;
+    mx.set((e.clientX - r.left) / r.width - 0.5);
+    my.set((e.clientY - r.top)  / r.height - 0.5);
+  };
+  const onMouseLeave = () => { mx.set(0); my.set(0); };
+  return { ref, rotX, rotY, onMouseMove, onMouseLeave };
 }
 
-const containerVariants = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-      staggerDirection: 1
-    }
-  },
-};
-
-const fadeUp = {
-  hidden: {
-    opacity: 0,
-    y: 60,
-    scale: 0.9,
-    filter: "blur(10px)"
-  },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    filter: "blur(0px)",
-    transition: {
-      duration: 0.8,
-      ease: [0.23, 1, 0.32, 1],
-      type: "spring",
-      stiffness: 100
-    }
-  },
-};
-
-const colorConfig: Record<string, ColorConfig> = {
-  primary: {
-    accent:      "#4f8ef7",
-    glow:        "rgba(79,142,247,0.18)",
-    border:      "rgba(79,142,247,0.22)",
-    tagBg:       "rgba(79,142,247,0.1)",
-    tagBorder:   "rgba(79,142,247,0.28)",
-    gradient:    "linear-gradient(135deg, #4f8ef7 0%, #00d4ff 100%)",
-  },
-  cyan: {
-    accent:      "#00d4ff",
-    glow:        "rgba(0,212,255,0.16)",
-    border:      "rgba(0,212,255,0.22)",
-    tagBg:       "rgba(0,212,255,0.08)",
-    tagBorder:   "rgba(0,212,255,0.28)",
-    gradient:    "linear-gradient(135deg, #00d4ff 0%, #0099cc 100%)",
-  },
-  violet: {
-    accent:      "#8b5cf6",
-    glow:        "rgba(139,92,246,0.16)",
-    border:      "rgba(139,92,246,0.22)",
-    tagBg:       "rgba(139,92,246,0.08)",
-    tagBorder:   "rgba(139,92,246,0.28)",
-    gradient:    "linear-gradient(135deg, #8b5cf6 0%, #c084fc 100%)",
-  },
-  emerald: {
-    accent:      "#10b981",
-    glow:        "rgba(16,185,129,0.16)",
-    border:      "rgba(16,185,129,0.22)",
-    tagBg:       "rgba(16,185,129,0.08)",
-    tagBorder:   "rgba(16,185,129,0.28)",
-    gradient:    "linear-gradient(135deg, #10b981 0%, #34d399 100%)",
-  },
-};
-
-/* ---- GitHub SVG ---- */
-const GithubIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-  </svg>
-);
-
-const uberCaseStudy = {
-  problem: "Design a backend that can coordinate riders, drivers, trips, and fare calculation with clear service boundaries.",
-  architecture: [
-    "Layered Spring Boot services for users, drivers, rides, and pricing",
-    "REST controllers separated from business logic and persistence",
-    "Dockerized deployment path for repeatable local and cloud setup",
-  ],
-  apis: ["Auth & rider onboarding", "Driver matching", "Ride booking", "Fare calculation", "Trip status updates"],
+/* ── Flagship case-study card ── */
+const uberPoints = {
+  problem: "Design a backend that coordinates riders, drivers, trips and fare calculation with clean service boundaries.",
+  arch: ["Layered Spring Boot services", "REST controllers separate from business logic", "Dockerized for repeatable deploy"],
+  apis: ["Auth & rider onboarding", "Driver matching", "Ride booking", "Fare calculation", "Trip status"],
   stack: ["Java", "Spring Boot", "REST APIs", "Docker", "OOP"],
 };
 
-const UberCaseStudy = ({ project }: { project?: Project }) => {
-  if (!project) return null;
-
+function FlagshipCard({ project }: { project: Project }) {
+  const c = COLOR[project.color] || COLOR.primary;
   return (
-    <motion.article
-      className={styles.flagship}
-      initial={{ opacity: 0, y: 28 }}
+    <motion.div
+      initial={{ opacity: 0, y: 32 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
+      transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+      style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 420px",
+        gap: "0",
+        borderRadius: "24px",
+        border: `1px solid ${c.border}`,
+        background: "rgba(10,10,20,0.9)",
+        overflow: "hidden",
+        boxShadow: `0 24px 80px rgba(0,0,0,0.5), 0 0 60px ${c.glow}`,
+        marginBottom: "48px",
+        position: "relative",
+      }}
+      className="flagship-grid"
     >
-      <div className={styles.flagshipContent}>
-        <div className={styles.flagshipEyebrow}>Flagship Case Study</div>
-        <h3 className={styles.flagshipTitle}>Uber-style Ride-Hailing Backend</h3>
-        <p className={styles.flagshipSummary}>{project.description}</p>
+      {/* top gradient line */}
+      <div style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 2,
+        background: `linear-gradient(90deg, transparent, ${c.accent}, #8b5cf6, #f472b6, transparent)`,
+        zIndex: 2,
+      }} />
 
-        <div className={styles.caseGrid}>
-          <div className={styles.casePanel}>
-            <span>Problem</span>
-            <p>{uberCaseStudy.problem}</p>
-          </div>
-          <div className={styles.casePanel}>
-            <span>Architecture</span>
-            <ul>
-              {uberCaseStudy.architecture.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-          <div className={styles.casePanel}>
-            <span>Core APIs</span>
-            <div className={styles.apiList}>
-              {uberCaseStudy.apis.map((api) => (
-                <small key={api}>{api}</small>
-              ))}
-            </div>
-          </div>
-          <div className={styles.casePanel}>
-            <span>Tech Stack</span>
-            <div className={styles.apiList}>
-              {uberCaseStudy.stack.map((tech) => (
-                <small key={tech}>{tech}</small>
-              ))}
-            </div>
-          </div>
+      {/* LEFT — content */}
+      <div style={{ padding: "40px 36px", display: "flex", flexDirection: "column", gap: "20px" }}>
+        {/* eyebrow */}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: "8px",
+          padding: "5px 12px", borderRadius: "9999px", width: "fit-content",
+          border: "1px solid rgba(52,211,153,0.3)", background: "rgba(52,211,153,0.08)",
+        }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399", boxShadow: "0 0 8px #34d399" }} />
+          <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#34d399" }}>
+            Flagship Case Study
+          </span>
         </div>
 
-        <div className={styles.flagshipActions}>
+        <h3 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(24px,3vw,38px)", fontWeight: 700, letterSpacing: "-0.03em", color: "#f8fafc", margin: 0, lineHeight: 1.1 }}>
+          {project.name}
+        </h3>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: "14px", lineHeight: 1.75, color: "rgba(255,255,255,0.6)", margin: 0, maxWidth: "560px" }}>
+          {project.description}
+        </p>
+
+        {/* 2×2 case panels */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+          {[
+            { label: "Problem", content: uberPoints.problem, type: "text" },
+            { label: "Architecture", items: uberPoints.arch, type: "list" },
+            { label: "Core APIs", items: uberPoints.apis, type: "pills" },
+            { label: "Tech Stack", items: uberPoints.stack, type: "pills" },
+          ].map((panel) => (
+            <div key={panel.label} style={{
+              padding: "14px 16px",
+              borderRadius: "14px",
+              border: "1px solid rgba(255,255,255,0.06)",
+              background: "rgba(255,255,255,0.025)",
+            }}>
+              <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: c.accent, display: "block", marginBottom: "8px" }}>
+                {panel.label}
+              </span>
+              {panel.type === "text" && <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{(panel as any).content}</p>}
+              {panel.type === "list" && <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
+                {(panel as any).items.map((i: string) => <li key={i}>{i}</li>)}
+              </ul>}
+              {panel.type === "pills" && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {(panel as any).items.map((i: string) => (
+                    <span key={i} style={{ padding: "3px 8px", borderRadius: "6px", border: `1px solid ${c.border}`, background: c.dim, color: "rgba(255,255,255,0.7)", fontSize: "11px", fontFamily: "var(--font-jetbrains-mono)" }}>{i}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* action links */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
           {project.repo && (
-            <a href={project.repo} target="_blank" rel="noopener noreferrer">
-              <GithubIcon /> GitHub
+            <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#f8fafc", fontSize: "13px", fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease", fontFamily: "var(--font-body)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.background = c.dim; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}>
+              <FiGithub size={14} /> GitHub
             </a>
           )}
           {project.deploy && (
-            <a href={project.deploy} target="_blank" rel="noopener noreferrer">
-              <FiExternalLink size={16} /> Live Demo
+            <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#f8fafc", fontSize: "13px", fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease", fontFamily: "var(--font-body)" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.background = c.dim; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}>
+              <FiExternalLink size={14} /> Live Demo
             </a>
           )}
-          <a href="#contact">
-            Hire Me <FiArrowRight size={16} />
+          <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`, color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`, fontFamily: "var(--font-body)" }}>
+            Hire Me <FiArrowRight size={14} />
           </a>
         </div>
       </div>
 
-      <div className={styles.flagshipVisual}>
-        <Image
-          src={project.image}
-          alt={`${project.name} screenshot`}
-          width={760}
-          height={480}
-          className={styles.flagshipImage}
-          priority
-          sizes="(max-width: 1024px) 100vw, 44vw"
-        />
-        <div className={styles.proofStrip}>
-          <span>Driver Matching</span>
-          <span>Fare Logic</span>
-          <span>REST APIs</span>
+      {/* RIGHT — image */}
+      <div style={{ position: "relative", overflow: "hidden", minHeight: "400px" }}>
+        <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover" }} sizes="420px" />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(10,10,20,0.4), transparent)" }} />
+        {/* proof chips */}
+        <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+          {["Driver Matching", "Fare Logic", "REST APIs"].map(t => (
+            <span key={t} style={{ padding: "5px 10px", borderRadius: "9999px", background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)", color: "#fff", fontSize: "10px", fontFamily: "var(--font-jetbrains-mono)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>{t}</span>
+          ))}
         </div>
       </div>
-    </motion.article>
+    </motion.div>
   );
-};
+}
 
-// Unique project card with reveal animation
-const ProjectCard = ({ project, index }: { project: Project; index: number }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [imgSrc, setImgSrc] = useState(project.image);
-
-  const cfg = colorConfig[project.color] || colorConfig.primary;
-  const shouldShowActions = isHovered || isTouchDevice;
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(hover: none), (pointer: coarse)");
-    const updateInputMode = () => setIsTouchDevice(mediaQuery.matches);
-
-    updateInputMode();
-    mediaQuery.addEventListener("change", updateInputMode);
-
-    return () => mediaQuery.removeEventListener("change", updateInputMode);
-  }, []);
+/* ── Regular 3-D project card ── */
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const tilt = useTilt3D();
+  const [hovered, setHovered] = useState(false);
+  const [imgSrc, setImgSrc]   = useState(project.image);
+  const c = COLOR[project.color] || COLOR.primary;
 
   return (
-    <motion.article
-      className={styles.projectCard}
-      variants={fadeUp}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      style={{ "--accent": cfg.accent, "--glow": cfg.glow, "--border-c": cfg.border } as any}
-      whileHover={{
-        y: -8,
-        scale: 1.02,
-        transition: { type: "spring", stiffness: 300, damping: 20 }
+    <motion.div
+      ref={tilt.ref}
+      onMouseMove={tilt.onMouseMove}
+      onMouseLeave={() => { tilt.onMouseLeave(); setHovered(false); }}
+      onMouseEnter={() => setHovered(true)}
+      style={{
+        rotateX: tilt.rotX,
+        rotateY: tilt.rotY,
+        transformStyle: "preserve-3d",
+        perspective: 1000,
       }}
-      layout
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
     >
-      {/* Image with overlay */}
-      <div className={styles.cardImage}>
-        {project.type.includes("Blockchain") && (
-          <span className={styles.web3Badge}>Web3 Highlight</span>
-        )}
-        <Image
-          src={imgSrc}
-          alt={project.name}
-          width={400}
-          height={250}
-          className={styles.image}
-          loading="lazy"
-          sizes="(max-width: 768px) 100vw, (max-width: 1400px) 50vw, 380px"
-          onError={() => setImgSrc("/projects/default.png")}
-        />
+      <div style={{
+        borderRadius: "20px",
+        border: `1px solid ${hovered ? c.border : "rgba(255,255,255,0.06)"}`,
+        background: "rgba(10,10,20,0.85)",
+        overflow: "hidden",
+        boxShadow: hovered ? `0 24px 60px rgba(0,0,0,0.5), 0 0 40px ${c.glow}` : "0 4px 24px rgba(0,0,0,0.3)",
+        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+        position: "relative",
+        backdropFilter: "blur(12px)",
+      }}>
+        {/* top glow line on hover */}
+        <div style={{
+          position: "absolute", top: 0, left: 0, right: 0, height: "1px",
+          background: `linear-gradient(90deg, transparent, ${c.accent}, transparent)`,
+          opacity: hovered ? 1 : 0,
+          transition: "opacity 0.3s ease",
+          zIndex: 2,
+        }} />
 
-        <div className={styles.imageOverlay} />
+        {/* image */}
+        <div style={{ position: "relative", height: "200px", overflow: "hidden" }}>
+          <Image
+            src={imgSrc}
+            alt={project.name}
+            fill
+            style={{
+              objectFit: "cover",
+              transition: "transform 0.5s ease",
+              transform: hovered ? "scale(1.06)" : "scale(1)",
+            }}
+            loading="lazy"
+            sizes="(max-width: 768px) 100vw, 400px"
+            onError={() => setImgSrc("/projects/default.png")}
+          />
+          {/* dark overlay */}
+          <div style={{
+            position: "absolute", inset: 0,
+            background: hovered ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.1)",
+            transition: "background 0.3s ease",
+          }} />
 
-        {/* Floating number */}
-        <motion.div
-          className={styles.projectNumber}
-          animate={isHovered ? { scale: 1.2, rotate: 5 } : { scale: 1, rotate: 0 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
-        >
-          {String(index + 1).padStart(2, "0")}
-        </motion.div>
+          {/* number badge */}
+          <div style={{
+            position: "absolute", top: "12px", right: "12px",
+            padding: "4px 10px", borderRadius: "8px",
+            background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            fontFamily: "var(--font-jetbrains-mono)", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)",
+          }}>
+            {String(index + 1).padStart(2, "0")}
+          </div>
 
-        {/* Hover reveal content */}
-        <motion.div
-          className={styles.hoverContent}
-          initial={{ opacity: 0, y: 20 }}
-          animate={shouldShowActions ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className={styles.hoverActions}>
+          {/* web3 badge */}
+          {project.type.includes("Blockchain") && (
+            <div style={{
+              position: "absolute", top: "12px", left: "12px",
+              padding: "4px 10px", borderRadius: "9999px",
+              background: "rgba(52,211,153,0.15)", backdropFilter: "blur(8px)",
+              border: "1px solid rgba(52,211,153,0.35)",
+              fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700,
+              color: "#34d399", letterSpacing: "0.08em", textTransform: "uppercase",
+            }}>
+              Web3
+            </div>
+          )}
+
+          {/* hover action buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: "absolute", inset: 0,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
+            }}
+          >
             {project.repo && (
-              <motion.a
-                href={project.repo}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.actionBtn}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <GithubIcon /> Code
-              </motion.a>
+              <a href={project.repo} target="_blank" rel="noopener noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+                <FiGithub size={14} /> Code
+              </a>
             )}
             {project.deploy && (
-
-              <motion.a
-                href={project.deploy}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.actionBtn}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FiExternalLink size={15} /> Live
-              </motion.a>
+              <a href={project.deploy} target="_blank" rel="noopener noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+                <FiExternalLink size={14} /> Live
+              </a>
             )}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Content */}
-      <div className={styles.cardContent}>
-        <div className={styles.cardHeader}>
-          <h3 className={styles.projectTitle}>{project.name}</h3>
-          <span className={styles.projectType} style={{ color: cfg.accent }}>
-            {project.type}
-          </span>
+          </motion.div>
         </div>
 
-        <p className={styles.projectDesc}>{project.description}</p>
-
-        <div className={styles.techStack}>
-          {project.tags.slice(0, 3).map((tag, tagIndex) => (
-            <motion.span
-              key={tag}
-              className={styles.techTag}
-              style={{
-                background: cfg.tagBg,
-                borderColor: cfg.tagBorder,
-                color: cfg.accent
-              } as any}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={shouldShowActions ? { opacity: 1, scale: 1 } : { opacity: 0.85, scale: 1 }}
-              transition={{ delay: tagIndex * 0.1 }}
-            >
-              {tag}
-            </motion.span>
-          ))}
-        </div>
-      </div>
-
-      {/* Animated border */}
-      <motion.div
-        className={styles.cardBorder}
-        style={{ background: cfg.gradient } as any}
-        initial={{ scaleX: 0 }}
-        animate={shouldShowActions ? { scaleX: 1 } : { scaleX: 0 }}
-        transition={{ duration: 0.4 }}
-      />
-    </motion.article>
-  );
-};
-
-/* ---- Main section ---- */
-const Projects = () => {
-  const ref = useRef<HTMLElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-  const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
-    const aPriority = typeof a.priority === "number" ? a.priority : 999;
-    const bPriority = typeof b.priority === "number" ? b.priority : 999;
-    if (aPriority !== bPriority) return aPriority - bPriority;
-    if (a.featured !== b.featured) return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
-    return b.year - a.year;
-  });
-  const stats = {
-    total: projects.length,
-    featured: projects.filter((project) => project.featured).length,
-    technologies: projects.reduce((acc: Record<string, number>, project) => {
-      project.tags.forEach((tag) => {
-        acc[tag] = (acc[tag] || 0) + 1;
-      });
-      return acc;
-    }, {}),
-  };
-  const flagshipProject = projects.find((project) => project.id === "uber-ride-platform");
-  const projectCards = flagshipProject
-    ? projects.filter((project) => project.id !== flagshipProject.id)
-    : projects;
-
-  return (
-    <section className={styles.section} ref={ref}>
-      <div className={styles.container}>
-
-        {/* ---- Header ---- */}
-        <motion.div
-          className={styles.header}
-          initial={{ opacity: 0, y: 28 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.65, ease: [0.23, 1, 0.32, 1] }}
-        >
-          <div className={styles.labelRow}>
-            <span className={styles.labelLine} />
-            <span className={styles.labelText}>Featured Work</span>
-            <span className={styles.labelLine} />
+        {/* content */}
+        <div style={{ padding: "18px 20px 20px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px", gap: "8px" }}>
+            <h3 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "17px", fontWeight: 700, color: "#f8fafc", margin: 0, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+              {project.name}
+            </h3>
+            <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: c.accent, padding: "3px 8px", borderRadius: "6px", background: c.dim, border: `1px solid ${c.border}`, flexShrink: 0, whiteSpace: "nowrap" }}>
+              {project.year}
+            </span>
           </div>
 
-          <h2 className={styles.heading}>
-            What I&apos;ve <span className={styles.headingAccent}>Built</span>
-          </h2>
-          <p className={styles.subheading}>
-            Production-grade applications — React frontends, Java Spring Boot backends, REST APIs & more.
+          <p style={{ fontFamily: "var(--font-body)", fontSize: "13px", lineHeight: 1.65, color: "rgba(255,255,255,0.5)", margin: "0 0 14px" }}>
+            {project.description}
           </p>
 
-          {/* Count pills */}
-          <div className={styles.statRow}>
-            <div className={styles.statPill}>
-              <span className={styles.statNum}>{stats.total}</span>
-              <span className={styles.statLabel}>Projects</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statPill}>
-              <span className={styles.statNum}>{stats.featured}</span>
-              <span className={styles.statLabel}>Featured</span>
-            </div>
-            <div className={styles.statDivider} />
-            <div className={styles.statPill}>
-              <span className={styles.statNum}>{Object.keys(stats.technologies).length}</span>
-              <span className={styles.statLabel}>Technologies</span>
-            </div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            {project.tags.slice(0, 4).map((tag) => (
+              <span key={tag} style={{
+                fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 600,
+                letterSpacing: "0.04em", textTransform: "uppercase",
+                padding: "3px 9px", borderRadius: "6px",
+                border: `1px solid ${hovered ? c.border : "rgba(255,255,255,0.07)"}`,
+                background: hovered ? c.dim : "rgba(255,255,255,0.03)",
+                color: hovered ? c.accent : "rgba(255,255,255,0.4)",
+                transition: "all 0.25s ease",
+              }}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* bottom bar that fills on hover */}
+        <div style={{
+          height: "2px",
+          background: `linear-gradient(90deg, ${c.accent}, #8b5cf6)`,
+          transform: `scaleX(${hovered ? 1 : 0})`,
+          transformOrigin: "left",
+          transition: "transform 0.4s ease",
+        }} />
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Main section ── */
+const Projects = () => {
+  const ref     = useRef<HTMLElement>(null);
+  const inView  = useInView(ref, { once: true, margin: "-80px" });
+
+  const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
+    const ap = typeof a.priority === "number" ? a.priority : 999;
+    const bp = typeof b.priority === "number" ? b.priority : 999;
+    if (ap !== bp) return ap - bp;
+    return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
+  });
+
+  const flagship = projects.find((p) => p.id === "uber-ride-platform");
+  const cards    = projects.filter((p) => p.id !== "uber-ride-platform");
+  const techs    = [...new Set(projects.flatMap((p) => p.tags))];
+
+  return (
+    <section id="projects" ref={ref} style={{ position: "relative", zIndex: 1, padding: "100px 0 80px" }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
+
+        {/* ── Header ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          style={{ textAlign: "center", marginBottom: "64px" }}
+        >
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "20px" }}>
+            <div style={{ height: "1px", width: "60px", background: "linear-gradient(90deg, transparent, #6366f1)" }} />
+            <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "11px", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "#6366f1" }}>
+              Featured Work
+            </span>
+            <div style={{ height: "1px", width: "60px", background: "linear-gradient(90deg, #6366f1, transparent)" }} />
+          </div>
+
+          <h2 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(36px,5vw,60px)", fontWeight: 700, letterSpacing: "-0.04em", margin: "0 0 16px", lineHeight: 1.05 }}>
+            <span style={{ color: "#f8fafc" }}>What I&apos;ve </span>
+            <span style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #f472b6)", backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent" }}>Built</span>
+          </h2>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: "16px", color: "rgba(255,255,255,0.5)", maxWidth: "500px", margin: "0 auto 28px", lineHeight: 1.7 }}>
+            Production-grade applications — React frontends, Java Spring Boot backends, REST APIs &amp; blockchain DApps.
+          </p>
+
+          {/* stat pills */}
+          <div style={{ display: "inline-flex", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "9999px", padding: "12px 28px", gap: "24px" } as any}>
+            {[
+              { n: projects.length,      l: "Projects" },
+              { n: projects.filter(p=>p.featured).length, l: "Featured" },
+              { n: techs.length,         l: "Technologies" },
+            ].map((s, i) => (
+              <span key={s.l} style={{ display: "flex", alignItems: "center", gap: i > 0 ? "24px" : "0" }}>
+                {i > 0 && <span style={{ width: 1, height: 28, background: "rgba(255,255,255,0.08)", display: "inline-block", marginRight: "24px" }} />}
+                <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
+                  <span style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "18px", fontWeight: 700, background: "linear-gradient(135deg, #6366f1, #8b5cf6)", backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent" }}>{s.n}</span>
+                  <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>{s.l}</span>
+                </span>
+              </span>
+            ))}
           </div>
         </motion.div>
 
-        <UberCaseStudy project={flagshipProject} />
+        {/* ── Flagship ── */}
+        {flagship && <FlagshipCard project={flagship} />}
 
-        {/* ---- Unique Masonry Grid ---- */}
-        <motion.div
-          className={styles.masonryGrid}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "show" : "hidden"}
+        {/* ── Masonry grid ── */}
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
+          gap: "20px",
+        }}
+          className="projects-masonry"
         >
-          {projectCards.map((project, index) => (
-            <ProjectCard key={project.id} project={project} index={index} />
-          ))}
-        </motion.div>
-
+          {cards.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
+        </div>
       </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .flagship-grid { grid-template-columns: 1fr !important; }
+          .flagship-grid > *:last-child { min-height: 260px !important; }
+        }
+        @media (max-width: 600px) {
+          .projects-masonry { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 };

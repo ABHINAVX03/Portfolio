@@ -3,160 +3,396 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { FiMenu, FiMoon, FiSun, FiX } from "react-icons/fi";
+import { FiDownload, FiMenu, FiX } from "react-icons/fi";
 
 const NAV_ITEMS = [
-  { label: "Home", href: "#home" },
+  { label: "Home",     href: "#home" },
   { label: "Projects", href: "#projects" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "About",    href: "#about" },
+  { label: "Contact",  href: "#contact" },
 ];
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDark, setIsDark] = useState(true);
+  const [isScrolled,  setIsScrolled]  = useState(false);
+  const [isMenuOpen,  setIsMenuOpen]  = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
+  /* ── scroll + active-section tracker ── */
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 10);
+    const onScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      const sections = ["home", "projects", "about", "contact"];
+      const current = sections.find((id) => {
+        const el = document.getElementById(id);
+        if (!el) return false;
+        const { top, bottom } = el.getBoundingClientRect();
+        return top <= 120 && bottom >= 120;
+      });
+      if (current) setActiveSection(current);
+    };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  /* ── lock body scroll when mobile menu open ── */
   useEffect(() => {
-    const storedTheme = window.localStorage.getItem("theme");
-    const shouldUseDark = storedTheme ? storedTheme === "dark" : true;
-    setIsDark(shouldUseDark);
-    document.documentElement.classList.toggle("dark", shouldUseDark);
-  }, []);
-
-  useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    document.body.style.overflow = isMenuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [isMenuOpen]);
 
-  const toggleTheme = () => {
-    const next = !isDark;
-    setIsDark(next);
-    document.documentElement.classList.toggle("dark", next);
-    window.localStorage.setItem("theme", next ? "dark" : "light");
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 px-4 py-4 sm:px-6">
-      <nav role="navigation"
-        className={`mx-auto flex w-full max-w-7xl items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-6 ${
-          isScrolled
-            ? "border-black/10 bg-white/70 shadow-[0_10px_30px_rgba(0,0,0,0.06)] backdrop-blur-xl dark:border-white/15 dark:bg-[#05070f]/70"
-            : "border-black/5 bg-white/35 backdrop-blur-lg dark:border-white/10 dark:bg-[#05070f]/45"
-        }`}
-        aria-label="Main navigation"
+    <>
+      <header
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          padding: "16px 24px",
+          display: "flex",
+          justifyContent: "center",
+          pointerEvents: "none",
+        }}
       >
-        <Link
-          href="#home"
-          className="inline-flex items-center gap-3 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c470]"
-          aria-label="Go to home section"
+        <motion.nav
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0,   opacity: 1 }}
+          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          role="navigation"
+          aria-label="Main navigation"
+          style={{
+            pointerEvents: "auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            maxWidth: "900px",
+            padding: "10px 16px",
+            borderRadius: "9999px",
+            border: `1px solid ${isScrolled ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.06)"}`,
+            background: isScrolled
+              ? "rgba(5, 5, 8, 0.85)"
+              : "rgba(5, 5, 8, 0.4)",
+            backdropFilter: "blur(24px)",
+            WebkitBackdropFilter: "blur(24px)",
+            boxShadow: isScrolled
+              ? "0 4px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.08)"
+              : "none",
+            transition: "all 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
+          }}
         >
-          <span className="grid h-10 w-10 place-items-center rounded-xl border border-black/15 bg-black/5 text-sm font-bold text-slate-800 dark:border-white/20 dark:bg-white/5 dark:text-white">
-            AG
-          </span>
-          <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-slate-900 dark:text-white">Abhinav Gupta</p>
-            <div className="flex items-center gap-2 text-xs text-slate-600 dark:text-white/70">
-              <span className="relative inline-flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#22c470] opacity-75" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#22c470]" />
-              </span>
-              Available for opportunities
+          {/* ── Logo ── */}
+          <Link
+            href="#home"
+            aria-label="Go to home"
+            style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
+          >
+            <div style={{
+              width: 36,
+              height: 36,
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "13px",
+              fontWeight: 800,
+              color: "#fff",
+              fontFamily: "var(--font-space-grotesk)",
+              boxShadow: "0 0 16px rgba(99,102,241,0.4)",
+              flexShrink: 0,
+            }}>
+              AG
             </div>
-          </div>
-        </Link>
+            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
+              <span style={{
+                fontFamily: "var(--font-space-grotesk)",
+                fontSize: "14px",
+                fontWeight: 700,
+                color: "#f8fafc",
+                letterSpacing: "-0.02em",
+              }}>
+                Abhinav Gupta
+              </span>
+              <span style={{
+                fontFamily: "var(--font-jetbrains-mono)",
+                fontSize: "10px",
+                color: "#34d399",
+                letterSpacing: "0.04em",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}>
+                <span style={{
+                  display: "inline-block",
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "#34d399",
+                  boxShadow: "0 0 8px #34d399",
+                  animation: "ping 2s ease-in-out infinite",
+                }} />
+                Available
+              </span>
+            </div>
+          </Link>
 
-        <ul className="hidden items-center gap-6 md:flex">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.href}>
-              <Link
-                href={item.href}
-                className="text-sm font-medium text-slate-700 transition hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4F8EF7] dark:text-white/80 dark:hover:text-white"
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex items-center gap-2">
-          {/* Theme Toggle Button */}
-          <button
-            type="button"
-            onClick={toggleTheme}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-black/5 text-slate-800 transition hover:bg-black/10 hover:text-[#22c470] dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 dark:hover:text-[#22c470] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c470]"
-            aria-label="Toggle theme"
+          {/* ── Desktop nav links ── */}
+          <ul style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "2px",
+            listStyle: "none",
+            margin: 0,
+            padding: 0,
+          }}
+            className="nav-desktop-links"
           >
-            {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
-          </button>
-
-          <a
-            href="/resume/Resume.pdf"
-            download
-            className="hidden rounded-xl bg-[#22c470] px-4 py-2.5 text-sm font-semibold text-black transition hover:bg-[#32d983] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#22c470] md:inline-block"
-            aria-label="Download resume"
-          >
-            Resume
-          </a>
-
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen((prev) => !prev)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-black/10 bg-black/5 text-slate-800 md:hidden dark:border-white/15 dark:bg-white/5 dark:text-white" aria-controls="mobile-menu"
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-            aria-expanded={isMenuOpen}
-          >
-            {isMenuOpen ? <FiX size={18} /> : <FiMenu size={18} />}
-          </button>
-        </div>
-      </nav>
-
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div id="mobile-menu" initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.2 }}
-            className="mx-auto mt-2 w-full max-w-7xl rounded-2xl border border-black/10 bg-white/95 p-4 backdrop-blur-xl dark:border-white/15 dark:bg-[#05070f]/95 md:hidden"
-          >
-            <ul className="space-y-2">
-              {NAV_ITEMS.map((item) => (
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.href.replace("#", "");
+              return (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block rounded-lg px-3 py-2 text-sm text-slate-800 transition hover:bg-slate-100 hover:text-slate-950 dark:text-white/85 dark:hover:bg-white/10 dark:hover:text-white"
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      padding: "7px 14px",
+                      borderRadius: "9999px",
+                      fontFamily: "var(--font-body)",
+                      fontSize: "13px",
+                      fontWeight: 500,
+                      color: isActive ? "#fff" : "rgba(255,255,255,0.6)",
+                      background: isActive ? "rgba(99,102,241,0.2)" : "transparent",
+                      border: isActive ? "1px solid rgba(99,102,241,0.35)" : "1px solid transparent",
+                      transition: "all 0.25s ease",
+                      textDecoration: "none",
+                      letterSpacing: "0.01em",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.color = "#fff";
+                        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActive) {
+                        e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+                        e.currentTarget.style.background = "transparent";
+                      }
+                    }}
                   >
+                    {isActive && (
+                      <span style={{
+                        width: 5,
+                        height: 5,
+                        borderRadius: "50%",
+                        background: "#6366f1",
+                        boxShadow: "0 0 8px #6366f1",
+                        flexShrink: 0,
+                      }} />
+                    )}
                     {item.label}
                   </Link>
                 </li>
-              ))}
-            </ul>
+              );
+            })}
+          </ul>
+
+          {/* ── Resume CTA + hamburger ── */}
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <a
               href="/resume/Resume.pdf"
               download
-              className="mt-3 block rounded-lg bg-[#22c470] px-4 py-2 text-center text-sm font-semibold text-black hover:bg-[#32d983]"
-              aria-label="Download resume from mobile menu"
+              aria-label="Download resume"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 16px",
+                borderRadius: "9999px",
+                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                color: "#fff",
+                fontFamily: "var(--font-body)",
+                fontSize: "12px",
+                fontWeight: 600,
+                letterSpacing: "0.01em",
+                textDecoration: "none",
+                boxShadow: "0 0 20px rgba(99,102,241,0.3)",
+                transition: "all 0.25s ease",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 0 30px rgba(99,102,241,0.55)";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 0 20px rgba(99,102,241,0.3)";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
+              className="nav-resume-btn"
             >
-              Download Resume
+              <FiDownload size={12} />
+              Resume
             </a>
+
+            {/* Hamburger — mobile only */}
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen((p) => !p)}
+              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+              style={{
+                display: "none",
+                width: 36,
+                height: 36,
+                borderRadius: "10px",
+                border: "1px solid rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#f8fafc",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+                flexShrink: 0,
+              }}
+              className="nav-hamburger"
+            >
+              {isMenuOpen ? <FiX size={16} /> : <FiMenu size={16} />}
+            </button>
+          </div>
+        </motion.nav>
+      </header>
+
+      {/* ── Mobile full-screen menu ── */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            id="mobile-menu"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(32px)" }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 999,
+              background: "rgba(5, 5, 8, 0.97)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+            }}
+          >
+            {/* Close button top-right */}
+            <button
+              type="button"
+              onClick={closeMenu}
+              aria-label="Close menu"
+              style={{
+                position: "absolute",
+                top: "24px",
+                right: "24px",
+                width: 40,
+                height: 40,
+                borderRadius: "10px",
+                border: "1px solid rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.05)",
+                color: "#f8fafc",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+            >
+              <FiX size={18} />
+            </button>
+
+            {NAV_ITEMS.map((item, i) => (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ delay: i * 0.07, duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+              >
+                <Link
+                  href={item.href}
+                  onClick={closeMenu}
+                  style={{
+                    display: "block",
+                    fontFamily: "var(--font-space-grotesk)",
+                    fontSize: "42px",
+                    fontWeight: 800,
+                    letterSpacing: "-0.04em",
+                    color: activeSection === item.href.replace("#", "") ? "#6366f1" : "rgba(255,255,255,0.85)",
+                    textDecoration: "none",
+                    padding: "8px 24px",
+                    transition: "color 0.2s ease",
+                  }}
+                >
+                  {item.label}
+                </Link>
+              </motion.div>
+            ))}
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.32, duration: 0.35 }}
+              style={{ marginTop: "16px" }}
+            >
+              <a
+                href="/resume/Resume.pdf"
+                download
+                onClick={closeMenu}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "14px 32px",
+                  borderRadius: "9999px",
+                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                  color: "#fff",
+                  fontFamily: "var(--font-body)",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  boxShadow: "0 0 32px rgba(99,102,241,0.4)",
+                }}
+              >
+                <FiDownload size={16} />
+                Download Resume
+              </a>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+
+      {/* ── Responsive styles injected globally ── */}
+      <style>{`
+        @media (max-width: 768px) {
+          .nav-desktop-links { display: none !important; }
+          .nav-resume-btn    { display: none !important; }
+          .nav-hamburger     { display: flex !important; }
+        }
+        @keyframes ping {
+          0%   { box-shadow: 0 0 0 0 rgba(52,211,153,0.6); }
+          70%  { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
+          100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+        }
+      `}</style>
+    </>
   );
 };
 

@@ -31,12 +31,9 @@
 }
 
 .img {
-  height: 44px;
-  width: auto;
   margin: 0 28px;
   filter: brightness(40%) grayscale(20%) invert(0);
   transition: filter 0.35s ease, transform 0.35s ease;
-  object-fit: contain;
   flex-shrink: 0;
 }
 

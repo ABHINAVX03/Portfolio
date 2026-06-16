@@ -1,4 +1,4 @@
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -11,6 +11,14 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
   display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -29,20 +37,17 @@ export const metadata = {
     "Abhinav Gupta",
   ],
   authors: [{ name: "Abhinav Gupta" }],
-  icons: {
-    icon: "/logo.png",
-  },
+  icons: { icon: "/logo.png" },
   openGraph: {
     title: "Abhinav Gupta | Full Stack Developer",
     description:
-      "Portfolio of Abhinav Gupta, a Full Stack Developer specializing in React, Next.js, Java Spring Boot, and modern web engineering.",
+      "Portfolio of Abhinav Gupta — React, Next.js, Java Spring Boot, REST APIs.",
     url: "https://abhinavgupta.dev",
     siteName: "Abhinav Gupta Portfolio",
     locale: "en_US",
     type: "website",
     images: [
       {
-        // FIX: was /og-image.png in metadata but /og-image.webp in dead <Head> block — unified to .png
         url: "/og-image.png",
         width: 1200,
         height: 630,
@@ -54,22 +59,18 @@ export const metadata = {
     card: "summary_large_image",
     title: "Abhinav Gupta | Full Stack Developer",
     description:
-      "Portfolio of Abhinav Gupta, a Full Stack Developer specializing in React, Next.js, and Java Spring Boot.",
+      "Portfolio of Abhinav Gupta — React, Next.js, and Java Spring Boot.",
     images: ["/og-image.png"],
   },
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      {/*
-        FIX: Removed the <Head> import and block entirely.
-        next/head is a Pages Router API — it is silently ignored in the App Router (src/app/).
-        All meta tags are already handled correctly by the `metadata` export above.
-        The old <Head> block also had a mismatched og:image filename (/og-image.webp vs .png).
-      */}
+    <html
+      lang="en"
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+    >
       <head>
-        {/* JSON-LD structured data — Person schema for richer Google search results */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -91,7 +92,14 @@ export default function RootLayout({ children }) {
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        {/* Deep space background layers */}
+        <div className="bg-grid" aria-hidden="true" />
+        <div className="bg-orb bg-orb-1" aria-hidden="true" />
+        <div className="bg-orb bg-orb-2" aria-hidden="true" />
+        <div className="bg-orb bg-orb-3" aria-hidden="true" />
+        {children}
+      </body>
     </html>
   );
 }
