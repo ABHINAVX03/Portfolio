@@ -157,8 +157,14 @@ function FlagshipCard({ project }: { project: Project }) {
         </div>
       </div>
 
-      {/* RIGHT — image */}
-      <div style={{ position: "relative", overflow: "hidden", minHeight: "400px" }}>
+      {/* RIGHT — image
+          NOTE: minHeight moved from inline style to the .flagship-image-col
+          className. Inline styles always beat external <style> media queries
+          regardless of specificity, so the old `style={{ minHeight: "400px" }}`
+          was silently overriding the 900px breakpoint that tried to shrink it
+          to 260px — on phones the image stayed locked at 400px tall inside a
+          now-narrow single column, producing an oddly tall, squeezed crop. */}
+      <div className="flagship-image-col" style={{ position: "relative", overflow: "hidden" }}>
         <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover" }} sizes="420px" />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(10,10,20,0.4), transparent)" }} />
         {/* proof chips */}
@@ -409,12 +415,18 @@ const Projects = () => {
       </div>
 
       <style>{`
+        .flagship-image-col {
+          min-height: 400px;
+        }
         @media (max-width: 900px) {
           .flagship-grid { grid-template-columns: 1fr !important; }
-          .flagship-grid > *:last-child { min-height: 260px !important; }
+          .flagship-image-col { min-height: 260px !important; }
         }
         @media (max-width: 600px) {
           .projects-masonry { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .flagship-image-col { min-height: 220px !important; }
         }
       `}</style>
     </section>

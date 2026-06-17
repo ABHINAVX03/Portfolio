@@ -172,7 +172,7 @@ function SectionHeading({ children }) {
 }
 
 /* ── Skill pill ── */
-function SkillPill({ label, hovered }) {
+function SkillPill({ label }) {
   return (
     <span style={{
       fontFamily: T.mono,
@@ -571,9 +571,21 @@ const About = () => {
       <style>{`
         @keyframes aboutBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         @keyframes aboutPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* These two grids collapse at DIFFERENT widths on purpose:
+           .about-two-col (bio text vs. stats numbers) reads fine compressed
+           down to ~460px per column, so 900px is an appropriate breakpoint.
+           .about-split-grid (coding-profile rows with space-between flex
+           layouts, certification rows with icon + text) needs more room
+           before wrapping looks clean — those start crowding around
+           950-1000px on real devices (iPad landscape, small laptops), so it
+           gets its own earlier breakpoint at 1000px rather than sharing
+           900px with the other grid. */
+        @media (max-width: 1000px) {
+          .about-split-grid { grid-template-columns: 1fr !important; }
+        }
         @media (max-width: 900px) {
           .about-two-col { grid-template-columns: 1fr !important; }
-          .about-split-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </section>

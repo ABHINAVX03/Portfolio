@@ -3,6 +3,7 @@ import Hero from "@/components/Hero/Hero";
 import Projects from "@/components/Projects/Projects";
 import About from "@/components/About/About";
 import Contact from "@/components/Contact/Contact";
+import ScrollSection from "@/components/ScrollSection/ScrollSection";
 
 export default function Home() {
   return (
@@ -10,22 +11,25 @@ export default function Home() {
       {/* CSS-only animated background — zero JS, zero lag */}
       <div className="bg-grid" aria-hidden="true" />
 
-      <section id="home">
-        <Navbar />
+      {/* Navbar sits outside ScrollSection — it's fixed/global chrome, not a
+          scrolling page section, so it shouldn't be subject to depth fade */}
+      <Navbar />
+
+      <ScrollSection id="home">
         <Hero />
-      </section>
+      </ScrollSection>
 
-      <section id="projects">
+      <ScrollSection id="projects">
         <Projects />
-      </section>
+      </ScrollSection>
 
-      <section id="about">
+      <ScrollSection id="about">
         <About />
-      </section>
+      </ScrollSection>
 
-      <section id="contact">
+      <ScrollSection id="contact" intensity={0.6}>
         <Contact />
-      </section>
+      </ScrollSection>
     </div>
   );
 }
