@@ -1,8 +1,14 @@
 /*
-  About section — all layout and visual styling lives in About.jsx as inline styles,
-  matching the same approach used by Hero.tsx and Projects.tsx.
-  This file only exists so the `import styles from "./about.module.css"` import
-  doesn't break. The one class below is referenced directly in the JSX.
+  About section — most layout/visual styling still lives in About.jsx as
+  inline styles (matching Hero.tsx / Projects.tsx convention). This module
+  now also holds the interactive states that were previously implemented as
+  inline onMouseEnter/onMouseLeave JS handlers on individual elements.
+
+  Why move them here: those handlers ran a setState-free style mutation on
+  every mouse event, which works but (a) can't be reused, (b) doesn't get
+  GPU-accelerated transition batching the way a CSS class swap does, and
+  (c) made every interactive element's JSX noisy with two extra props.
+  Functionally identical result, fewer moving parts.
 */
 
 /* Visually hidden — for screen readers only */
@@ -16,4 +22,155 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* ── Skill pill (default / Languages, Frontend, etc.) ── */
+.pill {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.08);
+  color: #c7d2fe;
+  display: inline-block;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.pill:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.14);
+  transform: translateY(-1px);
+}
+
+/* ── "Currently Learning" pill variant ── */
+.pillViolet {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: rgba(139, 92, 246, 0.08);
+  color: #c4b5fd;
+  display: inline-block;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.pillViolet:hover {
+  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.16);
+  transform: translateY(-1px);
+}
+
+/* ── "What I'm Building" pill variant ── */
+.pillRose {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(244, 114, 182, 0.25);
+  background: rgba(244, 114, 182, 0.08);
+  color: #fda4af;
+  display: inline-block;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.pillRose:hover {
+  border-color: rgba(244, 114, 182, 0.5);
+  background: rgba(244, 114, 182, 0.16);
+  transform: translateY(-1px);
+}
+
+/* ── Social link chip (GitHub / LinkedIn / Email / Location) ── */
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.socialLink:hover {
+  color: #f8fafc;
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* ── Stat card hover lift (border glow to match section gradient-top accents) ── */
+.statCard {
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.statCard:hover {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+/* ── GitHub card: subtle border glow on hover, echoes the gradient-top bar already used on TimelineItem ── */
+.githubCard {
+  transition: border-color 0.25s ease;
+}
+.githubCard:hover {
+  border-color: rgba(99, 102, 241, 0.32) !important;
+}
+
+/* ── "View Profile" button on the GitHub card ── */
+.githubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.08);
+  color: #c7d2fe;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.githubLink:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ── Coding profile row ── */
+.profileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.profileRow:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* ── Certification row (static, no hover — kept as a class purely for
+     consistency with the other row-style elements in this file) ── */
+.certRow {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.05);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
