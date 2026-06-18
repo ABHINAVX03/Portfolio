@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
-const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_USER || "").trim();
-const EMAIL_PASS = (process.env.EMAIL_PASS || process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
+const EMAIL_USER = (process.env.GMAIL_USER || "").trim();
+const EMAIL_PASS = (process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
 const EMAIL_TO = (process.env.EMAIL_TO || EMAIL_USER).trim();
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;

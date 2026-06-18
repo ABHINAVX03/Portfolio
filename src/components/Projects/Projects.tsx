@@ -2,7 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
-import { FiExternalLink, FiGithub, FiArrowRight } from "react-icons/fi";
+import Link from "next/link";
+import { FiExternalLink, FiGithub, FiArrowRight, FiBookOpen } from "react-icons/fi";
 import projectsData from "@/utils/projects/index.json";
 
 interface Project {
@@ -21,7 +22,6 @@ interface Project {
   status: "completed" | "in-progress" | "planned";
 }
 
-/* ── colour map (indigo/violet/rose/emerald palette) ── */
 const COLOR: Record<string, { accent: string; glow: string; dim: string; border: string }> = {
   primary: { accent: "#6366f1", glow: "rgba(99,102,241,0.25)",  dim: "rgba(99,102,241,0.08)",  border: "rgba(99,102,241,0.25)" },
   cyan:    { accent: "#6366f1", glow: "rgba(99,102,241,0.25)",  dim: "rgba(99,102,241,0.08)",  border: "rgba(99,102,241,0.25)" },
@@ -29,7 +29,6 @@ const COLOR: Record<string, { accent: string; glow: string; dim: string; border:
   emerald: { accent: "#34d399", glow: "rgba(52,211,153,0.2)",   dim: "rgba(52,211,153,0.07)",  border: "rgba(52,211,153,0.25)" },
 };
 
-/* ── 3-D tilt hook ── */
 function useTilt3D() {
   const ref = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
@@ -46,7 +45,6 @@ function useTilt3D() {
   return { ref, rotX, rotY, onMouseMove, onMouseLeave };
 }
 
-/* ── Flagship case-study card ── */
 const uberPoints = {
   problem: "Design a backend that coordinates riders, drivers, trips and fare calculation with clean service boundaries.",
   arch: ["Layered Spring Boot services", "REST controllers separate from business logic", "Dockerized for repeatable deploy"],
@@ -54,8 +52,12 @@ const uberPoints = {
   stack: ["Java", "Spring Boot", "REST APIs", "Docker", "OOP"],
 };
 
+// ── Flagship card ──────────────────────────────────────────────────────────────
+// FIX: Added "Case Study →" button so the page is actually reachable from the UI.
+// Previously there was no link to /projects/uber-ride-platform anywhere on the site.
 function FlagshipCard({ project }: { project: Project }) {
   const c = COLOR[project.color] || COLOR.primary;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -106,10 +108,10 @@ function FlagshipCard({ project }: { project: Project }) {
         {/* 2×2 case panels */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
           {[
-            { label: "Problem", content: uberPoints.problem, type: "text" },
-            { label: "Architecture", items: uberPoints.arch, type: "list" },
-            { label: "Core APIs", items: uberPoints.apis, type: "pills" },
-            { label: "Tech Stack", items: uberPoints.stack, type: "pills" },
+            { label: "Problem",      content: uberPoints.problem, type: "text" },
+            { label: "Architecture", items: uberPoints.arch,      type: "list" },
+            { label: "Core APIs",    items: uberPoints.apis,      type: "pills" },
+            { label: "Tech Stack",   items: uberPoints.stack,     type: "pills" },
           ].map((panel) => (
             <div key={panel.label} style={{
               padding: "14px 16px",
@@ -121,9 +123,11 @@ function FlagshipCard({ project }: { project: Project }) {
                 {panel.label}
               </span>
               {panel.type === "text" && <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{(panel as any).content}</p>}
-              {panel.type === "list" && <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
-                {(panel as any).items.map((i: string) => <li key={i}>{i}</li>)}
-              </ul>}
+              {panel.type === "list" && (
+                <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
+                  {(panel as any).items.map((i: string) => <li key={i}>{i}</li>)}
+                </ul>
+              )}
               {panel.type === "pills" && (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {(panel as any).items.map((i: string) => (
@@ -135,39 +139,82 @@ function FlagshipCard({ project }: { project: Project }) {
           ))}
         </div>
 
-        {/* action links */}
+        {/* ✅ FIX: action links — added "Case Study" button */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+          {/* ✅ NEW: Case Study deep-dive link — this is the primary CTA for the case study page */}
+          <Link
+            href={`/projects/${project.id}`}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "7px",
+              padding: "9px 16px", borderRadius: "12px",
+              background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`,
+              color: "#fff", fontSize: "13px", fontWeight: 600,
+              textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`,
+              fontFamily: "var(--font-body)",
+            }}
+          >
+            <FiBookOpen size={14} /> Case Study
+          </Link>
+
           {project.repo && (
-            <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#f8fafc", fontSize: "13px", fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease", fontFamily: "var(--font-body)" }}
+            <a
+              href={project.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "7px",
+                padding: "9px 16px", borderRadius: "12px",
+                border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
+                color: "#f8fafc", fontSize: "13px", fontWeight: 600,
+                textDecoration: "none", fontFamily: "var(--font-body)",
+                transition: "all 0.2s ease",
+              }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.background = c.dim; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}>
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+            >
               <FiGithub size={14} /> GitHub
             </a>
           )}
+
           {project.deploy && (
-            <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#f8fafc", fontSize: "13px", fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease", fontFamily: "var(--font-body)" }}
+            <a
+              href={project.deploy}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "7px",
+                padding: "9px 16px", borderRadius: "12px",
+                border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
+                color: "#f8fafc", fontSize: "13px", fontWeight: 600,
+                textDecoration: "none", fontFamily: "var(--font-body)",
+                transition: "all 0.2s ease",
+              }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.background = c.dim; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}>
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+            >
               <FiExternalLink size={14} /> Live Demo
             </a>
           )}
-          <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`, color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`, fontFamily: "var(--font-body)" }}>
+
+          <a
+            href="#contact"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "7px",
+              padding: "9px 16px", borderRadius: "12px",
+              border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
+              color: "#f8fafc", fontSize: "13px", fontWeight: 600,
+              textDecoration: "none", fontFamily: "var(--font-body)",
+            }}
+          >
             Hire Me <FiArrowRight size={14} />
           </a>
         </div>
       </div>
 
-      {/* RIGHT — image
-          NOTE: minHeight moved from inline style to the .flagship-image-col
-          className. Inline styles always beat external <style> media queries
-          regardless of specificity, so the old `style={{ minHeight: "400px" }}`
-          was silently overriding the 900px breakpoint that tried to shrink it
-          to 260px — on phones the image stayed locked at 400px tall inside a
-          now-narrow single column, producing an oddly tall, squeezed crop. */}
+      {/* RIGHT — image */}
       <div className="flagship-image-col" style={{ position: "relative", overflow: "hidden" }}>
         <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover" }} sizes="420px" />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(10,10,20,0.4), transparent)" }} />
-        {/* proof chips */}
         <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
           {["Driver Matching", "Fare Logic", "REST APIs"].map(t => (
             <span key={t} style={{ padding: "5px 10px", borderRadius: "9999px", background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)", color: "#fff", fontSize: "10px", fontFamily: "var(--font-jetbrains-mono)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>{t}</span>
@@ -178,7 +225,7 @@ function FlagshipCard({ project }: { project: Project }) {
   );
 }
 
-/* ── Regular 3-D project card ── */
+// ── Regular card ───────────────────────────────────────────────────────────────
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const tilt = useTilt3D();
   const [hovered, setHovered] = useState(false);
@@ -191,12 +238,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       onMouseMove={tilt.onMouseMove}
       onMouseLeave={() => { tilt.onMouseLeave(); setHovered(false); }}
       onMouseEnter={() => setHovered(true)}
-      style={{
-        rotateX: tilt.rotX,
-        rotateY: tilt.rotY,
-        transformStyle: "preserve-3d",
-        perspective: 1000,
-      }}
+      style={{ rotateX: tilt.rotX, rotateY: tilt.rotY, transformStyle: "preserve-3d", perspective: 1000 }}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -212,7 +254,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         position: "relative",
         backdropFilter: "blur(12px)",
       }}>
-        {/* top glow line on hover */}
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, height: "1px",
           background: `linear-gradient(90deg, transparent, ${c.accent}, transparent)`,
@@ -227,66 +268,36 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             src={imgSrc}
             alt={project.name}
             fill
-            style={{
-              objectFit: "cover",
-              transition: "transform 0.5s ease",
-              transform: hovered ? "scale(1.06)" : "scale(1)",
-            }}
+            style={{ objectFit: "cover", transition: "transform 0.5s ease", transform: hovered ? "scale(1.06)" : "scale(1)" }}
             loading="lazy"
             sizes="(max-width: 768px) 100vw, 400px"
             onError={() => setImgSrc("/projects/default.png")}
           />
-          {/* dark overlay */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: hovered ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.1)",
-            transition: "background 0.3s ease",
-          }} />
+          <div style={{ position: "absolute", inset: 0, background: hovered ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.1)", transition: "background 0.3s ease" }} />
 
-          {/* number badge */}
-          <div style={{
-            position: "absolute", top: "12px", right: "12px",
-            padding: "4px 10px", borderRadius: "8px",
-            background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            fontFamily: "var(--font-jetbrains-mono)", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)",
-          }}>
+          <div style={{ position: "absolute", top: "12px", right: "12px", padding: "4px 10px", borderRadius: "8px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.1)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)" }}>
             {String(index + 1).padStart(2, "0")}
           </div>
 
-          {/* web3 badge */}
           {project.type.includes("Blockchain") && (
-            <div style={{
-              position: "absolute", top: "12px", left: "12px",
-              padding: "4px 10px", borderRadius: "9999px",
-              background: "rgba(52,211,153,0.15)", backdropFilter: "blur(8px)",
-              border: "1px solid rgba(52,211,153,0.35)",
-              fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700,
-              color: "#34d399", letterSpacing: "0.08em", textTransform: "uppercase",
-            }}>
+            <div style={{ position: "absolute", top: "12px", left: "12px", padding: "4px 10px", borderRadius: "9999px", background: "rgba(52,211,153,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(52,211,153,0.35)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, color: "#34d399", letterSpacing: "0.08em", textTransform: "uppercase" }}>
               Web3
             </div>
           )}
 
-          {/* hover action buttons */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
             transition={{ duration: 0.2 }}
-            style={{
-              position: "absolute", inset: 0,
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
-            }}
+            style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}
           >
             {project.repo && (
-              <a href={project.repo} target="_blank" rel="noopener noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+              <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
                 <FiGithub size={14} /> Code
               </a>
             )}
             {project.deploy && (
-              <a href={project.deploy} target="_blank" rel="noopener noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+              <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
                 <FiExternalLink size={14} /> Live
               </a>
             )}
@@ -325,23 +336,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
         </div>
 
-        {/* bottom bar that fills on hover */}
-        <div style={{
-          height: "2px",
-          background: `linear-gradient(90deg, ${c.accent}, #8b5cf6)`,
-          transform: `scaleX(${hovered ? 1 : 0})`,
-          transformOrigin: "left",
-          transition: "transform 0.4s ease",
-        }} />
+        <div style={{ height: "2px", background: `linear-gradient(90deg, ${c.accent}, #8b5cf6)`, transform: `scaleX(${hovered ? 1 : 0})`, transformOrigin: "left", transition: "transform 0.4s ease" }} />
       </div>
     </motion.div>
   );
 }
 
-/* ── Main section ── */
+// ── Main section ───────────────────────────────────────────────────────────────
 const Projects = () => {
-  const ref     = useRef<HTMLElement>(null);
-  const inView  = useInView(ref, { once: true, margin: "-80px" });
+  const ref    = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
     const ap = typeof a.priority === "number" ? a.priority : 999;
@@ -358,7 +362,7 @@ const Projects = () => {
     <section id="projects" ref={ref} style={{ position: "relative", zIndex: 1, padding: "100px 0 80px" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
 
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -381,12 +385,11 @@ const Projects = () => {
             Production-grade applications — React frontends, Java Spring Boot backends, REST APIs &amp; blockchain DApps.
           </p>
 
-          {/* stat pills */}
           <div style={{ display: "inline-flex", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "9999px", padding: "12px 28px", gap: "24px" } as any}>
             {[
-              { n: projects.length,      l: "Projects" },
-              { n: projects.filter(p=>p.featured).length, l: "Featured" },
-              { n: techs.length,         l: "Technologies" },
+              { n: projects.length,                              l: "Projects" },
+              { n: projects.filter(p => p.featured).length,     l: "Featured" },
+              { n: techs.length,                                 l: "Technologies" },
             ].map((s, i) => (
               <span key={s.l} style={{ display: "flex", alignItems: "center", gap: i > 0 ? "24px" : "0" }}>
                 {i > 0 && <span style={{ width: 1, height: 28, background: "rgba(255,255,255,0.08)", display: "inline-block", marginRight: "24px" }} />}
@@ -399,25 +402,17 @@ const Projects = () => {
           </div>
         </motion.div>
 
-        {/* ── Flagship ── */}
+        {/* Flagship */}
         {flagship && <FlagshipCard project={flagship} />}
 
-        {/* ── Masonry grid ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-          gap: "20px",
-        }}
-          className="projects-masonry"
-        >
+        {/* Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }} className="projects-masonry">
           {cards.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
         </div>
       </div>
 
       <style>{`
-        .flagship-image-col {
-          min-height: 400px;
-        }
+        .flagship-image-col { min-height: 400px; }
         @media (max-width: 900px) {
           .flagship-grid { grid-template-columns: 1fr !important; }
           .flagship-image-col { min-height: 260px !important; }

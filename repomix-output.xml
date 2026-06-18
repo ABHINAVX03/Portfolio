@@ -14,7 +14,7 @@ The content is organized as follows:
 1. This summary section
 2. Repository information
 3. Directory structure
-4. Repository files (if enabled)d
+4. Repository files (if enabled)
 5. Multiple file entries, each consisting of:
   - File path as an attribute
   - Full contents of the file
@@ -86,7 +86,6 @@ public/projects/project8.png
 public/projects/Screenshot 2026-05-13 043145.png
 public/projects/uber_project_collage.png
 public/resume/Resume.pdf
-public/resume/Resume1.pdf
 public/SVG/about.png
 public/SVG/contact.png
 README_FIXES.md
@@ -98,6 +97,8 @@ src/app/globals.css
 src/app/layout.jsx
 src/app/page.jsx
 src/app/page.module.css
+src/app/projects/[slug]/not-found.tsx
+src/app/projects/[slug]/page.tsx
 src/app/robots.ts
 src/app/sitemap.ts
 src/assets/fonts/Prototype.ttf
@@ -115,6 +116,13 @@ src/components/Projects/Projects.tsx
 src/components/ScrollSection/ScrollSection.tsx
 src/components/StackSlider/stackslider.module.css
 src/components/StackSlider/StackSlider.tsx
+src/utils/caseStudies/BoundaryDecisionBlock.tsx
+src/utils/caseStudies/FailureScenarioCard.tsx
+src/utils/caseStudies/index.ts
+src/utils/caseStudies/LifecycleDiagram.tsx
+src/utils/caseStudies/not-found.tsx
+src/utils/caseStudies/types.ts
+src/utils/caseStudies/uber-ride-platform.ts
 src/utils/formValidation.js
 src/utils/logos.js
 src/utils/projects/index.json
@@ -128,6 +136,831 @@ vercel.json
 
 <files>
 This section contains the contents of the repository's files.
+
+<file path="src/app/projects/[slug]/not-found.tsx">
+// src/app/projects/[slug]/not-found.tsx
+//
+// IMPORTANT: This file must live at exactly this path:
+//   src/app/projects/[slug]/not-found.tsx
+//
+// The original was mistakenly placed at:
+//   src/utils/caseStudies/not-found.tsx
+//
+// Next.js App Router only recognises not-found.tsx when it sits
+// inside the route segment it should apply to. Anywhere else, it
+// is just an unused React component — the framework never loads it,
+// so unknown slugs throw a generic unhandled error instead of this page.
+
+import Link from "next/link";
+import { FiArrowLeft } from "react-icons/fi";
+
+export default function CaseStudyNotFound() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        zIndex: 1,
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 20,
+        textAlign: "center",
+        padding: "0 24px",
+      }}
+    >
+      <p
+        style={{
+          fontFamily: "var(--font-jetbrains-mono)",
+          fontSize: 11,
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: "#6366f1",
+          margin: 0,
+        }}
+      >
+        Not found
+      </p>
+      <h1
+        style={{
+          fontFamily: "var(--font-space-grotesk)",
+          fontSize: "clamp(24px, 4vw, 36px)",
+          fontWeight: 700,
+          color: "#f8fafc",
+          margin: 0,
+          letterSpacing: "-0.02em",
+        }}
+      >
+        This case study doesn&apos;t exist
+      </h1>
+      <p
+        style={{
+          fontFamily: "var(--font-body)",
+          fontSize: 14,
+          color: "rgba(255,255,255,0.5)",
+          margin: 0,
+          maxWidth: 420,
+        }}
+      >
+        The project you&apos;re looking for might have moved, or the link might
+        be outdated.
+      </p>
+      <Link
+        href="/#projects"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 8,
+          marginTop: 8,
+          padding: "11px 22px",
+          borderRadius: 9999,
+          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+          color: "#fff",
+          fontFamily: "var(--font-body)",
+          fontSize: 14,
+          fontWeight: 600,
+          textDecoration: "none",
+        }}
+      >
+        <FiArrowLeft size={14} /> Back to projects
+      </Link>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/projects/[slug]/page.tsx">
+// src/app/projects/[slug]/page.tsx
+//
+// FIXES APPLIED:
+// 1. params is now Promise<{slug:string}> — required in Next.js 15+
+// 2. generateMetadata is async and awaits params
+// 3. CaseStudyPage is async and awaits params
+// Without these changes the page crashes at runtime with:
+// "params should be awaited before using its properties"
+
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { FiArrowLeft, FiGithub, FiExternalLink } from "react-icons/fi";
+import { caseStudyRegistry } from "@/utils/caseStudies";
+import LifecycleDiagram from "@/utils/caseStudies/LifecycleDiagram";
+import BoundaryDecisionBlock from "@/utils/caseStudies/BoundaryDecisionBlock";
+import FailureScenarioCard from "@/utils/caseStudies/FailureScenarioCard";
+import projectsData from "@/utils/projects/index.json";
+
+// ✅ FIX: params is a Promise in Next.js 15+
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+// Pre-render known case studies at build time rather than on first request.
+export function generateStaticParams() {
+  return Object.keys(caseStudyRegistry).map((slug) => ({ slug }));
+}
+
+// ✅ FIX: async + await params
+export async function generateMetadata({ params }: PageProps) {
+  const { slug } = await params;
+  const content = caseStudyRegistry[slug];
+  if (!content) return {};
+  const project = (projectsData.projects as any[]).find((p) => p.id === slug);
+  return {
+    title: `${project?.name ?? content.slug} — Case Study | Abhinav Gupta`,
+    description: content.hero.claim,
+  };
+}
+
+// ✅ FIX: async + await params
+export default async function CaseStudyPage({ params }: PageProps) {
+  const { slug } = await params;
+  const content = caseStudyRegistry[slug];
+  if (!content) notFound();
+
+  const project = (projectsData.projects as any[]).find((p) => p.id === slug);
+
+  const hasFailureContent =
+    content.failures.length > 0 &&
+    !content.failures[0].title.startsWith("[FILL IN");
+
+  return (
+    <article
+      style={{
+        position: "relative",
+        zIndex: 1,
+        minHeight: "100vh",
+        paddingTop: "100px",
+        paddingBottom: "80px",
+      }}
+    >
+      <div style={{ maxWidth: 880, margin: "0 auto", padding: "0 24px" }}>
+
+        {/* Back link */}
+        <Link
+          href="/#projects"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            fontFamily: "var(--font-jetbrains-mono)",
+            fontSize: 12,
+            color: "rgba(255,255,255,0.5)",
+            textDecoration: "none",
+            marginBottom: 32,
+          }}
+        >
+          <FiArrowLeft size={13} /> All projects
+        </Link>
+
+        {/* Hero */}
+        <header style={{ marginBottom: 56 }}>
+          <p
+            style={{
+              fontFamily: "var(--font-jetbrains-mono)",
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              color: "#6366f1",
+              margin: "0 0 16px",
+            }}
+          >
+            Case Study
+          </p>
+          <h1
+            style={{
+              fontFamily: "var(--font-space-grotesk)",
+              fontSize: "clamp(28px, 4vw, 42px)",
+              fontWeight: 700,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.15,
+              color: "#f8fafc",
+              margin: "0 0 20px",
+            }}
+          >
+            {content.hero.claim}
+          </h1>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 15,
+              lineHeight: 1.7,
+              color: "rgba(255,255,255,0.55)",
+              margin: 0,
+              maxWidth: 640,
+            }}
+          >
+            {content.hero.subhead}
+          </p>
+        </header>
+
+        {/* Lifecycle diagram */}
+        <section style={{ marginBottom: 64 }}>
+          <LifecycleDiagram steps={content.lifecycle} />
+        </section>
+
+        {/* Boundary decisions */}
+        <section style={{ marginBottom: hasFailureContent ? 64 : 56 }}>
+          <h2
+            style={{
+              fontFamily: "var(--font-space-grotesk)",
+              fontSize: 22,
+              fontWeight: 700,
+              color: "#f8fafc",
+              letterSpacing: "-0.02em",
+              margin: "0 0 24px",
+            }}
+          >
+            Where the boundaries are drawn
+          </h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            {content.decisions.map((d) => (
+              <BoundaryDecisionBlock key={d.question} decision={d} />
+            ))}
+          </div>
+        </section>
+
+        {/* Failure scenarios — only shown when real content exists */}
+        {hasFailureContent && (
+          <section style={{ marginBottom: 56 }}>
+            <h2
+              style={{
+                fontFamily: "var(--font-space-grotesk)",
+                fontSize: 22,
+                fontWeight: 700,
+                color: "#f8fafc",
+                letterSpacing: "-0.02em",
+                margin: "0 0 24px",
+              }}
+            >
+              What broke when a boundary was wrong
+            </h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {content.failures.map((f) => (
+                <FailureScenarioCard key={f.title} scenario={f} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Stack + links */}
+        <section
+          style={{
+            padding: "28px 32px",
+            borderRadius: 16,
+            border: "1px solid rgba(255,255,255,0.07)",
+            background: "rgba(10,10,20,0.7)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 32,
+              marginBottom: 24,
+            }}
+          >
+            {content.stack.map((group) => (
+              <div key={group.category}>
+                <p
+                  style={{
+                    fontFamily: "var(--font-jetbrains-mono)",
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "#6366f1",
+                    margin: "0 0 10px",
+                  }}
+                >
+                  {group.category}
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {group.items.map((item) => (
+                    <span
+                      key={item}
+                      style={{
+                        fontFamily: "var(--font-jetbrains-mono)",
+                        fontSize: 11,
+                        padding: "4px 10px",
+                        borderRadius: 8,
+                        border: "1px solid rgba(99,102,241,0.25)",
+                        background: "rgba(99,102,241,0.08)",
+                        color: "#c7d2fe",
+                      }}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            {content.links.repo && (
+              <a
+                href={content.links.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 7,
+                  padding: "10px 18px",
+                  borderRadius: 10,
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  background: "rgba(255,255,255,0.05)",
+                  color: "#f8fafc",
+                  fontFamily: "var(--font-body)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                <FiGithub size={14} /> View source
+              </a>
+            )}
+            {content.links.deploy && (
+              <a
+                href={content.links.deploy}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 7,
+                  padding: "10px 18px",
+                  borderRadius: 10,
+                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                  color: "#fff",
+                  fontFamily: "var(--font-body)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                }}
+              >
+                <FiExternalLink size={14} /> Live demo
+              </a>
+            )}
+          </div>
+        </section>
+      </div>
+    </article>
+  );
+}
+</file>
+
+<file path="src/utils/caseStudies/BoundaryDecisionBlock.tsx">
+// src/components/CaseStudy/BoundaryDecisionBlock.tsx
+//
+// Renders one "where the boundary is drawn" entry: the question, the
+// actual decision, the reasoning, and the honest tradeoff. Four short
+// fields rather than one paragraph, because the tradeoff specifically
+// needs to stay visually distinct -- it's the part that keeps this from
+// reading like marketing copy. A decision with no stated cost is a sales
+// pitch, not an engineering explanation.
+
+import { BoundaryDecision } from "@/utils/caseStudies/types";
+
+export default function BoundaryDecisionBlock({ decision }: { decision: BoundaryDecision }) {
+  return (
+    <div style={{
+      padding: "22px 24px",
+      borderRadius: 14,
+      border: "1px solid rgba(255,255,255,0.07)",
+      background: "rgba(255,255,255,0.025)",
+    }}>
+      <h3 style={{
+        fontFamily: "var(--font-space-grotesk)", fontSize: 15.5, fontWeight: 700,
+        color: "#f8fafc", margin: "0 0 14px", letterSpacing: "-0.01em",
+      }}>
+        {decision.question}
+      </h3>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <Field label="Decision" color="#6366f1" text={decision.decision} />
+        <Field label="Reasoning" color="#8b5cf6" text={decision.reasoning} />
+        <Field label="Tradeoff" color="#fbbf24" text={decision.tradeoff} />
+      </div>
+    </div>
+  );
+}
+
+function Field({ label, color, text }: { label: string; color: string; text: string }) {
+  return (
+    <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
+      <span style={{
+        fontFamily: "var(--font-jetbrains-mono)", fontSize: 10, fontWeight: 700,
+        letterSpacing: "0.08em", textTransform: "uppercase", color,
+        flexShrink: 0, width: 84, paddingTop: 2,
+      }}>
+        {label}
+      </span>
+      <p style={{
+        fontFamily: "var(--font-body)", fontSize: 13, lineHeight: 1.6,
+        color: "rgba(255,255,255,0.6)", margin: 0,
+      }}>
+        {text}
+      </p>
+    </div>
+  );
+}
+</file>
+
+<file path="src/utils/caseStudies/FailureScenarioCard.tsx">
+// src/components/CaseStudy/FailureScenarioCard.tsx
+//
+// Renders one "what broke when a boundary was wrong" entry. This section
+// only renders at all when content.failures has real entries (page.tsx
+// already guards on that), so by the time this component runs, the
+// content is assumed genuine -- this just needs to present it clearly,
+// not hedge it.
+
+import { FailureScenario } from "@/utils/caseStudies/types";
+
+export default function FailureScenarioCard({ scenario }: { scenario: FailureScenario }) {
+  return (
+    <div style={{
+      padding: "20px 22px",
+      borderRadius: 14,
+      border: "1px solid rgba(251,191,36,0.18)",
+      background: "rgba(251,191,36,0.04)",
+      position: "relative",
+      overflow: "hidden",
+    }}>
+      <div style={{
+        position: "absolute", top: 0, left: 0, bottom: 0, width: 3,
+        background: "#fbbf24",
+      }} />
+
+      <h3 style={{
+        fontFamily: "var(--font-space-grotesk)", fontSize: 15, fontWeight: 700,
+        color: "#f8fafc", margin: "0 0 10px", letterSpacing: "-0.01em",
+      }}>
+        {scenario.title}
+      </h3>
+
+      <p style={{
+        fontFamily: "var(--font-body)", fontSize: 13, lineHeight: 1.65,
+        color: "rgba(255,255,255,0.6)", margin: "0 0 12px",
+      }}>
+        {scenario.whatHappened}
+      </p>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "rgba(255,255,255,0.45)" }}>
+          <strong style={{ color: "#fbbf24", fontWeight: 600 }}>Root cause: </strong>
+          {scenario.rootCause}
+        </span>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "rgba(255,255,255,0.45)" }}>
+          <strong style={{ color: "#34d399", fontWeight: 600 }}>Fix: </strong>
+          {scenario.fix}
+        </span>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/utils/caseStudies/index.ts">
+// src/utils/caseStudies/index.ts
+//
+// Registry mapping a project's slug (matches the "id" field in
+// src/utils/projects/index.json) to its case-study content module.
+//
+// Adding a second case study later: write a new file in this folder
+// shaped like uber-ride-platform.ts, then add one line here. The page
+// component and every other file in this folder never need to change.
+
+import { CaseStudyContent } from "./types";
+import { uberRidePlatform } from "./uber-ride-platform";
+
+export const caseStudyRegistry: Record<string, CaseStudyContent> = {
+  "uber-ride-platform": uberRidePlatform,
+};
+</file>
+
+<file path="src/utils/caseStudies/LifecycleDiagram.tsx">
+// src/components/CaseStudy/LifecycleDiagram.tsx
+//
+// The signature element. Renders the actual request lifecycle as a
+// vertical sequence -- not a generic boxes-and-arrows architecture
+// diagram, but the specific order a ride moves through, with each step
+// tagged by which service owns it. Steps marked isFailurePoint get an
+// amber accent: "this is a boundary that mattered."
+//
+// Deliberately plain SVG, no chart library -- this needs to be exact and
+// readable at a glance, not a generic chart-library default.
+
+import { LifecycleStep } from "@/utils/caseStudies/types";
+
+const ACCENT = "#6366f1";
+const AMBER = "#fbbf24";
+const NODE_R = 7;
+const ROW_H = 92;
+
+export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) {
+  const width = 760;
+  const height = steps.length * ROW_H + 24;
+  const lineX = 32;
+  const textX = 64;
+
+  return (
+    <div style={{
+      padding: "32px 28px",
+      borderRadius: 18,
+      border: "1px solid rgba(99,102,241,0.18)",
+      background: "rgba(10,10,20,0.7)",
+      overflowX: "auto",
+    }}>
+      <p style={{
+        fontFamily: "var(--font-jetbrains-mono)", fontSize: 10, fontWeight: 700,
+        letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+        margin: "0 0 24px",
+      }}>
+        Request lifecycle — one ride, in order
+      </p>
+
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img"
+        aria-label="Diagram showing the sequence of a ride request: rider requests, system matches a driver, driver accepts, trip runs, fare is calculated, fare is settled. Each step labeled with the service that owns it.">
+        {/* connecting spine */}
+        <line x1={lineX} y1={12} x2={lineX} y2={height - 12}
+          stroke="rgba(255,255,255,0.1)" strokeWidth={2} />
+
+        {steps.map((step, i) => {
+          const cy = 12 + i * ROW_H + ROW_H / 2 - ROW_H / 2 + 24;
+          const color = step.isFailurePoint ? AMBER : ACCENT;
+          return (
+            <g key={step.id}>
+              {/* node */}
+              <circle cx={lineX} cy={cy} r={NODE_R} fill="#050508" stroke={color} strokeWidth={2.5} />
+              {step.isFailurePoint && (
+                <circle cx={lineX} cy={cy} r={NODE_R + 5} fill="none" stroke={color} strokeWidth={1} opacity={0.35} />
+              )}
+
+              {/* step label */}
+              <text x={textX} y={cy - 12} fontFamily="var(--font-space-grotesk)" fontSize={15}
+                fontWeight={700} fill="#f8fafc">
+                {step.label}
+              </text>
+
+              {/* owning service tag */}
+              <text x={textX} y={cy + 6} fontFamily="var(--font-jetbrains-mono)" fontSize={11}
+                fontWeight={600} fill={color} letterSpacing="0.04em">
+                {step.owningService.toUpperCase()}
+              </text>
+
+              {/* detail line, wrapped manually -- SVG has no native text
+                  wrapping, and this content is short enough that one or
+                  two foreignObject lines is simpler than a wrapping lib */}
+              <foreignObject x={textX} y={cy + 16} width={width - textX - 16} height={ROW_H - 40}>
+                <div style={{
+                  fontFamily: "var(--font-body)", fontSize: 12.5, lineHeight: 1.55,
+                  color: "rgba(255,255,255,0.5)",
+                }}>
+                  {step.detail}
+                </div>
+              </foreignObject>
+            </g>
+          );
+        })}
+      </svg>
+
+      {/* legend */}
+      <div style={{ display: "flex", gap: 20, marginTop: 16, flexWrap: "wrap" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>
+          <span style={{ width: 9, height: 9, borderRadius: "50%", border: `2px solid ${ACCENT}`, display: "inline-block" }} />
+          standard step
+        </span>
+        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>
+          <span style={{ width: 9, height: 9, borderRadius: "50%", border: `2px solid ${AMBER}`, display: "inline-block" }} />
+          boundary that mattered
+        </span>
+      </div>
+    </div>
+  );
+}
+</file>
+
+<file path="src/utils/caseStudies/not-found.tsx">
+// src/app/projects/[slug]/not-found.tsx
+//
+// Shown when a slug doesn't exist in the case-study registry -- a typo'd
+// URL, an old bookmark to a removed project, etc. Routes back to the
+// project grid rather than leaving someone stuck on a generic 404.
+
+import Link from "next/link";
+import { FiArrowLeft } from "react-icons/fi";
+
+export default function CaseStudyNotFound() {
+  return (
+    <div style={{
+      position: "relative", zIndex: 1, minHeight: "100vh",
+      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+      gap: 20, textAlign: "center", padding: "0 24px",
+    }}>
+      <p style={{
+        fontFamily: "var(--font-jetbrains-mono)", fontSize: 11, fontWeight: 700,
+        letterSpacing: "0.14em", textTransform: "uppercase", color: "#6366f1", margin: 0,
+      }}>
+        Not found
+      </p>
+      <h1 style={{
+        fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(24px, 4vw, 36px)",
+        fontWeight: 700, color: "#f8fafc", margin: 0, letterSpacing: "-0.02em",
+      }}>
+        This case study doesn&apos;t exist
+      </h1>
+      <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "rgba(255,255,255,0.5)", margin: 0, maxWidth: 420 }}>
+        The project you&apos;re looking for might have moved, or the link might be outdated.
+      </p>
+      <Link
+        href="/#projects"
+        style={{
+          display: "inline-flex", alignItems: "center", gap: 8, marginTop: 8,
+          padding: "11px 22px", borderRadius: 9999,
+          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+          color: "#fff", fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 600,
+          textDecoration: "none",
+        }}
+      >
+        <FiArrowLeft size={14} /> Back to projects
+      </Link>
+    </div>
+  );
+}
+</file>
+
+<file path="src/utils/caseStudies/types.ts">
+// src/utils/caseStudies/types.ts
+//
+// One content module per case study. Keeps narrative content (which is
+// long-form and won't fit the thin index.json schema used by the project
+// grid) separate from layout. The grid card stays a teaser; this is the
+// deep version someone reaches by clicking through.
+
+export interface LifecycleStep {
+  id: string;
+  label: string;            // "Rider requests a ride"
+  owningService: string;    // "Rider Service" -- which Spring Boot service owns this step
+  detail: string;           // one sentence: what actually happens here
+  isFailurePoint?: boolean; // true if a wrong boundary decision here caused a real bug
+}
+
+export interface BoundaryDecision {
+  question: string;         // "Why is matching a separate service from booking?"
+  decision: string;         // the actual choice you made, stated plainly
+  reasoning: string;        // why, in terms of what would break otherwise
+  tradeoff: string;         // honest cost of this choice -- extra hop, eventual consistency, etc.
+}
+
+export interface FailureScenario {
+  title: string;            // "Fare calculated before trip end was recorded"
+  whatHappened: string;     // concrete, specific -- not hypothetical hand-waving
+  rootCause: string;        // which boundary was drawn wrong
+  fix: string;              // what changed as a result
+}
+
+export interface CaseStudyContent {
+  slug: string;             // matches the project id in index.json
+  hero: {
+    claim: string;          // one sentence, stated as an argument not a description
+    subhead: string;
+  };
+  lifecycle: LifecycleStep[];
+  decisions: BoundaryDecision[];
+  failures: FailureScenario[];
+  stack: { category: string; items: string[] }[];
+  links: { repo: string | null; deploy: string | null };
+}
+</file>
+
+<file path="src/utils/caseStudies/uber-ride-platform.ts">
+// src/utils/caseStudies/uber-ride-platform.ts
+//
+// Content for the flagship project's case-study page. This is the file
+// that's actually worth your time -- the page component just renders
+// whatever shape this returns, but the substance (does this prove you
+// can reason about service boundaries) lives here.
+//
+// NOTE: the placeholders below (marked with [FILL IN]) need your real
+// specifics. I've drafted realistic structure and wording based on what's
+// already in your flagship card and project description, but I don't know
+// your actual implementation details -- whether you genuinely separated
+// matching from booking as distinct services, what really broke during
+// development, etc. Replace placeholders with what actually happened.
+// A case study that overclaims architecture you didn't build is worse
+// than no case study -- a technical interviewer will ask "walk me through
+// this" and the gap will show immediately.
+
+import { CaseStudyContent } from "./types";
+
+export const uberRidePlatform: CaseStudyContent = {
+  slug: "uber-ride-platform",
+
+  hero: {
+    claim:
+      "A ride only works if four things that don't trust each other -- rider, driver, trip, fare -- agree on what happened, in order, without any one of them blocking the rest.",
+    subhead:
+      "Backend for a ride-hailing platform: rider onboarding, driver matching, trip booking, and fare calculation as Spring Boot services with explicit boundaries.",
+  },
+
+  lifecycle: [
+    {
+      id: "request",
+      label: "Rider requests a ride",
+      owningService: "Rider Service",
+      detail:
+        "[FILL IN: does this validate the rider's account state -- e.g. no outstanding unpaid fare -- before even looking for a driver? If so, say that here; it's a real boundary decision.]",
+    },
+    {
+      id: "match",
+      label: "System finds an available driver",
+      owningService: "Matching Service",
+      detail:
+        "[FILL IN: what's the actual matching logic? Nearest available driver? First-accept? This is the step most worth being specific about, since 'driver matching' is in your tags list but the case study currently doesn't say HOW.]",
+    },
+    {
+      id: "accept",
+      label: "Driver accepts the trip",
+      owningService: "Matching Service → Trip Service handoff",
+      detail:
+        "[FILL IN: this is likely your most interesting boundary. Does Matching Service own the trip record the instant a driver accepts, or does ownership transfer to a separate Trip Service? That handoff point is exactly the kind of thing this page should make legible.]",
+      isFailurePoint: true,
+    },
+    {
+      id: "trip",
+      label: "Trip is in progress",
+      owningService: "Trip Service",
+      detail:
+        "[FILL IN: what state does Trip Service track during the ride itself -- status only, or location/route too?]",
+    },
+    {
+      id: "fare",
+      label: "Fare is calculated",
+      owningService: "Fare Service",
+      detail:
+        "Fare calculation reads the completed trip record rather than the original request, so a fare is always computed from what actually happened on the road, not what was originally requested.",
+      isFailurePoint: true,
+    },
+    {
+      id: "settle",
+      label: "Fare is settled",
+      owningService: "Fare Service",
+      detail:
+        "[FILL IN: does this close the loop back to Rider Service, e.g. updating the rider's payment/account state? If there's no payment integration yet, say so plainly -- 'fare is calculated and recorded; payment settlement is the next service boundary to design' is an honest, still-impressive answer.]",
+    },
+  ],
+
+  decisions: [
+    {
+      question: "Why is driver matching a separate service from trip booking?",
+      decision:
+        "[FILL IN: state plainly whether you actually built these as separate Spring Boot services/modules, or separate controllers within one service, or separate logical layers within one controller. Be exact -- 'service' implies independent deployability, which is a much stronger claim than 'separate class.']",
+      reasoning:
+        "[FILL IN: the real reason. Likely candidate: matching is a search/optimization problem that might need to retry or time out independently of booking, so coupling them would mean a slow match search blocks the booking flow even for rides that already matched fine.]",
+      tradeoff:
+        "[FILL IN: the honest cost. Likely candidate: an extra network hop or method call between match-found and booking-confirmed, plus the need to handle 'driver matched but then declined' as its own state rather than just retrying inline.]",
+    },
+    {
+      question: "Why does fare calculation read the trip record instead of the original request?",
+      decision:
+        "Fare Service depends on Trip Service's completed record, not on the Rider Service's original ride request.",
+      reasoning:
+        "A requested ride and the ride that actually happened can differ -- route changes, wait time, a cancelled-and-restarted trip. Calculating fare from the request would price the ride that was asked for, not the ride that occurred.",
+      tradeoff:
+        "Fare can only be calculated after Trip Service marks a trip complete, which means there's a window where a trip has ended in the real world but the system hasn't yet produced a fare. [FILL IN: how is that window actually handled -- polling, an event, a status field the frontend checks?]",
+    },
+  ],
+
+  failures: [
+    {
+      title: "[FILL IN: a real one]",
+      whatHappened:
+        "[This is the most valuable section on the whole page IF it's true and specific. A genuine 'I initially had X own Y, and that caused Z, so I moved the boundary' story is worth more than every other section combined, because it's the one thing a templated portfolio can't fake. If nothing like this happened yet because the project is still in-progress (your index.json marks it in-progress), it's completely fine to leave this section out entirely rather than inventing one -- see the page component notes on conditional rendering.]",
+      rootCause: "[FILL IN]",
+      fix: "[FILL IN]",
+    },
+  ],
+
+  stack: [
+    { category: "Backend", items: ["Java", "Spring Boot", "REST APIs", "OOP"] },
+    { category: "Infra", items: ["Docker"] },
+    // [FILL IN: add a Database row once you confirm what this project
+    // actually persists to -- your index.json doesn't list one for this
+    // project, unlike hospital-management which lists PostgreSQL. If
+    // ride/trip state is in-memory or not yet persisted, that's worth
+    // stating directly rather than omitting silently.]
+  ],
+
+  links: {
+    repo: "https://github.com/ABHINAVX03/Book_Karo-backend-Spring-boot-",
+    deploy: "https://book-car-frontend.vercel.app",
+  },
+};
+</file>
 
 <file path=".eslintrc.json">
 {
@@ -586,152 +1419,6 @@ Examples:
 }
 </file>
 
-<file path="src/app/api/github/profile/route.ts">
-import { NextResponse } from "next/server";
-
-const USERNAME = "ABHINAVX03";
-
-export interface GithubLanguage {
-  name: string;
-  count: number;
-  percentage: number;
-}
-
-export interface GithubCommitWeek {
-  week: string; // ISO date, e.g. "2026-03-23"
-  count: number;
-}
-
-export interface GithubProfileResponse {
-  username: string;
-  profileUrl: string;
-  avatarUrl: string;
-  publicRepos: number;
-  followers: number;
-  following: number;
-  totalStars: number;
-  topLanguages: GithubLanguage[];
-  commitActivity: GithubCommitWeek[];
-  error?: string;
-}
-
-interface GithubRepo {
-  name: string;
-  stargazers_count?: number;
-  language?: string;
-  fork?: boolean;
-  pushed_at?: string;
-}
-
-// How many of the most-recently-pushed-to repos to pull commit stats from.
-// Kept small because each repo costs one extra unauthenticated request
-// (60/hr shared limit), and stats/commit_activity can return 202 (still
-// computing) on a cold cache -- more repos means more chances to hit that.
-const COMMIT_ACTIVITY_REPO_COUNT = 5;
-
-// Trim GitHub's 52-week response down to a readable window for the bar chart.
-const COMMIT_ACTIVITY_WEEKS = 12;
-
-export async function GET(): Promise<NextResponse<GithubProfileResponse | { error: string }>> {
-  try {
-    const headers = {
-      Accept: "application/vnd.github+json",
-      "User-Agent": "portfolio-app",
-    };
-
-    const [userRes, reposRes] = await Promise.all([
-      fetch(`https://api.github.com/users/${USERNAME}`, { headers, next: { revalidate: 3600 } }),
-      fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, { headers, next: { revalidate: 3600 } }),
-    ]);
-
-    if (!userRes.ok || !reposRes.ok) {
-      return NextResponse.json({ error: "Failed to fetch GitHub data" }, { status: 502 });
-    }
-
-    const user = await userRes.json();
-    const repos: GithubRepo[] = await reposRes.json();
-
-    const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
-    const languageCount: Record<string, number> = {};
-
-    repos.forEach((repo) => {
-      if (repo.language) {
-        languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
-      }
-    });
-
-    // count -> percentage normalization. This is a rough, repo-count-based
-    // percentage (one repo = one vote for its dominant language), not a
-    // byte-weighted one -- consistent with how `count` was already being
-    // computed above, just expressed as a share of the total instead of
-    // a raw integer. If you want byte-accurate percentages later, that
-    // requires an additional GET /repos/{owner}/{repo}/languages call per
-    // repo summed by bytes, which costs more of the unauthenticated quota.
-    const totalLanguageVotes = Object.values(languageCount).reduce((a, b) => a + b, 0) || 1;
-
-    const topLanguages = Object.entries(languageCount)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([name, count]) => ({
-        name,
-        count,
-        percentage: Math.round((count / totalLanguageVotes) * 1000) / 10,
-      }));
-
-    // ── Commit activity, aggregated across the most recently pushed-to repos ──
-    const candidateRepos = repos
-      .filter((r) => !r.fork)
-      .sort((a, b) => new Date(b.pushed_at ?? 0).getTime() - new Date(a.pushed_at ?? 0).getTime())
-      .slice(0, COMMIT_ACTIVITY_REPO_COUNT);
-
-    const commitActivityResults = await Promise.all(
-      candidateRepos.map(async (repo) => {
-        const res = await fetch(
-          `https://api.github.com/repos/${USERNAME}/${repo.name}/stats/commit_activity`,
-          { headers, next: { revalidate: 3600 } }
-        );
-        // 202 = GitHub is still computing stats for this repo (cold cache).
-        // Treat as "no data yet" rather than throwing -- one slow repo
-        // should not take down the whole route on first load.
-        if (res.status === 202 || !res.ok) return null;
-        const json = await res.json();
-        return Array.isArray(json) ? (json as { week: number; total: number }[]) : null;
-      })
-    );
-
-    const weeklyTotals = new Map<number, number>();
-    commitActivityResults.forEach((repoWeeks) => {
-      if (!repoWeeks) return;
-      repoWeeks.forEach((wk) => {
-        weeklyTotals.set(wk.week, (weeklyTotals.get(wk.week) || 0) + (wk.total || 0));
-      });
-    });
-
-    const commitActivity: GithubCommitWeek[] = Array.from(weeklyTotals.entries())
-      .sort((a, b) => a[0] - b[0])
-      .slice(-COMMIT_ACTIVITY_WEEKS)
-      .map(([weekUnix, count]) => ({
-        week: new Date(weekUnix * 1000).toISOString().slice(0, 10),
-        count,
-      }));
-
-    return NextResponse.json({
-      username: user.login,
-      profileUrl: user.html_url,
-      avatarUrl: user.avatar_url,
-      publicRepos: user.public_repos,
-      followers: user.followers,
-      following: user.following,
-      totalStars,
-      topLanguages,
-      commitActivity,
-    });
-  } catch (error) {
-    return NextResponse.json({ error: "Unexpected GitHub API error" }, { status: 500 });
-  }
-}
-</file>
-
 <file path="src/app/page.module.css">
 
 </file>
@@ -751,16 +1438,33 @@ export default function robots(): MetadataRoute.Robots {
 </file>
 
 <file path="src/app/sitemap.ts">
+// src/app/sitemap.ts
+//
+// FIX: Original only listed "/" — search engines couldn't discover
+// the case study pages at /projects/[slug].
+// Now includes one entry per registered case study.
+
 import { MetadataRoute } from "next";
+import { caseStudyRegistry } from "@/utils/caseStudies";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const base = "https://abhinavgupta.dev";
+
+  const caseStudyEntries = Object.keys(caseStudyRegistry).map((slug) => ({
+    url: `${base}/projects/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
   return [
     {
-      url: "https://abhinavgupta.dev",
+      url: base,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
     },
+    ...caseStudyEntries,
   ];
 }
 </file>
@@ -1331,6 +2035,152 @@ dist/
 }
 </file>
 
+<file path="src/app/api/github/profile/route.ts">
+import { NextResponse } from "next/server";
+
+const USERNAME = "ABHINAVX03";
+
+export interface GithubLanguage {
+  name: string;
+  count: number;
+  percentage: number;
+}
+
+export interface GithubCommitWeek {
+  week: string; // ISO date, e.g. "2026-03-23"
+  count: number;
+}
+
+export interface GithubProfileResponse {
+  username: string;
+  profileUrl: string;
+  avatarUrl: string;
+  publicRepos: number;
+  followers: number;
+  following: number;
+  totalStars: number;
+  topLanguages: GithubLanguage[];
+  commitActivity: GithubCommitWeek[];
+  error?: string;
+}
+
+interface GithubRepo {
+  name: string;
+  stargazers_count?: number;
+  language?: string;
+  fork?: boolean;
+  pushed_at?: string;
+}
+
+// How many of the most-recently-pushed-to repos to pull commit stats from.
+// Kept small because each repo costs one extra unauthenticated request
+// (60/hr shared limit), and stats/commit_activity can return 202 (still
+// computing) on a cold cache -- more repos means more chances to hit that.
+const COMMIT_ACTIVITY_REPO_COUNT = 5;
+
+// Trim GitHub's 52-week response down to a readable window for the bar chart.
+const COMMIT_ACTIVITY_WEEKS = 12;
+
+export async function GET(): Promise<NextResponse<GithubProfileResponse | { error: string }>> {
+  try {
+    const headers = {
+      Accept: "application/vnd.github+json",
+      "User-Agent": "portfolio-app",
+    };
+
+    const [userRes, reposRes] = await Promise.all([
+      fetch(`https://api.github.com/users/${USERNAME}`, { headers, next: { revalidate: 3600 } }),
+      fetch(`https://api.github.com/users/${USERNAME}/repos?per_page=100&sort=updated`, { headers, next: { revalidate: 3600 } }),
+    ]);
+
+    if (!userRes.ok || !reposRes.ok) {
+      return NextResponse.json({ error: "Failed to fetch GitHub data" }, { status: 502 });
+    }
+
+    const user = await userRes.json();
+    const repos: GithubRepo[] = await reposRes.json();
+
+    const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
+    const languageCount: Record<string, number> = {};
+
+    repos.forEach((repo) => {
+      if (repo.language) {
+        languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
+      }
+    });
+
+    // count -> percentage normalization. This is a rough, repo-count-based
+    // percentage (one repo = one vote for its dominant language), not a
+    // byte-weighted one -- consistent with how `count` was already being
+    // computed above, just expressed as a share of the total instead of
+    // a raw integer. If you want byte-accurate percentages later, that
+    // requires an additional GET /repos/{owner}/{repo}/languages call per
+    // repo summed by bytes, which costs more of the unauthenticated quota.
+    const totalLanguageVotes = Object.values(languageCount).reduce((a, b) => a + b, 0) || 1;
+
+    const topLanguages = Object.entries(languageCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5)
+      .map(([name, count]) => ({
+        name,
+        count,
+        percentage: Math.round((count / totalLanguageVotes) * 1000) / 10,
+      }));
+
+    // ── Commit activity, aggregated across the most recently pushed-to repos ──
+    const candidateRepos = repos
+      .filter((r) => !r.fork)
+      .sort((a, b) => new Date(b.pushed_at ?? 0).getTime() - new Date(a.pushed_at ?? 0).getTime())
+      .slice(0, COMMIT_ACTIVITY_REPO_COUNT);
+
+    const commitActivityResults = await Promise.all(
+      candidateRepos.map(async (repo) => {
+        const res = await fetch(
+          `https://api.github.com/repos/${USERNAME}/${repo.name}/stats/commit_activity`,
+          { headers, next: { revalidate: 3600 } }
+        );
+        // 202 = GitHub is still computing stats for this repo (cold cache).
+        // Treat as "no data yet" rather than throwing -- one slow repo
+        // should not take down the whole route on first load.
+        if (res.status === 202 || !res.ok) return null;
+        const json = await res.json();
+        return Array.isArray(json) ? (json as { week: number; total: number }[]) : null;
+      })
+    );
+
+    const weeklyTotals = new Map<number, number>();
+    commitActivityResults.forEach((repoWeeks) => {
+      if (!repoWeeks) return;
+      repoWeeks.forEach((wk) => {
+        weeklyTotals.set(wk.week, (weeklyTotals.get(wk.week) || 0) + (wk.total || 0));
+      });
+    });
+
+    const commitActivity: GithubCommitWeek[] = Array.from(weeklyTotals.entries())
+      .sort((a, b) => a[0] - b[0])
+      .slice(-COMMIT_ACTIVITY_WEEKS)
+      .map(([weekUnix, count]) => ({
+        week: new Date(weekUnix * 1000).toISOString().slice(0, 10),
+        count,
+      }));
+
+    return NextResponse.json({
+      username: user.login,
+      profileUrl: user.html_url,
+      avatarUrl: user.avatar_url,
+      publicRepos: user.public_repos,
+      followers: user.followers,
+      following: user.following,
+      totalStars,
+      topLanguages,
+      commitActivity,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: "Unexpected GitHub API error" }, { status: 500 });
+  }
+}
+</file>
+
 <file path="src/app/page.jsx">
 import Navbar from "@/components/Navbar/Navbar";
 import Hero from "@/components/Hero/Hero";
@@ -1848,50 +2698,6 @@ const socials = {
 export default socials;
 </file>
 
-<file path="tsconfig.json">
-{
-  "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "target": "ES2017"
-  },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".next/dev/types/**/*.ts"
-, "src/app/api/github/profile/route.ts"  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
-</file>
-
 <file path="vercel.json">
 {
   "buildCommand": "npm run build",
@@ -2129,6 +2935,50 @@ const logos = [
 ];
 
 export default logos;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+, "src/app/api/github/profile/route.ts"  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
 </file>
 
 <file path="src/components/Contact/Contact.tsx">
@@ -4033,7 +4883,7 @@ a {
   "dependencies": {
     "framer-motion": "11.0.5",
     "i18next": "23.9.0",
-    "next": "^16.2.9",
+    "next": "^15.3.0",
     "nodemailer": "^8.0.7",
     "react": "^18",
     "react-dom": "^18",
@@ -4055,190 +4905,11 @@ a {
     "@types/react-dom": "^18",
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
-    "eslint-config-next": "^14.2.35",
+    "eslint-config-next": "^15.3.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5"
   }
-}
-</file>
-
-<file path="src/components/About/about.module.css">
-/*
-  About section — most layout/visual styling still lives in About.jsx as
-  inline styles (matching Hero.tsx / Projects.tsx convention). This module
-  now also holds the interactive states that were previously implemented as
-  inline onMouseEnter/onMouseLeave JS handlers on individual elements.
-
-  Why move them here: those handlers ran a setState-free style mutation on
-  every mouse event, which works but (a) can't be reused, (b) doesn't get
-  GPU-accelerated transition batching the way a CSS class swap does, and
-  (c) made every interactive element's JSX noisy with two extra props.
-  Functionally identical result, fewer moving parts.
-*/
-
-/* Visually hidden — for screen readers only */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
-/* ── Skill pill (default / Languages, Frontend, etc.) ── */
-.pill {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  padding: 5px 12px;
-  border-radius: 9999px;
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  background: rgba(99, 102, 241, 0.08);
-  color: #c7d2fe;
-  display: inline-block;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-.pill:hover {
-  border-color: rgba(99, 102, 241, 0.45);
-  background: rgba(99, 102, 241, 0.14);
-  transform: translateY(-1px);
-}
-
-/* ── "Currently Learning" pill variant ── */
-.pillViolet {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 5px 12px;
-  border-radius: 9999px;
-  border: 1px solid rgba(139, 92, 246, 0.25);
-  background: rgba(139, 92, 246, 0.08);
-  color: #c4b5fd;
-  display: inline-block;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-.pillViolet:hover {
-  border-color: rgba(139, 92, 246, 0.5);
-  background: rgba(139, 92, 246, 0.16);
-  transform: translateY(-1px);
-}
-
-/* ── "What I'm Building" pill variant ── */
-.pillRose {
-  font-family: var(--font-jetbrains-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 5px 12px;
-  border-radius: 9999px;
-  border: 1px solid rgba(244, 114, 182, 0.25);
-  background: rgba(244, 114, 182, 0.08);
-  color: #fda4af;
-  display: inline-block;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-}
-.pillRose:hover {
-  border-color: rgba(244, 114, 182, 0.5);
-  background: rgba(244, 114, 182, 0.16);
-  transform: translateY(-1px);
-}
-
-/* ── Social link chip (GitHub / LinkedIn / Email / Location) ── */
-.socialLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
-  border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(255, 255, 255, 0.03);
-  color: rgba(255, 255, 255, 0.5);
-  text-decoration: none;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-}
-.socialLink:hover {
-  color: #f8fafc;
-  border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(99, 102, 241, 0.08);
-}
-
-/* ── Stat card hover lift (border glow to match section gradient-top accents) ── */
-.statCard {
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-.statCard:hover {
-  border-color: rgba(99, 102, 241, 0.3) !important;
-}
-
-/* ── GitHub card: subtle border glow on hover, echoes the gradient-top bar already used on TimelineItem ── */
-.githubCard {
-  transition: border-color 0.25s ease;
-}
-.githubCard:hover {
-  border-color: rgba(99, 102, 241, 0.32) !important;
-}
-
-/* ── "View Profile" button on the GitHub card ── */
-.githubLink {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 9px 18px;
-  border-radius: 9999px;
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  background: rgba(99, 102, 241, 0.08);
-  color: #c7d2fe;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-.githubLink:hover {
-  border-color: rgba(99, 102, 241, 0.5);
-  background: rgba(99, 102, 241, 0.15);
-}
-
-/* ── Coding profile row ── */
-.profileRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  background: rgba(255, 255, 255, 0.02);
-  text-decoration: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
-.profileRow:hover {
-  border-color: rgba(99, 102, 241, 0.3);
-  background: rgba(99, 102, 241, 0.08);
-}
-
-/* ── Certification row (static, no hover — kept as a class purely for
-     consistency with the other row-style elements in this file) ── */
-.certRow {
-  padding: 9px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(139, 92, 246, 0.15);
-  background: rgba(139, 92, 246, 0.05);
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.5);
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 </file>
 
@@ -4931,7 +5602,8 @@ export default Hero;
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useMotionValue, useSpring, useTransform } from "framer-motion";
 import Image from "next/image";
-import { FiExternalLink, FiGithub, FiArrowRight } from "react-icons/fi";
+import Link from "next/link";
+import { FiExternalLink, FiGithub, FiArrowRight, FiBookOpen } from "react-icons/fi";
 import projectsData from "@/utils/projects/index.json";
 
 interface Project {
@@ -4950,7 +5622,6 @@ interface Project {
   status: "completed" | "in-progress" | "planned";
 }
 
-/* ── colour map (indigo/violet/rose/emerald palette) ── */
 const COLOR: Record<string, { accent: string; glow: string; dim: string; border: string }> = {
   primary: { accent: "#6366f1", glow: "rgba(99,102,241,0.25)",  dim: "rgba(99,102,241,0.08)",  border: "rgba(99,102,241,0.25)" },
   cyan:    { accent: "#6366f1", glow: "rgba(99,102,241,0.25)",  dim: "rgba(99,102,241,0.08)",  border: "rgba(99,102,241,0.25)" },
@@ -4958,7 +5629,6 @@ const COLOR: Record<string, { accent: string; glow: string; dim: string; border:
   emerald: { accent: "#34d399", glow: "rgba(52,211,153,0.2)",   dim: "rgba(52,211,153,0.07)",  border: "rgba(52,211,153,0.25)" },
 };
 
-/* ── 3-D tilt hook ── */
 function useTilt3D() {
   const ref = useRef<HTMLDivElement>(null);
   const mx = useMotionValue(0);
@@ -4975,7 +5645,6 @@ function useTilt3D() {
   return { ref, rotX, rotY, onMouseMove, onMouseLeave };
 }
 
-/* ── Flagship case-study card ── */
 const uberPoints = {
   problem: "Design a backend that coordinates riders, drivers, trips and fare calculation with clean service boundaries.",
   arch: ["Layered Spring Boot services", "REST controllers separate from business logic", "Dockerized for repeatable deploy"],
@@ -4983,8 +5652,12 @@ const uberPoints = {
   stack: ["Java", "Spring Boot", "REST APIs", "Docker", "OOP"],
 };
 
+// ── Flagship card ──────────────────────────────────────────────────────────────
+// FIX: Added "Case Study →" button so the page is actually reachable from the UI.
+// Previously there was no link to /projects/uber-ride-platform anywhere on the site.
 function FlagshipCard({ project }: { project: Project }) {
   const c = COLOR[project.color] || COLOR.primary;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 32 }}
@@ -5035,10 +5708,10 @@ function FlagshipCard({ project }: { project: Project }) {
         {/* 2×2 case panels */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
           {[
-            { label: "Problem", content: uberPoints.problem, type: "text" },
-            { label: "Architecture", items: uberPoints.arch, type: "list" },
-            { label: "Core APIs", items: uberPoints.apis, type: "pills" },
-            { label: "Tech Stack", items: uberPoints.stack, type: "pills" },
+            { label: "Problem",      content: uberPoints.problem, type: "text" },
+            { label: "Architecture", items: uberPoints.arch,      type: "list" },
+            { label: "Core APIs",    items: uberPoints.apis,      type: "pills" },
+            { label: "Tech Stack",   items: uberPoints.stack,     type: "pills" },
           ].map((panel) => (
             <div key={panel.label} style={{
               padding: "14px 16px",
@@ -5050,9 +5723,11 @@ function FlagshipCard({ project }: { project: Project }) {
                 {panel.label}
               </span>
               {panel.type === "text" && <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{(panel as any).content}</p>}
-              {panel.type === "list" && <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
-                {(panel as any).items.map((i: string) => <li key={i}>{i}</li>)}
-              </ul>}
+              {panel.type === "list" && (
+                <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
+                  {(panel as any).items.map((i: string) => <li key={i}>{i}</li>)}
+                </ul>
+              )}
               {panel.type === "pills" && (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {(panel as any).items.map((i: string) => (
@@ -5064,39 +5739,82 @@ function FlagshipCard({ project }: { project: Project }) {
           ))}
         </div>
 
-        {/* action links */}
+        {/* ✅ FIX: action links — added "Case Study" button */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+          {/* ✅ NEW: Case Study deep-dive link — this is the primary CTA for the case study page */}
+          <Link
+            href={`/projects/${project.id}`}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "7px",
+              padding: "9px 16px", borderRadius: "12px",
+              background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`,
+              color: "#fff", fontSize: "13px", fontWeight: 600,
+              textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`,
+              fontFamily: "var(--font-body)",
+            }}
+          >
+            <FiBookOpen size={14} /> Case Study
+          </Link>
+
           {project.repo && (
-            <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#f8fafc", fontSize: "13px", fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease", fontFamily: "var(--font-body)" }}
+            <a
+              href={project.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "7px",
+                padding: "9px 16px", borderRadius: "12px",
+                border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
+                color: "#f8fafc", fontSize: "13px", fontWeight: 600,
+                textDecoration: "none", fontFamily: "var(--font-body)",
+                transition: "all 0.2s ease",
+              }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.background = c.dim; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}>
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+            >
               <FiGithub size={14} /> GitHub
             </a>
           )}
+
           {project.deploy && (
-            <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)", color: "#f8fafc", fontSize: "13px", fontWeight: 600, textDecoration: "none", transition: "all 0.2s ease", fontFamily: "var(--font-body)" }}
+            <a
+              href={project.deploy}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "7px",
+                padding: "9px 16px", borderRadius: "12px",
+                border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
+                color: "#f8fafc", fontSize: "13px", fontWeight: 600,
+                textDecoration: "none", fontFamily: "var(--font-body)",
+                transition: "all 0.2s ease",
+              }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = c.border; (e.currentTarget as HTMLElement).style.background = c.dim; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}>
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.1)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.05)"; }}
+            >
               <FiExternalLink size={14} /> Live Demo
             </a>
           )}
-          <a href="#contact" style={{ display: "inline-flex", alignItems: "center", gap: "7px", padding: "9px 16px", borderRadius: "12px", background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`, color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`, fontFamily: "var(--font-body)" }}>
+
+          <a
+            href="#contact"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "7px",
+              padding: "9px 16px", borderRadius: "12px",
+              border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
+              color: "#f8fafc", fontSize: "13px", fontWeight: 600,
+              textDecoration: "none", fontFamily: "var(--font-body)",
+            }}
+          >
             Hire Me <FiArrowRight size={14} />
           </a>
         </div>
       </div>
 
-      {/* RIGHT — image
-          NOTE: minHeight moved from inline style to the .flagship-image-col
-          className. Inline styles always beat external <style> media queries
-          regardless of specificity, so the old `style={{ minHeight: "400px" }}`
-          was silently overriding the 900px breakpoint that tried to shrink it
-          to 260px — on phones the image stayed locked at 400px tall inside a
-          now-narrow single column, producing an oddly tall, squeezed crop. */}
+      {/* RIGHT — image */}
       <div className="flagship-image-col" style={{ position: "relative", overflow: "hidden" }}>
         <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover" }} sizes="420px" />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(10,10,20,0.4), transparent)" }} />
-        {/* proof chips */}
         <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
           {["Driver Matching", "Fare Logic", "REST APIs"].map(t => (
             <span key={t} style={{ padding: "5px 10px", borderRadius: "9999px", background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)", color: "#fff", fontSize: "10px", fontFamily: "var(--font-jetbrains-mono)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>{t}</span>
@@ -5107,7 +5825,7 @@ function FlagshipCard({ project }: { project: Project }) {
   );
 }
 
-/* ── Regular 3-D project card ── */
+// ── Regular card ───────────────────────────────────────────────────────────────
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const tilt = useTilt3D();
   const [hovered, setHovered] = useState(false);
@@ -5120,12 +5838,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       onMouseMove={tilt.onMouseMove}
       onMouseLeave={() => { tilt.onMouseLeave(); setHovered(false); }}
       onMouseEnter={() => setHovered(true)}
-      style={{
-        rotateX: tilt.rotX,
-        rotateY: tilt.rotY,
-        transformStyle: "preserve-3d",
-        perspective: 1000,
-      }}
+      style={{ rotateX: tilt.rotX, rotateY: tilt.rotY, transformStyle: "preserve-3d", perspective: 1000 }}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -5141,7 +5854,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         position: "relative",
         backdropFilter: "blur(12px)",
       }}>
-        {/* top glow line on hover */}
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, height: "1px",
           background: `linear-gradient(90deg, transparent, ${c.accent}, transparent)`,
@@ -5156,66 +5868,36 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             src={imgSrc}
             alt={project.name}
             fill
-            style={{
-              objectFit: "cover",
-              transition: "transform 0.5s ease",
-              transform: hovered ? "scale(1.06)" : "scale(1)",
-            }}
+            style={{ objectFit: "cover", transition: "transform 0.5s ease", transform: hovered ? "scale(1.06)" : "scale(1)" }}
             loading="lazy"
             sizes="(max-width: 768px) 100vw, 400px"
             onError={() => setImgSrc("/projects/default.png")}
           />
-          {/* dark overlay */}
-          <div style={{
-            position: "absolute", inset: 0,
-            background: hovered ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.1)",
-            transition: "background 0.3s ease",
-          }} />
+          <div style={{ position: "absolute", inset: 0, background: hovered ? "rgba(0,0,0,0.25)" : "rgba(0,0,0,0.1)", transition: "background 0.3s ease" }} />
 
-          {/* number badge */}
-          <div style={{
-            position: "absolute", top: "12px", right: "12px",
-            padding: "4px 10px", borderRadius: "8px",
-            background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.1)",
-            fontFamily: "var(--font-jetbrains-mono)", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)",
-          }}>
+          <div style={{ position: "absolute", top: "12px", right: "12px", padding: "4px 10px", borderRadius: "8px", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,0.1)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "11px", fontWeight: 700, color: "rgba(255,255,255,0.7)" }}>
             {String(index + 1).padStart(2, "0")}
           </div>
 
-          {/* web3 badge */}
           {project.type.includes("Blockchain") && (
-            <div style={{
-              position: "absolute", top: "12px", left: "12px",
-              padding: "4px 10px", borderRadius: "9999px",
-              background: "rgba(52,211,153,0.15)", backdropFilter: "blur(8px)",
-              border: "1px solid rgba(52,211,153,0.35)",
-              fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700,
-              color: "#34d399", letterSpacing: "0.08em", textTransform: "uppercase",
-            }}>
+            <div style={{ position: "absolute", top: "12px", left: "12px", padding: "4px 10px", borderRadius: "9999px", background: "rgba(52,211,153,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(52,211,153,0.35)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, color: "#34d399", letterSpacing: "0.08em", textTransform: "uppercase" }}>
               Web3
             </div>
           )}
 
-          {/* hover action buttons */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
             transition={{ duration: 0.2 }}
-            style={{
-              position: "absolute", inset: 0,
-              display: "flex", alignItems: "center", justifyContent: "center", gap: "10px",
-            }}
+            style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}
           >
             {project.repo && (
-              <a href={project.repo} target="_blank" rel="noopener noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+              <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
                 <FiGithub size={14} /> Code
               </a>
             )}
             {project.deploy && (
-              <a href={project.deploy} target="_blank" rel="noopener noreferrer"
-                style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+              <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
                 <FiExternalLink size={14} /> Live
               </a>
             )}
@@ -5254,23 +5936,16 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
         </div>
 
-        {/* bottom bar that fills on hover */}
-        <div style={{
-          height: "2px",
-          background: `linear-gradient(90deg, ${c.accent}, #8b5cf6)`,
-          transform: `scaleX(${hovered ? 1 : 0})`,
-          transformOrigin: "left",
-          transition: "transform 0.4s ease",
-        }} />
+        <div style={{ height: "2px", background: `linear-gradient(90deg, ${c.accent}, #8b5cf6)`, transform: `scaleX(${hovered ? 1 : 0})`, transformOrigin: "left", transition: "transform 0.4s ease" }} />
       </div>
     </motion.div>
   );
 }
 
-/* ── Main section ── */
+// ── Main section ───────────────────────────────────────────────────────────────
 const Projects = () => {
-  const ref     = useRef<HTMLElement>(null);
-  const inView  = useInView(ref, { once: true, margin: "-80px" });
+  const ref    = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
     const ap = typeof a.priority === "number" ? a.priority : 999;
@@ -5287,7 +5962,7 @@ const Projects = () => {
     <section id="projects" ref={ref} style={{ position: "relative", zIndex: 1, padding: "100px 0 80px" }}>
       <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 24px" }}>
 
-        {/* ── Header ── */}
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -5310,12 +5985,11 @@ const Projects = () => {
             Production-grade applications — React frontends, Java Spring Boot backends, REST APIs &amp; blockchain DApps.
           </p>
 
-          {/* stat pills */}
           <div style={{ display: "inline-flex", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "9999px", padding: "12px 28px", gap: "24px" } as any}>
             {[
-              { n: projects.length,      l: "Projects" },
-              { n: projects.filter(p=>p.featured).length, l: "Featured" },
-              { n: techs.length,         l: "Technologies" },
+              { n: projects.length,                              l: "Projects" },
+              { n: projects.filter(p => p.featured).length,     l: "Featured" },
+              { n: techs.length,                                 l: "Technologies" },
             ].map((s, i) => (
               <span key={s.l} style={{ display: "flex", alignItems: "center", gap: i > 0 ? "24px" : "0" }}>
                 {i > 0 && <span style={{ width: 1, height: 28, background: "rgba(255,255,255,0.08)", display: "inline-block", marginRight: "24px" }} />}
@@ -5328,25 +6002,17 @@ const Projects = () => {
           </div>
         </motion.div>
 
-        {/* ── Flagship ── */}
+        {/* Flagship */}
         {flagship && <FlagshipCard project={flagship} />}
 
-        {/* ── Masonry grid ── */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))",
-          gap: "20px",
-        }}
-          className="projects-masonry"
-        >
+        {/* Grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }} className="projects-masonry">
           {cards.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
         </div>
       </div>
 
       <style>{`
-        .flagship-image-col {
-          min-height: 400px;
-        }
+        .flagship-image-col { min-height: 400px; }
         @media (max-width: 900px) {
           .flagship-grid { grid-template-columns: 1fr !important; }
           .flagship-image-col { min-height: 260px !important; }
@@ -5363,6 +6029,185 @@ const Projects = () => {
 };
 
 export default Projects;
+</file>
+
+<file path="src/components/About/about.module.css">
+/*
+  About section — most layout/visual styling still lives in About.jsx as
+  inline styles (matching Hero.tsx / Projects.tsx convention). This module
+  now also holds the interactive states that were previously implemented as
+  inline onMouseEnter/onMouseLeave JS handlers on individual elements.
+
+  Why move them here: those handlers ran a setState-free style mutation on
+  every mouse event, which works but (a) can't be reused, (b) doesn't get
+  GPU-accelerated transition batching the way a CSS class swap does, and
+  (c) made every interactive element's JSX noisy with two extra props.
+  Functionally identical result, fewer moving parts.
+*/
+
+/* Visually hidden — for screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* ── Skill pill (default / Languages, Frontend, etc.) ── */
+.pill {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.08);
+  color: #c7d2fe;
+  display: inline-block;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.pill:hover {
+  border-color: rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.14);
+  transform: translateY(-1px);
+}
+
+/* ── "Currently Learning" pill variant ── */
+.pillViolet {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: rgba(139, 92, 246, 0.08);
+  color: #c4b5fd;
+  display: inline-block;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.pillViolet:hover {
+  border-color: rgba(139, 92, 246, 0.5);
+  background: rgba(139, 92, 246, 0.16);
+  transform: translateY(-1px);
+}
+
+/* ── "What I'm Building" pill variant ── */
+.pillRose {
+  font-family: var(--font-jetbrains-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(244, 114, 182, 0.25);
+  background: rgba(244, 114, 182, 0.08);
+  color: #fda4af;
+  display: inline-block;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+.pillRose:hover {
+  border-color: rgba(244, 114, 182, 0.5);
+  background: rgba(244, 114, 182, 0.16);
+  transform: translateY(-1px);
+}
+
+/* ── Social link chip (GitHub / LinkedIn / Email / Location) ── */
+.socialLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.socialLink:hover {
+  color: #f8fafc;
+  border-color: rgba(99, 102, 241, 0.4);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* ── Stat card hover lift (border glow to match section gradient-top accents) ── */
+.statCard {
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.statCard:hover {
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
+/* ── GitHub card: subtle border glow on hover, echoes the gradient-top bar already used on TimelineItem ── */
+.githubCard {
+  transition: border-color 0.25s ease;
+}
+.githubCard:hover {
+  border-color: rgba(99, 102, 241, 0.32) !important;
+}
+
+/* ── "View Profile" button on the GitHub card ── */
+.githubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: rgba(99, 102, 241, 0.08);
+  color: #c7d2fe;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.githubLink:hover {
+  border-color: rgba(99, 102, 241, 0.5);
+  background: rgba(99, 102, 241, 0.15);
+}
+
+/* ── Coding profile row ── */
+.profileRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.profileRow:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.08);
+}
+
+/* ── Certification row (static, no hover — kept as a class purely for
+     consistency with the other row-style elements in this file) ── */
+.certRow {
+  padding: 9px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.15);
+  background: rgba(139, 92, 246, 0.05);
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 </file>
 
 <file path="src/utils/projects/index.json">
@@ -5603,6 +6448,192 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
+}
+</file>
+
+<file path="src/app/api/send-email/route.js">
+import nodemailer from "nodemailer";
+
+const EMAIL_USER = (process.env.GMAIL_USER || "").trim();
+const EMAIL_PASS = (process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
+const EMAIL_TO = (process.env.EMAIL_TO || EMAIL_USER).trim();
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
+const RATE_LIMIT_MAX_REQUESTS = 5;
+const MAX_NAME_LENGTH = 80;
+const MAX_EMAIL_LENGTH = 120;
+const MAX_MESSAGE_LENGTH = 2000;
+
+const rateLimitStore = globalThis.__portfolioEmailRateLimit || new Map();
+globalThis.__portfolioEmailRateLimit = rateLimitStore;
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function cleanText(value = "", maxLength) {
+  return String(value).trim().slice(0, maxLength);
+}
+
+function getClientIp(request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  return forwardedFor?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
+}
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const existing = rateLimitStore.get(ip) || [];
+  const recent = existing.filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS);
+
+  if (recent.length >= RATE_LIMIT_MAX_REQUESTS) {
+    rateLimitStore.set(ip, recent);
+    return true;
+  }
+
+  rateLimitStore.set(ip, [...recent, now]);
+  return false;
+}
+
+function getTransporter() {
+  if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
+    console.error("Missing EMAIL_USER, EMAIL_PASS, or EMAIL_TO environment variables.");
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    service: "gmail",
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASS,
+    },
+    greetingTimeout: 30000,
+    connectionTimeout: 30000,
+  });
+}
+
+export async function POST(request) {
+  try {
+    const clientIp = getClientIp(request);
+    if (isRateLimited(clientIp)) {
+      return Response.json(
+        { error: "Too many messages. Please try again later." },
+        { status: 429 }
+      );
+    }
+
+    const body = await request.json();
+    if (body.company_url_confirm || body.website_url_confirm) {
+      return Response.json({ success: true }, { status: 200 });
+    }
+
+    const user_name = cleanText(body.user_name, MAX_NAME_LENGTH);
+    const user_email = cleanText(body.user_email, MAX_EMAIL_LENGTH).toLowerCase();
+    const message = cleanText(body.message, MAX_MESSAGE_LENGTH);
+
+    if (!user_name || !user_email || !message) {
+      return Response.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(user_email)) {
+      return Response.json({ error: "Invalid email format" }, { status: 400 });
+    }
+
+    const safeName = escapeHtml(user_name);
+    const safeEmail = escapeHtml(user_email);
+    const safeMessage = escapeHtml(message);
+
+    const transporter = getTransporter();
+
+    if (!transporter) {
+      return Response.json(
+        {
+          success: false,
+          warning: "Email service is unavailable. Please check environment variables.",
+        },
+        { status: 503 }
+      );
+    }
+
+    const adminMailOptions = {
+      from: `"Abhinav Gupta Portfolio" <${EMAIL_USER}>`,
+      to: EMAIL_TO,
+      replyTo: user_email,
+      subject: `New portfolio inquiry from ${user_name}`,
+      text: [
+        "New Portfolio Inquiry",
+        "",
+        `Name: ${user_name}`,
+        `Email: ${user_email}`,
+        "",
+        "Message:",
+        message,
+      ].join("\n"),
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #333; border-bottom: 2px solid #4f8ef7; padding-bottom: 10px;">
+            New Portfolio Inquiry
+          </h2>
+          <div style="margin: 20px 0; background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
+            <p><strong style="color: #333;">Name:</strong> <span style="color: #666;">${safeName}</span></p>
+            <p><strong style="color: #333;">Email:</strong> <span style="color: #666;"><a href="mailto:${safeEmail}">${safeEmail}</a></span></p>
+            <p><strong style="color: #333;">Message:</strong></p>
+            <p style="color: #666; white-space: pre-wrap; background-color: #fff; padding: 10px; border-left: 4px solid #4f8ef7;">
+              ${safeMessage}
+            </p>
+          </div>
+          <p style="color: #999; font-size: 12px; margin-top: 30px;">
+            This email was sent from your portfolio contact form.
+          </p>
+        </div>
+      `,
+    };
+
+    try {
+      await transporter.sendMail(adminMailOptions);
+    } catch (error) {
+      console.error("Email send error:", error);
+      const errorCode =
+        error?.code === "EAUTH" || error?.responseCode === 535
+          ? "EMAIL_AUTH_FAILED"
+          : error?.code === "ETIMEDOUT" || error?.code === "ECONNECTION"
+            ? "EMAIL_CONNECTION_FAILED"
+            : "EMAIL_SEND_FAILED";
+
+      return Response.json(
+        {
+          success: false,
+          error: "Failed to send email. Please try again later.",
+          code: errorCode,
+        },
+        { status: 502 }
+      );
+    }
+
+    return Response.json(
+      {
+        success: true,
+        message: "Thank you! Your message has been received. I'll get back to you soon.",
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Email processing error:", error);
+    return Response.json(
+      { error: "Failed to process email" },
+      { status: 500 }
+    );
+  }
 }
 </file>
 
@@ -6297,192 +7328,6 @@ const About = () => {
 };
 
 export default About;
-</file>
-
-<file path="src/app/api/send-email/route.js">
-import nodemailer from "nodemailer";
-
-const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_USER || "").trim();
-const EMAIL_PASS = (process.env.EMAIL_PASS || process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
-const EMAIL_TO = (process.env.EMAIL_TO || EMAIL_USER).trim();
-const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
-const RATE_LIMIT_MAX_REQUESTS = 5;
-const MAX_NAME_LENGTH = 80;
-const MAX_EMAIL_LENGTH = 120;
-const MAX_MESSAGE_LENGTH = 2000;
-
-const rateLimitStore = globalThis.__portfolioEmailRateLimit || new Map();
-globalThis.__portfolioEmailRateLimit = rateLimitStore;
-
-function escapeHtml(value = "") {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-function cleanText(value = "", maxLength) {
-  return String(value).trim().slice(0, maxLength);
-}
-
-function getClientIp(request) {
-  const forwardedFor = request.headers.get("x-forwarded-for");
-  return forwardedFor?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
-}
-
-function isRateLimited(ip) {
-  const now = Date.now();
-  const existing = rateLimitStore.get(ip) || [];
-  const recent = existing.filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS);
-
-  if (recent.length >= RATE_LIMIT_MAX_REQUESTS) {
-    rateLimitStore.set(ip, recent);
-    return true;
-  }
-
-  rateLimitStore.set(ip, [...recent, now]);
-  return false;
-}
-
-function getTransporter() {
-  if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
-    console.error("Missing EMAIL_USER, EMAIL_PASS, or EMAIL_TO environment variables.");
-    return null;
-  }
-
-  return nodemailer.createTransport({
-    service: "gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: EMAIL_USER,
-      pass: EMAIL_PASS,
-    },
-    greetingTimeout: 30000,
-    connectionTimeout: 30000,
-  });
-}
-
-export async function POST(request) {
-  try {
-    const clientIp = getClientIp(request);
-    if (isRateLimited(clientIp)) {
-      return Response.json(
-        { error: "Too many messages. Please try again later." },
-        { status: 429 }
-      );
-    }
-
-    const body = await request.json();
-    if (body.company_url_confirm || body.website_url_confirm) {
-      return Response.json({ success: true }, { status: 200 });
-    }
-
-    const user_name = cleanText(body.user_name, MAX_NAME_LENGTH);
-    const user_email = cleanText(body.user_email, MAX_EMAIL_LENGTH).toLowerCase();
-    const message = cleanText(body.message, MAX_MESSAGE_LENGTH);
-
-    if (!user_name || !user_email || !message) {
-      return Response.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(user_email)) {
-      return Response.json({ error: "Invalid email format" }, { status: 400 });
-    }
-
-    const safeName = escapeHtml(user_name);
-    const safeEmail = escapeHtml(user_email);
-    const safeMessage = escapeHtml(message);
-
-    const transporter = getTransporter();
-
-    if (!transporter) {
-      return Response.json(
-        {
-          success: false,
-          warning: "Email service is unavailable. Please check environment variables.",
-        },
-        { status: 503 }
-      );
-    }
-
-    const adminMailOptions = {
-      from: `"Abhinav Gupta Portfolio" <${EMAIL_USER}>`,
-      to: EMAIL_TO,
-      replyTo: user_email,
-      subject: `New portfolio inquiry from ${user_name}`,
-      text: [
-        "New Portfolio Inquiry",
-        "",
-        `Name: ${user_name}`,
-        `Email: ${user_email}`,
-        "",
-        "Message:",
-        message,
-      ].join("\n"),
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #333; border-bottom: 2px solid #4f8ef7; padding-bottom: 10px;">
-            New Portfolio Inquiry
-          </h2>
-          <div style="margin: 20px 0; background-color: #f5f5f5; padding: 15px; border-radius: 5px;">
-            <p><strong style="color: #333;">Name:</strong> <span style="color: #666;">${safeName}</span></p>
-            <p><strong style="color: #333;">Email:</strong> <span style="color: #666;"><a href="mailto:${safeEmail}">${safeEmail}</a></span></p>
-            <p><strong style="color: #333;">Message:</strong></p>
-            <p style="color: #666; white-space: pre-wrap; background-color: #fff; padding: 10px; border-left: 4px solid #4f8ef7;">
-              ${safeMessage}
-            </p>
-          </div>
-          <p style="color: #999; font-size: 12px; margin-top: 30px;">
-            This email was sent from your portfolio contact form.
-          </p>
-        </div>
-      `,
-    };
-
-    try {
-      await transporter.sendMail(adminMailOptions);
-    } catch (error) {
-      console.error("Email send error:", error);
-      const errorCode =
-        error?.code === "EAUTH" || error?.responseCode === 535
-          ? "EMAIL_AUTH_FAILED"
-          : error?.code === "ETIMEDOUT" || error?.code === "ECONNECTION"
-            ? "EMAIL_CONNECTION_FAILED"
-            : "EMAIL_SEND_FAILED";
-
-      return Response.json(
-        {
-          success: false,
-          error: "Failed to send email. Please try again later.",
-          code: errorCode,
-        },
-        { status: 502 }
-      );
-    }
-
-    return Response.json(
-      {
-        success: true,
-        message: "Thank you! Your message has been received. I'll get back to you soon.",
-      },
-      { status: 200 }
-    );
-  } catch (error) {
-    console.error("Email processing error:", error);
-    return Response.json(
-      { error: "Failed to process email" },
-      { status: 500 }
-    );
-  }
-}
 </file>
 
 </files>
