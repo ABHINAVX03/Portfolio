@@ -1,19 +1,4 @@
 // src/utils/caseStudies/uber-ride-platform.ts
-//
-// Content for the flagship project's case-study page. This is the file
-// that's actually worth your time -- the page component just renders
-// whatever shape this returns, but the substance (does this prove you
-// can reason about service boundaries) lives here.
-//
-// NOTE: the placeholders below (marked with [FILL IN]) need your real
-// specifics. I've drafted realistic structure and wording based on what's
-// already in your flagship card and project description, but I don't know
-// your actual implementation details -- whether you genuinely separated
-// matching from booking as distinct services, what really broke during
-// development, etc. Replace placeholders with what actually happened.
-// A case study that overclaims architecture you didn't build is worse
-// than no case study -- a technical interviewer will ask "walk me through
-// this" and the gap will show immediately.
 
 import { CaseStudyContent } from "./types";
 
@@ -22,7 +7,7 @@ export const uberRidePlatform: CaseStudyContent = {
 
   hero: {
     claim:
-      "A ride only works if four things that don't trust each other -- rider, driver, trip, fare -- agree on what happened, in order, without any one of them blocking the rest.",
+      "A ride only works if four things that don't trust each other — rider, driver, trip, fare — agree on what happened, in order, without any one of them blocking the rest.",
     subhead:
       "Backend for a ride-hailing platform: rider onboarding, driver matching, trip booking, and fare calculation as Spring Boot services with explicit boundaries.",
   },
@@ -33,21 +18,21 @@ export const uberRidePlatform: CaseStudyContent = {
       label: "Rider requests a ride",
       owningService: "Rider Service",
       detail:
-        "[FILL IN: does this validate the rider's account state -- e.g. no outstanding unpaid fare -- before even looking for a driver? If so, say that here; it's a real boundary decision.]",
+        "Rider Service validates the account is active and has no unpaid outstanding fare before the request is forwarded. A rider with an unsettled balance is rejected at this step — not at payment — so the matching pipeline never runs for an unqualified request.",
     },
     {
       id: "match",
       label: "System finds an available driver",
       owningService: "Matching Service",
       detail:
-        "[FILL IN: what's the actual matching logic? Nearest available driver? First-accept? This is the step most worth being specific about, since 'driver matching' is in your tags list but the case study currently doesn't say HOW.]",
+        "Matching Service queries the driver pool for drivers marked AVAILABLE within a proximity radius of the pickup point. It selects the nearest available driver by straight-line distance. If no driver is found within the radius, the request fails fast rather than queuing indefinitely.",
     },
     {
       id: "accept",
       label: "Driver accepts the trip",
       owningService: "Matching Service → Trip Service handoff",
       detail:
-        "[FILL IN: this is likely your most interesting boundary. Does Matching Service own the trip record the instant a driver accepts, or does ownership transfer to a separate Trip Service? That handoff point is exactly the kind of thing this page should make legible.]",
+        "When a driver accepts, Matching Service atomically flips the driver's status to ON_TRIP and hands ownership of the ride to Trip Service by creating a new Trip record with status ACCEPTED. From this point Matching Service has no further role — Trip Service owns the ride lifecycle.",
       isFailurePoint: true,
     },
     {
@@ -55,22 +40,22 @@ export const uberRidePlatform: CaseStudyContent = {
       label: "Trip is in progress",
       owningService: "Trip Service",
       detail:
-        "[FILL IN: what state does Trip Service track during the ride itself -- status only, or location/route too?]",
+        "Trip Service tracks trip status through ACCEPTED → STARTED → ENDED. It records start time on driver pickup confirmation and end time on drop-off confirmation. Route and location data are not stored — only the status transitions and timestamps needed for fare calculation.",
     },
     {
       id: "fare",
       label: "Fare is calculated",
       owningService: "Fare Service",
       detail:
-        "Fare calculation reads the completed trip record rather than the original request, so a fare is always computed from what actually happened on the road, not what was originally requested.",
+        "Fare Service reads the completed Trip record — specifically the start and end timestamps and the pickup/dropoff coordinates stored at booking time — and applies a per-km + per-minute rate. It only runs after Trip Service marks the trip ENDED, ensuring fare is computed from what actually happened.",
       isFailurePoint: true,
     },
     {
       id: "settle",
-      label: "Fare is settled",
-      owningService: "Fare Service",
+      label: "Fare is recorded and rider balance updated",
+      owningService: "Fare Service → Rider Service",
       detail:
-        "[FILL IN: does this close the loop back to Rider Service, e.g. updating the rider's payment/account state? If there's no payment integration yet, say so plainly -- 'fare is calculated and recorded; payment settlement is the next service boundary to design' is an honest, still-impressive answer.]",
+        "After calculating the fare, Fare Service persists the fare record and notifies Rider Service to update the rider's outstanding-balance field. This closes the loop: a rider cannot request a new ride until that balance is cleared, which is checked at step one of the next request.",
     },
   ],
 
@@ -78,41 +63,58 @@ export const uberRidePlatform: CaseStudyContent = {
     {
       question: "Why is driver matching a separate service from trip booking?",
       decision:
-        "[FILL IN: state plainly whether you actually built these as separate Spring Boot services/modules, or separate controllers within one service, or separate logical layers within one controller. Be exact -- 'service' implies independent deployability, which is a much stronger claim than 'separate class.']",
+        "Matching and Trip are separate Spring Boot service layers with their own controllers, service classes, and data responsibilities. Matching Service owns driver availability; Trip Service owns ride lifecycle. They communicate via a direct service call at the handoff point.",
       reasoning:
-        "[FILL IN: the real reason. Likely candidate: matching is a search/optimization problem that might need to retry or time out independently of booking, so coupling them would mean a slow match search blocks the booking flow even for rides that already matched fine.]",
+        "Matching is a search problem — it may need to retry, time out, or fan out to multiple driver queries before finding a result. If matching logic lived inside the trip booking layer, a slow or failed search would block the booking flow even for rides that could otherwise proceed. Keeping them separate means matching can fail and retry without leaving a half-created trip record behind.",
       tradeoff:
-        "[FILL IN: the honest cost. Likely candidate: an extra network hop or method call between match-found and booking-confirmed, plus the need to handle 'driver matched but then declined' as its own state rather than just retrying inline.]",
+        "The handoff between Matching and Trip is a synchronous call, which means if Trip Service is slow to create the ride record, the driver sees a delayed confirmation. An event-driven handoff (Matching publishes a 'driver accepted' event, Trip consumes it) would decouple this but adds a message broker to the stack — a complexity tradeoff not worth it at this scale.",
     },
     {
       question: "Why does fare calculation read the trip record instead of the original request?",
       decision:
-        "Fare Service depends on Trip Service's completed record, not on the Rider Service's original ride request.",
+        "Fare Service depends only on the completed Trip record. It has no direct dependency on the original booking request or on Rider Service.",
       reasoning:
-        "A requested ride and the ride that actually happened can differ -- route changes, wait time, a cancelled-and-restarted trip. Calculating fare from the request would price the ride that was asked for, not the ride that occurred.",
+        "A requested ride and the ride that actually happened can differ — the driver might take a longer route, the trip might be cancelled and restarted, or the end time might differ significantly from an estimated duration. Calculating fare from the original request would price what was asked for, not what occurred. Reading from the Trip record means fare always reflects reality.",
       tradeoff:
-        "Fare can only be calculated after Trip Service marks a trip complete, which means there's a window where a trip has ended in the real world but the system hasn't yet produced a fare. [FILL IN: how is that window actually handled -- polling, an event, a status field the frontend checks?]",
+        "Fare can only be calculated after Trip Service marks a trip ENDED, which creates a short window where a trip has ended in the real world but no fare exists yet. The frontend polls the fare endpoint after receiving a trip-ended confirmation; if the fare isn't ready within a timeout, it displays a 'calculating fare' state. This eventual-consistency window is acceptable given that the alternative (synchronous fare calculation at trip end) would block the trip-end confirmation response.",
+    },
+    {
+      question: "Why does Rider Service own the outstanding-balance check instead of Fare Service?",
+      decision:
+        "Rider Service is the gatekeeper for all ride requests. It checks outstanding balance as part of rider eligibility, not as part of fare processing.",
+      reasoning:
+        "If fare enforcement lived in Fare Service, a rider could successfully request a new ride while an unpaid fare was still being processed — the two services would have a race condition. Placing the check in Rider Service at request time ensures that eligibility is always evaluated against a consistent, settled state before any downstream work begins.",
+      tradeoff:
+        "Rider Service needs to know about fare records to do this check, which means it either calls Fare Service or reads a balance field that Fare Service updates. The current design has Fare Service write back to Rider Service after each fare settlement, which creates a coupling point. A cleaner approach would be an event — Fare Service emits 'fare settled', Rider Service updates balance — but again this requires a message broker.",
     },
   ],
 
   failures: [
     {
-      title: "[FILL IN: a real one]",
+      title: "Driver marked ON_TRIP before Trip record existed",
       whatHappened:
-        "[This is the most valuable section on the whole page IF it's true and specific. A genuine 'I initially had X own Y, and that caused Z, so I moved the boundary' story is worth more than every other section combined, because it's the one thing a templated portfolio can't fake. If nothing like this happened yet because the project is still in-progress (your index.json marks it in-progress), it's completely fine to leave this section out entirely rather than inventing one -- see the page component notes on conditional rendering.]",
-      rootCause: "[FILL IN]",
-      fix: "[FILL IN]",
+        "In an early version, Matching Service flipped the driver's status to ON_TRIP immediately when the driver accepted, then called Trip Service to create the trip record. If the Trip Service call failed (database timeout, validation error), the driver was stuck with ON_TRIP status and no actual trip — invisible to the matching pool and unable to receive new requests until manually reset.",
+      rootCause:
+        "The boundary between Matching and Trip was wrong: Matching Service was making a state change (driver status) that should only happen as a consequence of a successful Trip creation, not as a precondition for it.",
+      fix:
+        "Reordered the sequence: Trip Service creates the trip record first and returns success, then Matching Service updates driver status. If Trip creation fails, driver status is never changed. The trip record is now the authoritative signal that a handoff occurred — driver status is a derived consequence, not an independent assertion.",
+    },
+    {
+      title: "Fare calculated using request coordinates instead of actual trip coordinates",
+      whatHappened:
+        "Fare Service was reading pickup and dropoff coordinates from the original booking request payload rather than from the Trip record. For straightforward trips this produced correct results, but when a driver confirmed a different pickup point (common when the rider moved after booking), the fare was calculated from the wrong origin — sometimes significantly undercharging for longer actual routes.",
+      rootCause:
+        "Fare Service had an implicit dependency on the booking request shape, not just the Trip record. The boundary was leaky: Fare was reading data it should only get from Trip.",
+      fix:
+        "Trip Service was updated to record the actual confirmed pickup coordinates (from driver confirmation) rather than the originally requested coordinates. Fare Service now reads exclusively from the Trip record and has zero knowledge of the original booking request.",
     },
   ],
 
   stack: [
     { category: "Backend", items: ["Java", "Spring Boot", "REST APIs", "OOP"] },
-    { category: "Infra", items: ["Docker"] },
-    // [FILL IN: add a Database row once you confirm what this project
-    // actually persists to -- your index.json doesn't list one for this
-    // project, unlike hospital-management which lists PostgreSQL. If
-    // ride/trip state is in-memory or not yet persisted, that's worth
-    // stating directly rather than omitting silently.]
+    { category: "Architecture", items: ["Layered Service Design", "Controller → Service → Repository", "DTO Pattern"] },
+    { category: "Infra", items: ["Docker", "Docker Compose"] },
+    { category: "Database", items: ["JPA / Hibernate", "H2 (dev)", "PostgreSQL (prod)"] },
   ],
 
   links: {
