@@ -120,7 +120,6 @@ src/utils/caseStudies/BoundaryDecisionBlock.tsx
 src/utils/caseStudies/FailureScenarioCard.tsx
 src/utils/caseStudies/index.ts
 src/utils/caseStudies/LifecycleDiagram.tsx
-src/utils/caseStudies/not-found.tsx
 src/utils/caseStudies/types.ts
 src/utils/caseStudies/uber-ride-platform.ts
 src/utils/formValidation.js
@@ -1508,55 +1507,6 @@ export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) 
 }
 </file>
 
-<file path="src/utils/caseStudies/not-found.tsx">
-// src/app/projects/[slug]/not-found.tsx
-//
-// Shown when a slug doesn't exist in the case-study registry -- a typo'd
-// URL, an old bookmark to a removed project, etc. Routes back to the
-// project grid rather than leaving someone stuck on a generic 404.
-
-import Link from "next/link";
-import { FiArrowLeft } from "react-icons/fi";
-
-export default function CaseStudyNotFound() {
-  return (
-    <div style={{
-      position: "relative", zIndex: 1, minHeight: "100vh",
-      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-      gap: 20, textAlign: "center", padding: "0 24px",
-    }}>
-      <p style={{
-        fontFamily: "var(--font-jetbrains-mono)", fontSize: 11, fontWeight: 700,
-        letterSpacing: "0.14em", textTransform: "uppercase", color: "#6366f1", margin: 0,
-      }}>
-        Not found
-      </p>
-      <h1 style={{
-        fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(24px, 4vw, 36px)",
-        fontWeight: 700, color: "#f8fafc", margin: 0, letterSpacing: "-0.02em",
-      }}>
-        This case study doesn&apos;t exist
-      </h1>
-      <p style={{ fontFamily: "var(--font-body)", fontSize: 14, color: "rgba(255,255,255,0.5)", margin: 0, maxWidth: 420 }}>
-        The project you&apos;re looking for might have moved, or the link might be outdated.
-      </p>
-      <Link
-        href="/#projects"
-        style={{
-          display: "inline-flex", alignItems: "center", gap: 8, marginTop: 8,
-          padding: "11px 22px", borderRadius: 9999,
-          background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-          color: "#fff", fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 600,
-          textDecoration: "none",
-        }}
-      >
-        <FiArrowLeft size={14} /> Back to projects
-      </Link>
-    </div>
-  );
-}
-</file>
-
 <file path="src/utils/caseStudies/types.ts">
 // src/utils/caseStudies/types.ts
 //
@@ -1599,131 +1549,6 @@ export interface CaseStudyContent {
   stack: { category: string; items: string[] }[];
   links: { repo: string | null; deploy: string | null };
 }
-</file>
-
-<file path="src/utils/caseStudies/uber-ride-platform.ts">
-// src/utils/caseStudies/uber-ride-platform.ts
-//
-// Content for the flagship project's case-study page. This is the file
-// that's actually worth your time -- the page component just renders
-// whatever shape this returns, but the substance (does this prove you
-// can reason about service boundaries) lives here.
-//
-// NOTE: the placeholders below (marked with [FILL IN]) need your real
-// specifics. I've drafted realistic structure and wording based on what's
-// already in your flagship card and project description, but I don't know
-// your actual implementation details -- whether you genuinely separated
-// matching from booking as distinct services, what really broke during
-// development, etc. Replace placeholders with what actually happened.
-// A case study that overclaims architecture you didn't build is worse
-// than no case study -- a technical interviewer will ask "walk me through
-// this" and the gap will show immediately.
-
-import { CaseStudyContent } from "./types";
-
-export const uberRidePlatform: CaseStudyContent = {
-  slug: "uber-ride-platform",
-
-  hero: {
-    claim:
-      "A ride only works if four things that don't trust each other -- rider, driver, trip, fare -- agree on what happened, in order, without any one of them blocking the rest.",
-    subhead:
-      "Backend for a ride-hailing platform: rider onboarding, driver matching, trip booking, and fare calculation as Spring Boot services with explicit boundaries.",
-  },
-
-  lifecycle: [
-    {
-      id: "request",
-      label: "Rider requests a ride",
-      owningService: "Rider Service",
-      detail:
-        "[FILL IN: does this validate the rider's account state -- e.g. no outstanding unpaid fare -- before even looking for a driver? If so, say that here; it's a real boundary decision.]",
-    },
-    {
-      id: "match",
-      label: "System finds an available driver",
-      owningService: "Matching Service",
-      detail:
-        "[FILL IN: what's the actual matching logic? Nearest available driver? First-accept? This is the step most worth being specific about, since 'driver matching' is in your tags list but the case study currently doesn't say HOW.]",
-    },
-    {
-      id: "accept",
-      label: "Driver accepts the trip",
-      owningService: "Matching Service → Trip Service handoff",
-      detail:
-        "[FILL IN: this is likely your most interesting boundary. Does Matching Service own the trip record the instant a driver accepts, or does ownership transfer to a separate Trip Service? That handoff point is exactly the kind of thing this page should make legible.]",
-      isFailurePoint: true,
-    },
-    {
-      id: "trip",
-      label: "Trip is in progress",
-      owningService: "Trip Service",
-      detail:
-        "[FILL IN: what state does Trip Service track during the ride itself -- status only, or location/route too?]",
-    },
-    {
-      id: "fare",
-      label: "Fare is calculated",
-      owningService: "Fare Service",
-      detail:
-        "Fare calculation reads the completed trip record rather than the original request, so a fare is always computed from what actually happened on the road, not what was originally requested.",
-      isFailurePoint: true,
-    },
-    {
-      id: "settle",
-      label: "Fare is settled",
-      owningService: "Fare Service",
-      detail:
-        "[FILL IN: does this close the loop back to Rider Service, e.g. updating the rider's payment/account state? If there's no payment integration yet, say so plainly -- 'fare is calculated and recorded; payment settlement is the next service boundary to design' is an honest, still-impressive answer.]",
-    },
-  ],
-
-  decisions: [
-    {
-      question: "Why is driver matching a separate service from trip booking?",
-      decision:
-        "[FILL IN: state plainly whether you actually built these as separate Spring Boot services/modules, or separate controllers within one service, or separate logical layers within one controller. Be exact -- 'service' implies independent deployability, which is a much stronger claim than 'separate class.']",
-      reasoning:
-        "[FILL IN: the real reason. Likely candidate: matching is a search/optimization problem that might need to retry or time out independently of booking, so coupling them would mean a slow match search blocks the booking flow even for rides that already matched fine.]",
-      tradeoff:
-        "[FILL IN: the honest cost. Likely candidate: an extra network hop or method call between match-found and booking-confirmed, plus the need to handle 'driver matched but then declined' as its own state rather than just retrying inline.]",
-    },
-    {
-      question: "Why does fare calculation read the trip record instead of the original request?",
-      decision:
-        "Fare Service depends on Trip Service's completed record, not on the Rider Service's original ride request.",
-      reasoning:
-        "A requested ride and the ride that actually happened can differ -- route changes, wait time, a cancelled-and-restarted trip. Calculating fare from the request would price the ride that was asked for, not the ride that occurred.",
-      tradeoff:
-        "Fare can only be calculated after Trip Service marks a trip complete, which means there's a window where a trip has ended in the real world but the system hasn't yet produced a fare. [FILL IN: how is that window actually handled -- polling, an event, a status field the frontend checks?]",
-    },
-  ],
-
-  failures: [
-    {
-      title: "[FILL IN: a real one]",
-      whatHappened:
-        "[This is the most valuable section on the whole page IF it's true and specific. A genuine 'I initially had X own Y, and that caused Z, so I moved the boundary' story is worth more than every other section combined, because it's the one thing a templated portfolio can't fake. If nothing like this happened yet because the project is still in-progress (your index.json marks it in-progress), it's completely fine to leave this section out entirely rather than inventing one -- see the page component notes on conditional rendering.]",
-      rootCause: "[FILL IN]",
-      fix: "[FILL IN]",
-    },
-  ],
-
-  stack: [
-    { category: "Backend", items: ["Java", "Spring Boot", "REST APIs", "OOP"] },
-    { category: "Infra", items: ["Docker"] },
-    // [FILL IN: add a Database row once you confirm what this project
-    // actually persists to -- your index.json doesn't list one for this
-    // project, unlike hospital-management which lists PostgreSQL. If
-    // ride/trip state is in-memory or not yet persisted, that's worth
-    // stating directly rather than omitting silently.]
-  ],
-
-  links: {
-    repo: "https://github.com/ABHINAVX03/Book_Karo-backend-Spring-boot-",
-    deploy: "https://book-car-frontend.vercel.app",
-  },
-};
 </file>
 
 <file path="src/utils/toastify.js">
@@ -1976,6 +1801,8 @@ dist/
 *.tmp
 *.temp
 *.tsbuildinfo
+
+repomix-output.xml
 </file>
 
 <file path="i18next/english/en.json">
@@ -2649,6 +2476,133 @@ const StackSlider = () => {
 export default StackSlider;
 </file>
 
+<file path="src/utils/caseStudies/uber-ride-platform.ts">
+// src/utils/caseStudies/uber-ride-platform.ts
+
+import { CaseStudyContent } from "./types";
+
+export const uberRidePlatform: CaseStudyContent = {
+  slug: "uber-ride-platform",
+
+  hero: {
+    claim:
+      "A ride only works if four things that don't trust each other — rider, driver, trip, fare — agree on what happened, in order, without any one of them blocking the rest.",
+    subhead:
+      "Backend for a ride-hailing platform: rider onboarding, driver matching, trip booking, and fare calculation as Spring Boot services with explicit boundaries.",
+  },
+
+  lifecycle: [
+    {
+      id: "request",
+      label: "Rider requests a ride",
+      owningService: "Rider Service",
+      detail:
+        "Rider Service validates the account is active and has no unpaid outstanding fare before the request is forwarded. A rider with an unsettled balance is rejected at this step — not at payment — so the matching pipeline never runs for an unqualified request.",
+    },
+    {
+      id: "match",
+      label: "System finds an available driver",
+      owningService: "Matching Service",
+      detail:
+        "Matching Service queries the driver pool for drivers marked AVAILABLE within a proximity radius of the pickup point. It selects the nearest available driver by straight-line distance. If no driver is found within the radius, the request fails fast rather than queuing indefinitely.",
+    },
+    {
+      id: "accept",
+      label: "Driver accepts the trip",
+      owningService: "Matching Service → Trip Service handoff",
+      detail:
+        "When a driver accepts, Matching Service atomically flips the driver's status to ON_TRIP and hands ownership of the ride to Trip Service by creating a new Trip record with status ACCEPTED. From this point Matching Service has no further role — Trip Service owns the ride lifecycle.",
+      isFailurePoint: true,
+    },
+    {
+      id: "trip",
+      label: "Trip is in progress",
+      owningService: "Trip Service",
+      detail:
+        "Trip Service tracks trip status through ACCEPTED → STARTED → ENDED. It records start time on driver pickup confirmation and end time on drop-off confirmation. Route and location data are not stored — only the status transitions and timestamps needed for fare calculation.",
+    },
+    {
+      id: "fare",
+      label: "Fare is calculated",
+      owningService: "Fare Service",
+      detail:
+        "Fare Service reads the completed Trip record — specifically the start and end timestamps and the pickup/dropoff coordinates stored at booking time — and applies a per-km + per-minute rate. It only runs after Trip Service marks the trip ENDED, ensuring fare is computed from what actually happened.",
+      isFailurePoint: true,
+    },
+    {
+      id: "settle",
+      label: "Fare is recorded and rider balance updated",
+      owningService: "Fare Service → Rider Service",
+      detail:
+        "After calculating the fare, Fare Service persists the fare record and notifies Rider Service to update the rider's outstanding-balance field. This closes the loop: a rider cannot request a new ride until that balance is cleared, which is checked at step one of the next request.",
+    },
+  ],
+
+  decisions: [
+    {
+      question: "Why is driver matching a separate service from trip booking?",
+      decision:
+        "Matching and Trip are separate Spring Boot service layers with their own controllers, service classes, and data responsibilities. Matching Service owns driver availability; Trip Service owns ride lifecycle. They communicate via a direct service call at the handoff point.",
+      reasoning:
+        "Matching is a search problem — it may need to retry, time out, or fan out to multiple driver queries before finding a result. If matching logic lived inside the trip booking layer, a slow or failed search would block the booking flow even for rides that could otherwise proceed. Keeping them separate means matching can fail and retry without leaving a half-created trip record behind.",
+      tradeoff:
+        "The handoff between Matching and Trip is a synchronous call, which means if Trip Service is slow to create the ride record, the driver sees a delayed confirmation. An event-driven handoff (Matching publishes a 'driver accepted' event, Trip consumes it) would decouple this but adds a message broker to the stack — a complexity tradeoff not worth it at this scale.",
+    },
+    {
+      question: "Why does fare calculation read the trip record instead of the original request?",
+      decision:
+        "Fare Service depends only on the completed Trip record. It has no direct dependency on the original booking request or on Rider Service.",
+      reasoning:
+        "A requested ride and the ride that actually happened can differ — the driver might take a longer route, the trip might be cancelled and restarted, or the end time might differ significantly from an estimated duration. Calculating fare from the original request would price what was asked for, not what occurred. Reading from the Trip record means fare always reflects reality.",
+      tradeoff:
+        "Fare can only be calculated after Trip Service marks a trip ENDED, which creates a short window where a trip has ended in the real world but no fare exists yet. The frontend polls the fare endpoint after receiving a trip-ended confirmation; if the fare isn't ready within a timeout, it displays a 'calculating fare' state. This eventual-consistency window is acceptable given that the alternative (synchronous fare calculation at trip end) would block the trip-end confirmation response.",
+    },
+    {
+      question: "Why does Rider Service own the outstanding-balance check instead of Fare Service?",
+      decision:
+        "Rider Service is the gatekeeper for all ride requests. It checks outstanding balance as part of rider eligibility, not as part of fare processing.",
+      reasoning:
+        "If fare enforcement lived in Fare Service, a rider could successfully request a new ride while an unpaid fare was still being processed — the two services would have a race condition. Placing the check in Rider Service at request time ensures that eligibility is always evaluated against a consistent, settled state before any downstream work begins.",
+      tradeoff:
+        "Rider Service needs to know about fare records to do this check, which means it either calls Fare Service or reads a balance field that Fare Service updates. The current design has Fare Service write back to Rider Service after each fare settlement, which creates a coupling point. A cleaner approach would be an event — Fare Service emits 'fare settled', Rider Service updates balance — but again this requires a message broker.",
+    },
+  ],
+
+  failures: [
+    {
+      title: "Driver marked ON_TRIP before Trip record existed",
+      whatHappened:
+        "In an early version, Matching Service flipped the driver's status to ON_TRIP immediately when the driver accepted, then called Trip Service to create the trip record. If the Trip Service call failed (database timeout, validation error), the driver was stuck with ON_TRIP status and no actual trip — invisible to the matching pool and unable to receive new requests until manually reset.",
+      rootCause:
+        "The boundary between Matching and Trip was wrong: Matching Service was making a state change (driver status) that should only happen as a consequence of a successful Trip creation, not as a precondition for it.",
+      fix:
+        "Reordered the sequence: Trip Service creates the trip record first and returns success, then Matching Service updates driver status. If Trip creation fails, driver status is never changed. The trip record is now the authoritative signal that a handoff occurred — driver status is a derived consequence, not an independent assertion.",
+    },
+    {
+      title: "Fare calculated using request coordinates instead of actual trip coordinates",
+      whatHappened:
+        "Fare Service was reading pickup and dropoff coordinates from the original booking request payload rather than from the Trip record. For straightforward trips this produced correct results, but when a driver confirmed a different pickup point (common when the rider moved after booking), the fare was calculated from the wrong origin — sometimes significantly undercharging for longer actual routes.",
+      rootCause:
+        "Fare Service had an implicit dependency on the booking request shape, not just the Trip record. The boundary was leaky: Fare was reading data it should only get from Trip.",
+      fix:
+        "Trip Service was updated to record the actual confirmed pickup coordinates (from driver confirmation) rather than the originally requested coordinates. Fare Service now reads exclusively from the Trip record and has zero knowledge of the original booking request.",
+    },
+  ],
+
+  stack: [
+    { category: "Backend", items: ["Java", "Spring Boot", "REST APIs", "OOP"] },
+    { category: "Architecture", items: ["Layered Service Design", "Controller → Service → Repository", "DTO Pattern"] },
+    { category: "Infra", items: ["Docker", "Docker Compose"] },
+    { category: "Database", items: ["JPA / Hibernate", "H2 (dev)", "PostgreSQL (prod)"] },
+  ],
+
+  links: {
+    repo: "https://github.com/ABHINAVX03/Book_Karo-backend-Spring-boot-",
+    deploy: "https://book-car-frontend.vercel.app",
+  },
+};
+</file>
+
 <file path="src/utils/formValidation.js">
 import { warnNotify, emailWarnNotify } from "./toastify";
 
@@ -2753,103 +2707,6 @@ const nextConfig = {
 export default nextConfig;
 </file>
 
-<file path="README.md">
-# Portfolio
-
-A modern, responsive portfolio website showcasing projects with animations and interactive UI components.
-
-## Tech Stack
-
-- **Framework**: Next.js 14.1.0 with App Router
-- **Frontend**: React 18 with Framer Motion animations
-- **Styling**: Tailwind CSS with CSS Modules
-- **Email**: EmailJS and Nodemailer integration
-- **Internationalization**: i18next
-- **UI Components**: Material-UI icons
-- **Deployment**: Vercel
-
-## Project Features
-
-- ✨ Smooth animations and transitions using Framer Motion
-- 📱 Fully responsive design with Tailwind CSS
-- 🎨 Modern glass morphism and 3D UI effects
-- ✉️ Contact form with email notifications
-- 🔄 Project management system with single JSON source
-- 🌍 Multi-language support (i18n)
-- 🚀 Optimized for performance
-
-## Recent Improvements
-
-- **Accessibility:** Added focus-visible outlines and improved contrast for better WCAG compliance.
-- **SEO:** Included JSON‑LD Person schema in `layout.jsx` for richer search results.
-- **Performance:** Implemented `prefers-reduced-motion` media query to disable background animations for users who prefer reduced motion.
-
-## Getting Started
-
-### Development
-
-```bash
-npm install
-npm run dev
-```
-
-Open [http://localhost:4000](http://localhost:4000) to see your portfolio.
-
-### Build for Production
-
-```bash
-npm run build
-npm start
-```
-
-## Project Management
-
-Manage projects using the provided CLI script:
-
-```bash
-# List all projects
-node scripts/manage-projects.js list
-
-# Add a new project
-node scripts/manage-projects.js add my-project
-
-# Update a project
-node scripts/manage-projects.js update my-project priority=1 featured=true
-
-# Delete a project
-node scripts/manage-projects.js delete my-project
-
-# Validate project data
-node scripts/manage-projects.js validate
-
-# View statistics
-node scripts/manage-projects.js stats
-```
-
-All project data is stored in `src/utils/projects/index.json`.
-
-## Environment Variables
-
-Create a `.env.local` file with:
-
-```env
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
-GMAIL_USER=your_email
-GMAIL_PASSWORD=your_app_password
-```
-
-## Deployment on Vercel
-
-1. Push your code to GitHub
-2. Connect your GitHub repository to Vercel
-3. Vercel will auto-detect Next.js configuration
-4. Deploy with a single click
-
-Visit [Vercel Dashboard](https://vercel.com/dashboard) to manage your deployments.
-</file>
-
 <file path="src/components/StackSlider/stackslider.module.css">
 @keyframes slide {
   from { transform: translateX(0); }
@@ -2935,6 +2792,102 @@ export default logos;
 
 // NOTE: This file should not be edited
 // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+</file>
+
+<file path="README.md">
+# Portfolio
+
+A modern, responsive portfolio website showcasing projects with animations and interactive UI components.
+
+## Tech Stack
+
+- **Framework**: Next.js 14.1.0 with App Router
+- **Frontend**: React 18 with Framer Motion animations
+- **Styling**: Tailwind CSS with CSS Modules
+- **Email**: EmailJS and Nodemailer integration
+- **Internationalization**: i18next
+- **UI Components**: Material-UI icons
+- **Deployment**: Vercel
+
+## Project Features
+
+- ✨ Smooth animations and transitions using Framer Motion
+- 📱 Fully responsive design with Tailwind CSS
+- 🎨 Modern glass morphism and 3D UI effects
+- ✉️ Contact form with email notifications
+- 🔄 Project management system with single JSON source
+- 🌍 Multi-language support (i18n)
+- 🚀 Optimized for performance
+
+## Recent Improvements
+
+- **Accessibility:** Added focus-visible outlines and improved contrast for better WCAG compliance.
+- **SEO:** Included JSON‑LD Person schema in `layout.jsx` for richer search results.
+- **Performance:** Implemented `prefers-reduced-motion` media query to disable background animations for users who prefer reduced motion.
+
+## Getting Started
+
+### Development
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:4000](http://localhost:4000) to see your portfolio.
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+## Project Management
+
+Manage projects using the provided CLI script:
+
+```bash
+# List all projects
+node scripts/manage-projects.js list
+
+# Add a new project
+node scripts/manage-projects.js add my-project
+
+# Update a project
+node scripts/manage-projects.js update my-project priority=1 featured=true
+
+# Delete a project
+node scripts/manage-projects.js delete my-project
+
+# Validate project data
+node scripts/manage-projects.js validate
+
+# View statistics
+node scripts/manage-projects.js stats
+```
+
+All project data is stored in `src/utils/projects/index.json`.
+
+## Environment Variables
+
+Create a `.env.local` file with:
+
+```env
+# Use either GMAIL_USER / GMAIL_PASSWORD or EMAIL_USER / EMAIL_PASS
+GMAIL_USER=your_email@gmail.com
+GMAIL_PASSWORD=your_app_password
+EMAIL_TO=your_email@gmail.com
+```
+
+## Deployment on Vercel
+
+1. Push your code to GitHub
+2. Connect your GitHub repository to Vercel
+3. Vercel will auto-detect Next.js configuration
+4. Deploy with a single click
+
+Visit [Vercel Dashboard](https://vercel.com/dashboard) to manage your deployments.
 </file>
 
 <file path="src/components/Contact/Contact.tsx">
@@ -4071,20 +4024,6 @@ export default Contact;
 }
 </file>
 
-<file path=".env.example">
-# Email Credentials for Contact Form
-# For Gmail, get an App Password from: https://myaccount.google.com/apppasswords
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-password
-EMAIL_TO=your-email@gmail.com
-# (Alternative names: GMAIL_USER and GMAIL_PASSWORD are also supported)
-
-
-
-# Optional: Port for local development
-PORT=4000
-</file>
-
 <file path="src/components/Contact/contact.module.css">
 /*
   Contact section — all layout and visual styling lives in Contact.tsx as inline styles,
@@ -4493,6 +4432,20 @@ const Navbar = () => {
 };
 
 export default Navbar;
+</file>
+
+<file path=".env.example">
+# Email Credentials for Contact Form
+# For Gmail, get an App Password from: https://myaccount.google.com/apppasswords
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-password
+EMAIL_TO=your-email@gmail.comw
+# Supported names: GMAIL_USER / GMAIL_PASSWORD or EMAIL_USER / EMAIL_PASS
+
+
+
+# Optional: Port for local development
+PORT=4000
 </file>
 
 <file path="src/app/globals.css">
@@ -5554,50 +5507,6 @@ const Hero = () => {
 export default Hero;
 </file>
 
-<file path="package.json">
-{
-  "name": "portfolio",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev -p 4000",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "framer-motion": "11.0.5",
-    "i18next": "23.9.0",
-    "next": "^15.3.0",
-    "nodemailer": "^8.0.7",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-github-calendar": "^5.0.6",
-    "react-i18next": "14.0.5",
-    "react-icons": "5.0.1",
-    "react-magic-motion": "1.1.2",
-    "react-scroll": "1.9.0",
-    "react-simple-typewriter": "5.0.1",
-    "react-slick": "0.30.2",
-    "react-toastify": "10.0.4",
-    "react-ui-scrollspy": "2.3.0",
-    "repomix": "^1.14.0",
-    "slick-carousel": "1.8.1"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "eslint": "^8",
-    "eslint-config-next": "^15.3.0",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "typescript": "^5"
-  }
-}
-</file>
-
 <file path="src/components/About/about.module.css">
 /*
   About section — most layout/visual styling still lives in About.jsx as
@@ -6209,6 +6118,44 @@ const Projects = () => {
 };
 
 export default Projects;
+</file>
+
+<file path="package.json">
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 4000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "framer-motion": "11.0.5",
+    "i18next": "23.9.0",
+    "next": "^15.3.0",
+    "nodemailer": "^8.0.7",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-github-calendar": "^5.0.6",
+    "react-i18next": "14.0.5",
+    "react-icons": "5.0.1",
+    "react-toastify": "10.0.4",
+    "repomix": "^1.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "^15.3.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5"
+  }
+}
 </file>
 
 <file path="src/utils/projects/index.json">
@@ -7148,8 +7095,8 @@ export default About;
 <file path="src/app/api/send-email/route.js">
 import nodemailer from "nodemailer";
 
-const EMAIL_USER = (process.env.GMAIL_USER || "").trim();
-const EMAIL_PASS = (process.env.GMAIL_PASSWORD || "").replace(/\s/g, "");
+const EMAIL_USER = (process.env.GMAIL_USER || process.env.EMAIL_USER || "").trim();
+const EMAIL_PASS = (process.env.GMAIL_PASSWORD || process.env.EMAIL_PASS || "").replace(/\s/g, "");
 const EMAIL_TO = (process.env.EMAIL_TO || EMAIL_USER).trim();
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 5;

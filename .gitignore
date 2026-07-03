@@ -34,4 +34,6 @@ dist/
 # Temporary files
 *.tmp
 *.temp
-*.tsbuildinfo
+*.tsbuildinfo
+
+repomix-output.xml
