@@ -64,6 +64,15 @@ function getTransporter() {
   });
 }
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "1mb",
+    },
+    responseLimit: "8mb",
+  },
+};
+
 export async function POST(request) {
   try {
     const clientIp = getClientIp(request);

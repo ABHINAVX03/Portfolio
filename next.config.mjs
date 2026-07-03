@@ -80,14 +80,6 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
   trailingSlash: false,
-
-  // API optimizations
-  api: {
-    bodyParser: {
-      sizeLimit: "1mb",
-    },
-    responseLimit: "8mb",
-  },
 };
 
 export default nextConfig;
