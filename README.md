@@ -77,11 +77,10 @@ All project data is stored in `src/utils/projects/index.json`.
 Create a `.env.local` file with:
 
 ```env
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
-GMAIL_USER=your_email
+# Use either GMAIL_USER / GMAIL_PASSWORD or EMAIL_USER / EMAIL_PASS
+GMAIL_USER=your_email@gmail.com
 GMAIL_PASSWORD=your_app_password
+EMAIL_TO=your_email@gmail.com
 ```
 
 ## Deployment on Vercel
