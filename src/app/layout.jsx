@@ -1,25 +1,7 @@
-import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
-  display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
-  display: "swap",
-  weight: ["400", "500", "600", "700"],
-});
+import CustomCursor from "@/components/CustomCursor";
+import PageTransition from "@/components/PageTransition";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata = {
   metadataBase: new URL("https://abhinavgupta.dev"),
@@ -66,11 +48,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
-    >
+    <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="theme-color" content="#050508" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -93,12 +73,15 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
-        {/* Deep space background layers */}
+        <CustomCursor />
         <div className="bg-grid" aria-hidden="true" />
         <div className="bg-orb bg-orb-1" aria-hidden="true" />
         <div className="bg-orb bg-orb-2" aria-hidden="true" />
         <div className="bg-orb bg-orb-3" aria-hidden="true" />
-        {children}
+        <div className="shell-controls" aria-label="Portfolio controls">
+          <ThemeToggle />
+        </div>
+        <PageTransition>{children}</PageTransition>
       </body>
     </html>
   );

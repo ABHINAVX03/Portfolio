@@ -6,6 +6,8 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { FiArrowRight, FiDownload, FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
 import socials from "@/utils/socials";
+import AnimatedTagline from "./AnimatedTagline";
+import StatsWidget from "./StatsWidget";
 
 const ROLES = ["Full Stack Developer", "Java Spring Boot Engineer", "React Developer", "Problem Solver"];
 const SKILLS = ["React", "Next.js", "TypeScript", "Java", "Spring Boot", "PostgreSQL"];
@@ -169,7 +171,7 @@ const Hero = () => {
               lineHeight: 0.95,
               margin: 0,
             }}>
-              <span style={{ color: "#f8fafc" }}>Abhinav</span>
+              <span style={{ color: "var(--c-text-primary)" }}>Abhinav</span>
               <br />
               <span style={{
                 background: "linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #f472b6 100%)",
@@ -191,7 +193,7 @@ const Hero = () => {
             style={{
               fontFamily: "var(--font-jetbrains-mono)",
               fontSize: "clamp(14px, 1.8vw, 20px)",
-              color: "rgba(255,255,255,0.5)",
+              color: "var(--c-text-subtle)",
               minHeight: "28px",
             }}
             aria-label={`Role: ${roleText}`}
@@ -206,23 +208,30 @@ const Hero = () => {
           </motion.div>
 
           {/* description */}
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.6 }}
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: "15px",
-              lineHeight: 1.75,
-              color: "rgba(255,255,255,0.6)",
-              maxWidth: "440px",
-              margin: 0,
-            }}
+            style={{ maxWidth: "500px" }}
           >
-            MCA student at{" "}
-            <span style={{ color: "#c7d2fe", fontWeight: 600 }}>IIIT Vadodara</span>
-            {" "}(8.51 GPA) building production-grade full stack apps with React, Next.js, and Java Spring Boot. Codeforces Pupil with 300+ DSA problems solved.
-          </motion.p>
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                fontSize: "15px",
+                lineHeight: 1.75,
+                color: "var(--c-text-secondary)",
+                margin: 0,
+              }}
+            >
+              MCA student at{" "}
+              <span style={{ color: "var(--c-text-accent)", fontWeight: 600 }}>IIIT Vadodara</span>
+              {" "}(8.51 GPA) building production-grade full stack apps with React, Next.js, and Java Spring Boot. Codeforces Pupil with 300+ DSA problems solved.
+            </p>
+            <div style={{ marginTop: "14px" }}>
+              <AnimatedTagline />
+            </div>
+            <StatsWidget />
+          </motion.div>
 
           {/* skill badges */}
           <motion.div
@@ -244,16 +253,16 @@ const Hero = () => {
                   letterSpacing: "0.04em",
                   padding: "5px 12px",
                   borderRadius: "9999px",
-                  border: "1px solid rgba(99,102,241,0.25)",
-                  background: "rgba(99,102,241,0.08)",
-                  color: "#c7d2fe",
+                  border: "1px solid var(--c-border-glow)",
+                  background: "var(--c-primary-dim)",
+                  color: "var(--c-text-accent)",
                   cursor: "default",
                   transition: "all 0.2s ease",
                 }}
                 whileHover={{
                   background: "rgba(99,102,241,0.2)",
                   borderColor: "rgba(99,102,241,0.5)",
-                  color: "#fff",
+                  color: "var(--c-on-accent)",
                   scale: 1.05,
                 }}
               >
@@ -278,7 +287,7 @@ const Hero = () => {
                 padding: "12px 24px",
                 borderRadius: "9999px",
                 background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                color: "#fff",
+                color: "var(--c-on-accent)",
                 fontFamily: "var(--font-body)",
                 fontSize: "14px",
                 fontWeight: 600,
@@ -310,12 +319,12 @@ const Hero = () => {
                 padding: "12px 24px",
                 borderRadius: "9999px",
                 background: "transparent",
-                color: "#c7d2fe",
+                color: "var(--c-text-accent)",
                 fontFamily: "var(--font-body)",
                 fontSize: "14px",
                 fontWeight: 600,
                 textDecoration: "none",
-                border: "1px solid rgba(99,102,241,0.3)",
+                border: "1px solid var(--c-border-glow)",
                 transition: "all 0.25s ease",
               }}
               onMouseEnter={e => {
@@ -341,7 +350,7 @@ const Hero = () => {
                 gap: "6px",
                 padding: "12px 20px",
                 borderRadius: "9999px",
-                color: "rgba(255,255,255,0.5)",
+                color: "var(--c-text-subtle)",
                 fontFamily: "var(--font-body)",
                 fontSize: "14px",
                 fontWeight: 500,
@@ -349,10 +358,10 @@ const Hero = () => {
                 transition: "all 0.25s ease",
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.color = "#fff";
+                (e.currentTarget as HTMLElement).style.color = "var(--c-text-primary)";
               }}
               onMouseLeave={e => {
-                (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)";
+                (e.currentTarget as HTMLElement).style.color = "var(--c-text-subtle)";
               }}
             >
               View Work <FiArrowRight size={14} />
@@ -381,12 +390,12 @@ const Hero = () => {
                   width: 38,
                   height: 38,
                   borderRadius: "10px",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid var(--c-border)",
+                  background: "var(--bg-subtle)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  color: "rgba(255,255,255,0.5)",
+                  color: "var(--c-text-subtle)",
                   textDecoration: "none",
                   transition: "all 0.2s ease",
                 }}
@@ -397,9 +406,9 @@ const Hero = () => {
                   (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
                 }}
                 onMouseLeave={e => {
-                  (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,0.5)";
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,255,255,0.08)";
-                  (e.currentTarget as HTMLElement).style.background = "rgba(255,255,255,0.03)";
+                  (e.currentTarget as HTMLElement).style.color = "var(--c-text-secondary)";
+                  (e.currentTarget as HTMLElement).style.borderColor = "var(--c-border)";
+                  (e.currentTarget as HTMLElement).style.background = "var(--bg-glass)";
                   (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                 }}
               >
@@ -439,9 +448,9 @@ const Hero = () => {
               position: "relative",
               borderRadius: "24px",
               overflow: "hidden",
-              border: "1px solid rgba(99,102,241,0.2)",
-              background: "rgba(10,10,20,0.8)",
-              boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(99,102,241,0.08)",
+              border: "1px solid var(--c-border)",
+              background: "var(--bg-card)",
+              boxShadow: "var(--shadow-card)",
             }}>
               {/* glowing border top */}
               <div style={{
@@ -531,13 +540,13 @@ const Hero = () => {
               <div style={{
                 padding: "16px 20px",
                 borderTop: "1px solid rgba(255,255,255,0.05)",
-                background: "rgba(5,5,8,0.6)",
+                background: "var(--bg-elevated)",
               }}>
                 <pre style={{
                   fontFamily: "var(--font-jetbrains-mono)",
                   fontSize: "11px",
                   lineHeight: 1.7,
-                  color: "#94a3b8",
+                  color: "var(--c-text-muted)",
                   margin: 0,
                   overflowX: "auto",
                   whiteSpace: "pre",
@@ -570,8 +579,8 @@ const Hero = () => {
                 style={{
                   padding: "12px 8px",
                   borderRadius: "12px",
-                  border: "1px solid rgba(99,102,241,0.15)",
-                  background: "rgba(99,102,241,0.06)",
+                  border: "1px solid var(--c-border)",
+                  background: "var(--bg-glass)",
                   textAlign: "center",
                   backdropFilter: "blur(8px)",
                 }}
@@ -594,7 +603,7 @@ const Hero = () => {
                   fontWeight: 600,
                   letterSpacing: "0.06em",
                   textTransform: "uppercase",
-                  color: "rgba(255,255,255,0.35)",
+                  color: "var(--c-text-muted)",
                   marginTop: "2px",
                 }}>
                   {stat.label}

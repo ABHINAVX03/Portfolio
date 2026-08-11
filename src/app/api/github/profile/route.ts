@@ -1,17 +1,7 @@
 import { NextResponse } from "next/server";
+import { buildCommitActivity, buildLanguageSummary, GithubCommitWeek, GithubLanguage } from "./aggregation";
 
 const USERNAME = "ABHINAVX03";
-
-export interface GithubLanguage {
-  name: string;
-  count: number;
-  percentage: number;
-}
-
-export interface GithubCommitWeek {
-  week: string; // ISO date, e.g. "2026-03-23"
-  count: number;
-}
 
 export interface GithubProfileResponse {
   username: string;
@@ -41,8 +31,6 @@ interface GithubRepo {
 const COMMIT_ACTIVITY_REPO_COUNT = 5;
 
 // Trim GitHub's 52-week response down to a readable window for the bar chart.
-const COMMIT_ACTIVITY_WEEKS = 12;
-
 export async function GET(): Promise<NextResponse<GithubProfileResponse | { error: string }>> {
   try {
     const headers = {
@@ -63,31 +51,9 @@ export async function GET(): Promise<NextResponse<GithubProfileResponse | { erro
     const repos: GithubRepo[] = await reposRes.json();
 
     const totalStars = repos.reduce((sum, repo) => sum + (repo.stargazers_count || 0), 0);
-    const languageCount: Record<string, number> = {};
-
-    repos.forEach((repo) => {
-      if (repo.language) {
-        languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
-      }
-    });
-
-    // count -> percentage normalization. This is a rough, repo-count-based
-    // percentage (one repo = one vote for its dominant language), not a
-    // byte-weighted one -- consistent with how `count` was already being
-    // computed above, just expressed as a share of the total instead of
-    // a raw integer. If you want byte-accurate percentages later, that
-    // requires an additional GET /repos/{owner}/{repo}/languages call per
-    // repo summed by bytes, which costs more of the unauthenticated quota.
-    const totalLanguageVotes = Object.values(languageCount).reduce((a, b) => a + b, 0) || 1;
-
-    const topLanguages = Object.entries(languageCount)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 5)
-      .map(([name, count]) => ({
-        name,
-        count,
-        percentage: Math.round((count / totalLanguageVotes) * 1000) / 10,
-      }));
+    // This is a repo-count-based language share. Byte-weighted language data
+    // would require one additional API request per repository.
+    const topLanguages = buildLanguageSummary(repos);
 
     // ── Commit activity, aggregated across the most recently pushed-to repos ──
     const candidateRepos = repos
@@ -110,21 +76,7 @@ export async function GET(): Promise<NextResponse<GithubProfileResponse | { erro
       })
     );
 
-    const weeklyTotals = new Map<number, number>();
-    commitActivityResults.forEach((repoWeeks) => {
-      if (!repoWeeks) return;
-      repoWeeks.forEach((wk) => {
-        weeklyTotals.set(wk.week, (weeklyTotals.get(wk.week) || 0) + (wk.total || 0));
-      });
-    });
-
-    const commitActivity: GithubCommitWeek[] = Array.from(weeklyTotals.entries())
-      .sort((a, b) => a[0] - b[0])
-      .slice(-COMMIT_ACTIVITY_WEEKS)
-      .map(([weekUnix, count]) => ({
-        week: new Date(weekUnix * 1000).toISOString().slice(0, 10),
-        count,
-      }));
+    const commitActivity = buildCommitActivity(commitActivityResults);
 
     return NextResponse.json({
       username: user.login,

@@ -85,7 +85,7 @@ const education = [
 const codingProfiles = [
   { name: "LeetCode", meta: "300+ problems", url: "https://leetcode.com/u/ABHINAVX03/" },
   { name: "GeeksforGeeks", meta: "Active", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
-  { name: "Codeforces", meta: "Pupil (~1383)", url: "https://codeforces.com/profile/ABHINAVX03" },
+  { name: "Codeforces", meta: "Competitive programming", url: "https://codeforces.com/profile/ABHINAVX03" },
   { name: "HackerRank", meta: "Java · React · PS", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
   { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
 ];
@@ -125,22 +125,22 @@ function useTypewriter(text, speed = 30) {
 
 /* ── Shared token shorthands ── */
 const T = {
-  accent:  "#6366f1",
-  violet:  "#8b5cf6",
-  rose:    "#f472b6",
-  emerald: "#34d399",
-  amber:   "#fbbf24",
-  text:    "#f8fafc",
-  muted:   "rgba(255,255,255,0.5)",
-  dimmer:  "rgba(255,255,255,0.25)",
-  border:  "rgba(255,255,255,0.07)",
-  borderHover: "rgba(99,102,241,0.35)",
-  cardBg:  "rgba(10,10,20,0.7)",
+  accent:  "var(--c-primary)",
+  violet:  "var(--c-violet)",
+  rose:    "var(--c-rose)",
+  emerald: "var(--c-emerald)",
+  amber:   "var(--c-amber)",
+  text:    "var(--c-text-primary)",
+  muted:   "var(--c-text-secondary)",
+  dimmer:  "var(--c-text-muted)",
+  border:  "var(--c-border)",
+  borderHover: "var(--c-border-glow)",
+  cardBg:  "var(--bg-card)",
   mono:    "var(--font-jetbrains-mono)",
   sans:    "var(--font-space-grotesk)",
   body:    "var(--font-body)",
-  dim:     "rgba(99,102,241,0.08)",
-  dimBorder: "rgba(99,102,241,0.2)",
+  dim:     "var(--c-primary-dim)",
+  dimBorder: "var(--c-border-glow)",
 };
 
 const card = {

@@ -25,24 +25,24 @@ export default function FailureScenarioCard({ scenario }: { scenario: FailureSce
 
       <h3 style={{
         fontFamily: "var(--font-space-grotesk)", fontSize: 15, fontWeight: 700,
-        color: "#f8fafc", margin: "0 0 10px", letterSpacing: "-0.01em",
+        color: "var(--c-text-primary)", margin: "0 0 10px", letterSpacing: "-0.01em",
       }}>
         {scenario.title}
       </h3>
 
       <p style={{
         fontFamily: "var(--font-body)", fontSize: 13, lineHeight: 1.65,
-        color: "rgba(255,255,255,0.6)", margin: "0 0 12px",
+        color: "var(--c-text-secondary)", margin: "0 0 12px",
       }}>
         {scenario.whatHappened}
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "rgba(255,255,255,0.45)" }}>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--c-text-muted)" }}>
           <strong style={{ color: "#fbbf24", fontWeight: 600 }}>Root cause: </strong>
           {scenario.rootCause}
         </span>
-        <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "rgba(255,255,255,0.45)" }}>
+        <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--c-text-muted)" }}>
           <strong style={{ color: "#34d399", fontWeight: 600 }}>Fix: </strong>
           {scenario.fix}
         </span>

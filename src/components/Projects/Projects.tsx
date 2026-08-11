@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiExternalLink, FiGithub, FiArrowRight, FiBookOpen } from "react-icons/fi";
 import projectsData from "@/utils/projects/index.json";
+import { caseStudyRegistry } from "@/utils/caseStudies";
 
 interface Project {
   id: string;
@@ -57,6 +58,7 @@ const uberPoints = {
 // Previously there was no link to /projects/uber-ride-platform anywhere on the site.
 function FlagshipCard({ project }: { project: Project }) {
   const c = COLOR[project.color] || COLOR.primary;
+  const hasCaseStudy = Boolean(caseStudyRegistry[project.id]);
 
   return (
     <motion.div
@@ -69,9 +71,9 @@ function FlagshipCard({ project }: { project: Project }) {
         gap: "0",
         borderRadius: "24px",
         border: `1px solid ${c.border}`,
-        background: "rgba(10,10,20,0.9)",
+        background: "var(--bg-card)",
         overflow: "hidden",
-        boxShadow: `0 24px 80px rgba(0,0,0,0.5), 0 0 60px ${c.glow}`,
+        boxShadow: `var(--shadow-card), 0 0 60px ${c.glow}`,
         marginBottom: "48px",
         position: "relative",
       }}
@@ -98,10 +100,10 @@ function FlagshipCard({ project }: { project: Project }) {
           </span>
         </div>
 
-        <h3 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(24px,3vw,38px)", fontWeight: 700, letterSpacing: "-0.03em", color: "#f8fafc", margin: 0, lineHeight: 1.1 }}>
+        <h3 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(24px,3vw,38px)", fontWeight: 700, letterSpacing: "-0.03em", color: "var(--c-text-primary)", margin: 0, lineHeight: 1.1 }}>
           {project.name}
         </h3>
-        <p style={{ fontFamily: "var(--font-body)", fontSize: "14px", lineHeight: 1.75, color: "rgba(255,255,255,0.6)", margin: 0, maxWidth: "560px" }}>
+        <p style={{ fontFamily: "var(--font-body)", fontSize: "14px", lineHeight: 1.75, color: "var(--c-text-secondary)", margin: 0, maxWidth: "560px" }}>
           {project.description}
         </p>
 
@@ -116,22 +118,22 @@ function FlagshipCard({ project }: { project: Project }) {
             <div key={panel.label} style={{
               padding: "14px 16px",
               borderRadius: "14px",
-              border: "1px solid rgba(255,255,255,0.06)",
-              background: "rgba(255,255,255,0.025)",
+              border: "1px solid var(--c-border)",
+              background: "var(--bg-glass)",
             }}>
               <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: c.accent, display: "block", marginBottom: "8px" }}>
                 {panel.label}
               </span>
-              {panel.type === "text" && <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.6, color: "rgba(255,255,255,0.55)" }}>{(panel as any).content}</p>}
+              {panel.type === "text" && <p style={{ margin: 0, fontSize: "12px", lineHeight: 1.6, color: "var(--c-text-secondary)" }}>{(panel as any).content}</p>}
               {panel.type === "list" && (
-                <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "rgba(255,255,255,0.55)" }}>
+                <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "12px", lineHeight: 1.7, color: "var(--c-text-secondary)" }}>
                   {(panel as any).items.map((i: string) => <li key={i}>{i}</li>)}
                 </ul>
               )}
               {panel.type === "pills" && (
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {(panel as any).items.map((i: string) => (
-                    <span key={i} style={{ padding: "3px 8px", borderRadius: "6px", border: `1px solid ${c.border}`, background: c.dim, color: "rgba(255,255,255,0.7)", fontSize: "11px", fontFamily: "var(--font-jetbrains-mono)" }}>{i}</span>
+                    <span key={i} style={{ padding: "3px 8px", borderRadius: "6px", border: `1px solid ${c.border}`, background: c.dim, color: "var(--c-text-secondary)", fontSize: "11px", fontFamily: "var(--font-jetbrains-mono)" }}>{i}</span>
                   ))}
                 </div>
               )}
@@ -141,20 +143,21 @@ function FlagshipCard({ project }: { project: Project }) {
 
         {/* ✅ FIX: action links — added "Case Study" button */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-          {/* ✅ NEW: Case Study deep-dive link — this is the primary CTA for the case study page */}
-          <Link
-            href={`/projects/${project.id}`}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "7px",
-              padding: "9px 16px", borderRadius: "12px",
-              background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`,
-              color: "#fff", fontSize: "13px", fontWeight: 600,
-              textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`,
-              fontFamily: "var(--font-body)",
-            }}
-          >
-            <FiBookOpen size={14} /> Case Study
-          </Link>
+          {hasCaseStudy && (
+            <Link
+              href={`/projects/${project.id}`}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "7px",
+                padding: "9px 16px", borderRadius: "12px",
+                background: `linear-gradient(135deg, ${c.accent}, #8b5cf6)`,
+                color: "#fff", fontSize: "13px", fontWeight: 600,
+                textDecoration: "none", boxShadow: `0 0 20px ${c.glow}`,
+                fontFamily: "var(--font-body)",
+              }}
+            >
+              <FiBookOpen size={14} /> Case Study
+            </Link>
+          )}
 
           {project.repo && (
             <a
@@ -246,10 +249,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     >
       <div style={{
         borderRadius: "20px",
-        border: `1px solid ${hovered ? c.border : "rgba(255,255,255,0.06)"}`,
-        background: "rgba(10,10,20,0.85)",
+        border: `1px solid ${hovered ? c.border : "var(--c-border)"}`,
+        background: "var(--bg-card)",
         overflow: "hidden",
-        boxShadow: hovered ? `0 24px 60px rgba(0,0,0,0.5), 0 0 40px ${c.glow}` : "0 4px 24px rgba(0,0,0,0.3)",
+        boxShadow: hovered ? `var(--shadow-card), 0 0 40px ${c.glow}` : "var(--shadow-soft)",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
         position: "relative",
         backdropFilter: "blur(12px)",
@@ -307,7 +310,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         {/* content */}
         <div style={{ padding: "18px 20px 20px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "8px", gap: "8px" }}>
-            <h3 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "17px", fontWeight: 700, color: "#f8fafc", margin: 0, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
+            <h3 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "17px", fontWeight: 700, color: "var(--c-text-primary)", margin: 0, letterSpacing: "-0.02em", lineHeight: 1.2 }}>
               {project.name}
             </h3>
             <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "9px", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: c.accent, padding: "3px 8px", borderRadius: "6px", background: c.dim, border: `1px solid ${c.border}`, flexShrink: 0, whiteSpace: "nowrap" }}>
@@ -315,7 +318,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             </span>
           </div>
 
-          <p style={{ fontFamily: "var(--font-body)", fontSize: "13px", lineHeight: 1.65, color: "rgba(255,255,255,0.5)", margin: "0 0 14px" }}>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: "13px", lineHeight: 1.65, color: "var(--c-text-secondary)", margin: "0 0 14px" }}>
             {project.description}
           </p>
 
@@ -325,9 +328,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 600,
                 letterSpacing: "0.04em", textTransform: "uppercase",
                 padding: "3px 9px", borderRadius: "6px",
-                border: `1px solid ${hovered ? c.border : "rgba(255,255,255,0.07)"}`,
-                background: hovered ? c.dim : "rgba(255,255,255,0.03)",
-                color: hovered ? c.accent : "rgba(255,255,255,0.4)",
+                border: `1px solid ${hovered ? c.border : "var(--c-border)"}`,
+                background: hovered ? c.dim : "var(--bg-glass)",
+                color: hovered ? c.accent : "var(--c-text-muted)",
                 transition: "all 0.25s ease",
               }}>
                 {tag}
@@ -347,7 +350,7 @@ const Projects = () => {
   const ref    = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const projects: Project[] = ((projectsData.projects as any) || []).slice().sort((a: Project, b: Project) => {
+  const projects: Project[] = (projectsData.projects as Project[]).slice().sort((a: Project, b: Project) => {
     const ap = typeof a.priority === "number" ? a.priority : 999;
     const bp = typeof b.priority === "number" ? b.priority : 999;
     if (ap !== bp) return ap - bp;
@@ -378,24 +381,24 @@ const Projects = () => {
           </div>
 
           <h2 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(36px,5vw,60px)", fontWeight: 700, letterSpacing: "-0.04em", margin: "0 0 16px", lineHeight: 1.05 }}>
-            <span style={{ color: "#f8fafc" }}>What I&apos;ve </span>
+            <span style={{ color: "var(--c-text-primary)" }}>What I&apos;ve </span>
             <span style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #f472b6)", backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent" }}>Built</span>
           </h2>
-          <p style={{ fontFamily: "var(--font-body)", fontSize: "16px", color: "rgba(255,255,255,0.5)", maxWidth: "500px", margin: "0 auto 28px", lineHeight: 1.7 }}>
+          <p style={{ fontFamily: "var(--font-body)", fontSize: "16px", color: "var(--c-text-secondary)", maxWidth: "500px", margin: "0 auto 28px", lineHeight: 1.7 }}>
             Production-grade applications — React frontends, Java Spring Boot backends, REST APIs &amp; blockchain DApps.
           </p>
 
-          <div style={{ display: "inline-flex", alignItems: "center", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", borderRadius: "9999px", padding: "12px 28px", gap: "24px" } as any}>
+          <div style={{ display: "inline-flex", alignItems: "center", background: "var(--bg-glass)", border: "1px solid var(--c-border)", borderRadius: "9999px", padding: "12px 28px", gap: "24px", boxShadow: "var(--shadow-soft)" } as any}>
             {[
               { n: projects.length,                              l: "Projects" },
               { n: projects.filter(p => p.featured).length,     l: "Featured" },
               { n: techs.length,                                 l: "Technologies" },
             ].map((s, i) => (
               <span key={s.l} style={{ display: "flex", alignItems: "center", gap: i > 0 ? "24px" : "0" }}>
-                {i > 0 && <span style={{ width: 1, height: 28, background: "rgba(255,255,255,0.08)", display: "inline-block", marginRight: "24px" }} />}
+                {i > 0 && <span style={{ width: 1, height: 28, background: "var(--c-border)", display: "inline-block", marginRight: "24px" }} />}
                 <span style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
                   <span style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "18px", fontWeight: 700, background: "linear-gradient(135deg, #6366f1, #8b5cf6)", backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent" }}>{s.n}</span>
-                  <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)" }}>{s.l}</span>
+                  <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--c-text-muted)" }}>{s.l}</span>
                 </span>
               </span>
             ))}

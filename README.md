@@ -1,93 +1,55 @@
 # Portfolio
 
-A modern, responsive portfolio website showcasing projects with animations and interactive UI components.
+A polished, production-minded Next.js portfolio for a full-stack developer, with a custom visual system, animated experiences, and deep project case studies.
 
 ## Tech Stack
 
-- **Framework**: Next.js 14.1.0 with App Router
-- **Frontend**: React 18 with Framer Motion animations
-- **Styling**: Tailwind CSS with CSS Modules
-- **Email**: EmailJS and Nodemailer integration
-- **Internationalization**: i18next
-- **UI Components**: Material-UI icons
-- **Deployment**: Vercel
+- Framework: Next.js 15.5.19 with the App Router
+- UI: React 18, Framer Motion, React Icons
+- Styling: Tailwind CSS with global CSS and CSS modules
+- Backend: Next.js API routes with Nodemailer for the contact form
+- Testing: Jest + Testing Library, with Playwright scaffolding for E2E smoke tests
+- Deployment: Vercel-ready, Dockerized for local container builds
 
-## Project Features
+## What makes this repo different
 
-- ✨ Smooth animations and transitions using Framer Motion
-- 📱 Fully responsive design with Tailwind CSS
-- 🎨 Modern glass morphism and 3D UI effects
-- ✉️ Contact form with email notifications
-- 🔄 Project management system with single JSON source
-- 🌍 Multi-language support (i18n)
-- 🚀 Optimized for performance
+The case-study system is the differentiator. Each featured project can surface a deep narrative page with lifecycle diagrams, boundary decisions, and failure-analysis content, rather than just a surface-level project card.
 
-## Recent Improvements
+## Highlights
 
-- **Accessibility:** Added focus-visible outlines and improved contrast for better WCAG compliance.
-- **SEO:** Included JSON‑LD Person schema in `layout.jsx` for richer search results.
-- **Performance:** Implemented `prefers-reduced-motion` media query to disable background animations for users who prefer reduced motion.
+- Responsive, animated portfolio shell with a strong visual identity
+- Accessible contact form with rate limiting, honeypot protection, and HTML escaping
+- GitHub profile API route that aggregates language and commit activity data
+- A maintainable project registry with case-study content separated from the project grid data
 
-## Getting Started
-
-### Development
+## Getting started
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:4000](http://localhost:4000) to see your portfolio.
+Open http://localhost:4000 to view the site locally.
 
-### Build for Production
+## Production checks
 
 ```bash
 npm run build
-npm start
+npm run lint
+npx tsc --noEmit
+npm test -- --coverage
 ```
 
-## Project Management
+## Environment variables
 
-Manage projects using the provided CLI script:
-
-```bash
-# List all projects
-node scripts/manage-projects.js list
-
-# Add a new project
-node scripts/manage-projects.js add my-project
-
-# Update a project
-node scripts/manage-projects.js update my-project priority=1 featured=true
-
-# Delete a project
-node scripts/manage-projects.js delete my-project
-
-# Validate project data
-node scripts/manage-projects.js validate
-
-# View statistics
-node scripts/manage-projects.js stats
-```
-
-All project data is stored in `src/utils/projects/index.json`.
-
-## Environment Variables
-
-Create a `.env.local` file with:
+Create a .env.local file with:
 
 ```env
-# Use either GMAIL_USER / GMAIL_PASSWORD or EMAIL_USER / EMAIL_PASS
 GMAIL_USER=your_email@gmail.com
 GMAIL_PASSWORD=your_app_password
 EMAIL_TO=your_email@gmail.com
 ```
 
-## Deployment on Vercel
+## Project data
 
-1. Push your code to GitHub
-2. Connect your GitHub repository to Vercel
-3. Vercel will auto-detect Next.js configuration
-4. Deploy with a single click
-
-Visit [Vercel Dashboard](https://vercel.com/dashboard) to manage your deployments.
+Project metadata lives in src/utils/projects/index.json, while case-study content lives under src/utils/caseStudies/.

@@ -16,6 +16,36 @@
       "status": "in-progress"
     },
     {
+      "id": "cpsync",
+      "name": "CP Sync Tracker",
+      "type": "Full Stack · Spring Boot + React",
+      "repo": "https://github.com/ABHINAVX03/CPSync",
+      "deploy": null,
+      "image": "/projects/project2.png",
+      "description": "Codeforces sync tracker that normalizes problem updates, deduplicates external submissions, and surfaces them in a personal dashboard.",
+      "tags": ["Java", "Spring Boot", "React", "OAuth2", "PostgreSQL"],
+      "color": "violet",
+      "priority": 2,
+      "featured": true,
+      "year": 2026,
+      "status": "in-progress"
+    },
+    {
+      "id": "distributed-reservation-system",
+      "name": "Distributed Reservation System",
+      "type": "Backend · Spring Boot + Redis + Kafka",
+      "repo": "https://github.com/ABHINAVX03/Distributed-Reservation-System",
+      "deploy": null,
+      "image": "/projects/project3.png",
+      "description": "Distributed reservation service that uses Redis for short-lived availability locks and Kafka for durable booking event propagation.",
+      "tags": ["Java", "Spring Boot", "Redis", "Kafka", "AWS"],
+      "color": "emerald",
+      "priority": 3,
+      "featured": true,
+      "year": 2026,
+      "status": "in-progress"
+    },
+    {
       "id": "travel-world",
       "name": "Travel World",
       "type": "Full Stack · MERN",
@@ -25,7 +55,7 @@
       "description": "MERN travel booking app with JWT auth, bcrypt-secured accounts, package discovery, booking flows, and admin CRUD controls.",
       "tags": ["MongoDB", "Express.js", "React", "Node.js", "JWT"],
       "color": "violet",
-      "priority": 2,
+      "priority": 4,
       "featured": true,
       "year": 2025,
       "status": "completed"

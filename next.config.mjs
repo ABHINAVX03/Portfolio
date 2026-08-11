@@ -14,6 +14,10 @@ const csp = `
 `;
 
 const nextConfig = {
+  output: "standalone",
+  experimental: {
+    optimizePackageImports: ["framer-motion", "react-icons"],
+  },
   // Image optimization
   images: {
     formats: ["image/webp", "image/avif"],
@@ -80,6 +84,7 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   reactStrictMode: true,
   trailingSlash: false,
+  poweredByHeader: false,
 };
 
 export default nextConfig;

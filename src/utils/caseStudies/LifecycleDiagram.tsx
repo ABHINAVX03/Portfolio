@@ -27,12 +27,12 @@ export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) 
       padding: "32px 28px",
       borderRadius: 18,
       border: "1px solid rgba(99,102,241,0.18)",
-      background: "rgba(10,10,20,0.7)",
+      background: "var(--bg-card)",
       overflowX: "auto",
     }}>
       <p style={{
         fontFamily: "var(--font-jetbrains-mono)", fontSize: 10, fontWeight: 700,
-        letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,0.4)",
+        letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-text-muted)",
         margin: "0 0 24px",
       }}>
         Request lifecycle — one ride, in order
@@ -42,7 +42,7 @@ export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) 
         aria-label="Diagram showing the sequence of a ride request: rider requests, system matches a driver, driver accepts, trip runs, fare is calculated, fare is settled. Each step labeled with the service that owns it.">
         {/* connecting spine */}
         <line x1={lineX} y1={12} x2={lineX} y2={height - 12}
-          stroke="rgba(255,255,255,0.1)" strokeWidth={2} />
+          stroke="var(--c-border)" strokeWidth={2} />
 
         {steps.map((step, i) => {
           const cy = 12 + i * ROW_H + ROW_H / 2 - ROW_H / 2 + 24;
@@ -50,14 +50,14 @@ export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) 
           return (
             <g key={step.id}>
               {/* node */}
-              <circle cx={lineX} cy={cy} r={NODE_R} fill="#050508" stroke={color} strokeWidth={2.5} />
+              <circle cx={lineX} cy={cy} r={NODE_R} fill="var(--bg-elevated)" stroke={color} strokeWidth={2.5} />
               {step.isFailurePoint && (
                 <circle cx={lineX} cy={cy} r={NODE_R + 5} fill="none" stroke={color} strokeWidth={1} opacity={0.35} />
               )}
 
               {/* step label */}
               <text x={textX} y={cy - 12} fontFamily="var(--font-space-grotesk)" fontSize={15}
-                fontWeight={700} fill="#f8fafc">
+                fontWeight={700} fill="var(--c-text-primary)">
                 {step.label}
               </text>
 
@@ -73,7 +73,7 @@ export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) 
               <foreignObject x={textX} y={cy + 16} width={width - textX - 16} height={ROW_H - 40}>
                 <div style={{
                   fontFamily: "var(--font-body)", fontSize: 12.5, lineHeight: 1.55,
-                  color: "rgba(255,255,255,0.5)",
+                  color: "var(--c-text-secondary)",
                 }}>
                   {step.detail}
                 </div>
@@ -85,11 +85,11 @@ export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) 
 
       {/* legend */}
       <div style={{ display: "flex", gap: 20, marginTop: 16, flexWrap: "wrap" }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "var(--c-text-muted)" }}>
           <span style={{ width: 9, height: 9, borderRadius: "50%", border: `2px solid ${ACCENT}`, display: "inline-block" }} />
           standard step
         </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "rgba(255,255,255,0.4)" }}>
+        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "var(--c-text-muted)" }}>
           <span style={{ width: 9, height: 9, borderRadius: "50%", border: `2px solid ${AMBER}`, display: "inline-block" }} />
           boundary that mattered
         </span>

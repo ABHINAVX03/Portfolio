@@ -9,7 +9,15 @@
 
 import { CaseStudyContent } from "./types";
 import { uberRidePlatform } from "./uber-ride-platform";
+import { portfolioPlatform } from "./portfolio-platform";
+import { experienceSystem } from "./experience-system";
+import { cpsync } from "./cpsync";
+import { distributedReservationSystem } from "./distributed-reservation-system";
 
 export const caseStudyRegistry: Record<string, CaseStudyContent> = {
   "uber-ride-platform": uberRidePlatform,
+  "portfolio-platform": portfolioPlatform,
+  "experience-system": experienceSystem,
+  cpsync,
+  "distributed-reservation-system": distributedReservationSystem,
 };

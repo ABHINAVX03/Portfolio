@@ -174,3 +174,35 @@
   align-items: center;
   gap: 8px;
 }
+
+:global(html[data-theme="light"]) .pill {
+  color: #3730a3;
+}
+
+:global(html[data-theme="light"]) .pillViolet {
+  color: #6d28d9;
+}
+
+:global(html[data-theme="light"]) .pillRose {
+  color: #be185d;
+}
+
+:global(html[data-theme="light"]) .socialLink,
+:global(html[data-theme="light"]) .certRow {
+  border-color: var(--c-border);
+  background: var(--bg-subtle);
+  color: var(--c-text-secondary);
+}
+
+:global(html[data-theme="light"]) .socialLink:hover {
+  color: var(--c-text-primary);
+}
+
+:global(html[data-theme="light"]) .githubLink {
+  color: #3730a3;
+}
+
+:global(html[data-theme="light"]) .profileRow {
+  border-color: var(--c-border);
+  background: var(--bg-subtle);
+}

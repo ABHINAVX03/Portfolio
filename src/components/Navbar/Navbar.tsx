@@ -6,10 +6,12 @@ import { useEffect, useState } from "react";
 import { FiDownload, FiMenu, FiX } from "react-icons/fi";
 
 const NAV_ITEMS = [
-  { label: "Home",     href: "#home" },
+  { label: "Home", href: "#home" },
   { label: "Projects", href: "#projects" },
-  { label: "About",    href: "#about" },
-  { label: "Contact",  href: "#contact" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
+  { label: "Blog", href: "/blog" },
+  { label: "Now", href: "/now" },
 ];
 
 const Navbar = () => {
@@ -75,15 +77,15 @@ const Navbar = () => {
             maxWidth: "900px",
             padding: "10px 16px",
             borderRadius: "9999px",
-            border: `1px solid ${isScrolled ? "rgba(99,102,241,0.2)" : "rgba(255,255,255,0.06)"}`,
+            border: `1px solid ${isScrolled ? "var(--c-border-glow)" : "var(--c-border)"}`,
             background: isScrolled
-              ? "rgba(5, 5, 8, 0.85)"
-              : "rgba(5, 5, 8, 0.4)",
+              ? "var(--bg-card)"
+              : "var(--bg-glass)",
             backdropFilter: "blur(24px)",
             WebkitBackdropFilter: "blur(24px)",
             boxShadow: isScrolled
-              ? "0 4px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(99,102,241,0.08)"
-              : "none",
+              ? "var(--shadow-card)"
+              : "var(--shadow-soft)",
             transition: "all 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
           }}
         >
@@ -160,6 +162,7 @@ const Navbar = () => {
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    aria-label={item.label}
                     style={{
                       position: "relative",
                       display: "flex",
@@ -170,22 +173,22 @@ const Navbar = () => {
                       fontFamily: "var(--font-body)",
                       fontSize: "13px",
                       fontWeight: 500,
-                      color: isActive ? "#fff" : "rgba(255,255,255,0.6)",
-                      background: isActive ? "rgba(99,102,241,0.2)" : "transparent",
-                      border: isActive ? "1px solid rgba(99,102,241,0.35)" : "1px solid transparent",
+                      color: isActive ? "var(--c-text-primary)" : "var(--c-text-secondary)",
+                      background: isActive ? "var(--c-primary-dim)" : "transparent",
+                      border: isActive ? "1px solid var(--c-border-glow)" : "1px solid transparent",
                       transition: "all 0.25s ease",
                       textDecoration: "none",
                       letterSpacing: "0.01em",
                     }}
                     onMouseEnter={(e) => {
                       if (!isActive) {
-                        e.currentTarget.style.color = "#fff";
-                        e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                        e.currentTarget.style.color = "var(--c-text-primary)";
+                        e.currentTarget.style.background = "var(--c-primary-dim)";
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isActive) {
-                        e.currentTarget.style.color = "rgba(255,255,255,0.6)";
+                        e.currentTarget.style.color = "var(--c-text-secondary)";
                         e.currentTarget.style.background = "transparent";
                       }
                     }}

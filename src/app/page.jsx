@@ -7,7 +7,7 @@ import ScrollSection from "@/components/ScrollSection/ScrollSection";
 
 export default function Home() {
   return (
-    <div>
+    <div className="min-h-screen bg-transparent text-[var(--c-text-primary)]">
       {/* CSS-only animated background — zero JS, zero lag */}
       <div className="bg-grid" aria-hidden="true" />
 

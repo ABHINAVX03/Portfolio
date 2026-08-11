@@ -16,6 +16,11 @@ import BoundaryDecisionBlock from "@/utils/caseStudies/BoundaryDecisionBlock";
 import FailureScenarioCard from "@/utils/caseStudies/FailureScenarioCard";
 import projectsData from "@/utils/projects/index.json";
 
+interface Project {
+  id: string;
+  name: string;
+}
+
 // ✅ FIX: params is a Promise in Next.js 15+
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -31,7 +36,7 @@ export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const content = caseStudyRegistry[slug];
   if (!content) return {};
-  const project = (projectsData.projects as any[]).find((p) => p.id === slug);
+  const project = (projectsData.projects as Project[]).find((p) => p.id === slug);
   return {
     title: `${project?.name ?? content.slug} — Case Study | Abhinav Gupta`,
     description: content.hero.claim,
@@ -44,7 +49,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const content = caseStudyRegistry[slug];
   if (!content) notFound();
 
-  const project = (projectsData.projects as any[]).find((p) => p.id === slug);
+  const project = (projectsData.projects as Project[]).find((p) => p.id === slug);
 
   const hasFailureContent =
     content.failures.length > 0 &&
@@ -71,7 +76,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             gap: 6,
             fontFamily: "var(--font-jetbrains-mono)",
             fontSize: 12,
-            color: "rgba(255,255,255,0.5)",
+            color: "var(--c-text-subtle)",
             textDecoration: "none",
             marginBottom: 32,
           }}
@@ -101,7 +106,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               fontWeight: 700,
               letterSpacing: "-0.03em",
               lineHeight: 1.15,
-              color: "#f8fafc",
+              color: "var(--c-text-primary)",
               margin: "0 0 20px",
             }}
           >
@@ -112,7 +117,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               fontFamily: "var(--font-body)",
               fontSize: 15,
               lineHeight: 1.7,
-              color: "rgba(255,255,255,0.55)",
+              color: "var(--c-text-secondary)",
               margin: 0,
               maxWidth: 640,
             }}
@@ -133,7 +138,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               fontFamily: "var(--font-space-grotesk)",
               fontSize: 22,
               fontWeight: 700,
-              color: "#f8fafc",
+              color: "var(--c-text-primary)",
               letterSpacing: "-0.02em",
               margin: "0 0 24px",
             }}
@@ -155,7 +160,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
                 fontFamily: "var(--font-space-grotesk)",
                 fontSize: 22,
                 fontWeight: 700,
-                color: "#f8fafc",
+                color: "var(--c-text-primary)",
                 letterSpacing: "-0.02em",
                 margin: "0 0 24px",
               }}
@@ -175,8 +180,8 @@ export default async function CaseStudyPage({ params }: PageProps) {
           style={{
             padding: "28px 32px",
             borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.07)",
-            background: "rgba(10,10,20,0.7)",
+            border: "1px solid var(--c-border)",
+            background: "var(--bg-card)",
           }}
         >
           <div
@@ -213,7 +218,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
                         borderRadius: 8,
                         border: "1px solid rgba(99,102,241,0.25)",
                         background: "rgba(99,102,241,0.08)",
-                        color: "#c7d2fe",
+                        color: "var(--c-text-accent)",
                       }}
                     >
                       {item}
@@ -236,9 +241,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
                   gap: 7,
                   padding: "10px 18px",
                   borderRadius: 10,
-                  border: "1px solid rgba(255,255,255,0.1)",
-                  background: "rgba(255,255,255,0.05)",
-                  color: "#f8fafc",
+                  border: "1px solid var(--c-border)",
+                  background: "var(--bg-subtle)",
+                  color: "var(--c-text-primary)",
                   fontFamily: "var(--font-body)",
                   fontSize: 13,
                   fontWeight: 600,
@@ -260,7 +265,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
                   padding: "10px 18px",
                   borderRadius: 10,
                   background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  color: "#fff",
+                  color: "var(--c-on-accent)",
                   fontFamily: "var(--font-body)",
                   fontSize: 13,
                   fontWeight: 600,

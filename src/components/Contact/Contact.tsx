@@ -1,5 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { motion, useInView } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiMapPin, FiArrowRight } from "react-icons/fi";
 import { ToastContainer } from "react-toastify";
@@ -10,16 +11,16 @@ import { successNotify, errorNotify } from "@/utils/toastify.js";
 
 /* ── Design tokens ── */
 const T = {
-  accent:  "#6366f1",
-  violet:  "#8b5cf6",
-  rose:    "#f472b6",
-  emerald: "#34d399",
-  text:    "#f8fafc",
-  muted:   "rgba(255,255,255,0.5)",
-  border:  "rgba(255,255,255,0.07)",
-  cardBg:  "rgba(10,10,20,0.75)",
-  dim:     "rgba(99,102,241,0.08)",
-  dimBorder: "rgba(99,102,241,0.22)",
+  accent:  "var(--c-primary)",
+  violet:  "var(--c-violet)",
+  rose:    "var(--c-rose)",
+  emerald: "var(--c-emerald)",
+  text:    "var(--c-text-primary)",
+  muted:   "var(--c-text-secondary)",
+  border:  "var(--c-border)",
+  cardBg:  "var(--bg-card)",
+  dim:     "var(--c-primary-dim)",
+  dimBorder: "var(--c-border-glow)",
   mono:    "var(--font-jetbrains-mono)",
   sans:    "var(--font-space-grotesk)",
   body:    "var(--font-body)",
@@ -101,20 +102,37 @@ function Field({
 
 const Contact = () => {
   const ref = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
   const [isSending, setIsSending] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  useFocusTrap(formRef, true);
   const [formData, setFormData] = useState({
     user_name: "", user_email: "", message: "", company_url_confirm: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const next = { ...formData, [e.target.name]: e.target.value };
+    setFormData(next);
+    const result = formValidation(next);
+    if (result) {
+      setErrors({});
+      setStatus("idle");
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formValidation(formData)) return;
+    const validation = formValidation(formData);
+    if (!validation) {
+      setErrors({ form: "Please complete the required fields before sending." });
+      setStatus("error");
+      return;
+    }
+    setErrors({});
     setIsSending(true);
+    setStatus("idle");
     try {
       const response = await fetch("/api/send-email", {
         method: "POST",
@@ -124,13 +142,16 @@ const Contact = () => {
       const data = await response.json();
       if (response.ok && data.success) {
         setFormData({ user_name: "", user_email: "", message: "", company_url_confirm: "" });
+        setStatus("success");
         successNotify();
       } else {
         console.error("Email error:", data);
+        setStatus("error");
         errorNotify();
       }
     } catch (err) {
       console.error("Error sending email:", err);
+      setStatus("error");
       errorNotify();
     } finally {
       setIsSending(false);
@@ -299,7 +320,7 @@ const Contact = () => {
                 background: `linear-gradient(90deg, transparent, ${T.accent}, ${T.violet}, ${T.rose}, transparent)`,
               }} />
 
-              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              <form ref={formRef} onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }} aria-describedby="contact-status">
                 {/* honeypot */}
                 <input
                   type="text"
@@ -312,6 +333,8 @@ const Contact = () => {
                   style={{ position: "absolute", left: -9999, width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
                 />
 
+                {errors.form && <p id="contact-status" role="alert" style={{ color: "#fda4af", margin: 0 }}>{errors.form}</p>}
+                {status === "success" && <p id="contact-status" role="status" style={{ color: "#86efac", margin: 0 }}>Message sent — I will get back to you shortly.</p>}
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }} className="form-row">
                   <Field id="user_name" name="user_name" label="Name" placeholder="Your name" value={formData.user_name} onChange={handleChange} />
                   <Field id="user_email" name="user_email" label="Email" type="email" placeholder="your@email.com" value={formData.user_email} onChange={handleChange} />
