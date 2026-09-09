@@ -33,12 +33,12 @@
     {
       "id": "cp-sync-backend",
       "name": "CP Sync — Contest Aggregation & Calendar Sync Engine",
-      "type": "Backend · Java 21 + Spring Boot + Google Calendar API",
+      "type": "Full Stack · Java 21 + Spring Boot + React + Google Calendar API",
       "repo": "https://github.com/ABHINAVX03/cp-sync-backend-",
-      "deploy": null,
-      "image": "/projects/project2.png",
-      "description": "Automated contest aggregation engine built on Spring Boot that fetches upcoming competitive programming contests from LeetCode & Codeforces and synchronizes rounds directly to Google Calendar.",
-      "tags": ["Java 21", "Spring Boot", "Google Calendar API", "REST APIs", "AWS EC2", "Cache"],
+      "deploy": "https://cp-sync-frontend.vercel.app",
+      "image": "/projects/cpsync.png",
+      "description": "Contest aggregation engine and dashboard that fetches upcoming competitive programming rounds from Codeforces, LeetCode, CodeChef, and AtCoder and synchronizes them directly to Google Calendar.",
+      "tags": ["Java 21", "Spring Boot", "Google Calendar API", "React", "REST APIs", "AWS EC2"],
       "color": "violet",
       "priority": 3,
       "featured": true,
@@ -48,11 +48,11 @@
     {
       "id": "aapka-couch",
       "name": "AapkaCoach — AI-Powered Diet & Fitness Platform",
-      "type": "Full Stack · Next.js 16 + DeepSeek AI + Cashfree",
+      "type": "Full Stack · Next.js 16 + DeepSeek AI + Supabase + Cashfree",
       "repo": "https://github.com/ABHINAVX03/Aapka-Couch",
       "deploy": "https://aapka-couch.vercel.app",
-      "image": "/projects/project7.png",
-      "description": "AI-driven fitness and nutrition web app generating tailored 7-day Indian meal plans, workout splits, and body recomposition tracking with Cashfree payment gateway integration.",
+      "image": "/projects/aapkacoach.png",
+      "description": "AI-driven fitness and nutrition platform generating tailored 7-day Indian meal plans, workout splits, and body recomposition tracking with Cashfree payment gateway integration.",
       "tags": ["Next.js 16", "React 19", "DeepSeek AI", "Supabase", "Cashfree", "Tailwind CSS"],
       "color": "emerald",
       "priority": 4,
@@ -79,7 +79,7 @@
   "metadata": {
     "totalProjects": 5,
     "featuredProjects": 5,
-    "lastUpdated": "2026-09-09",
-    "version": "2.1.0"
+    "lastUpdated": "2026-09-10",
+    "version": "2.2.0"
   }
 }

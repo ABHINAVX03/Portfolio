@@ -288,26 +288,35 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             {String(index + 1).padStart(2, "0")}
           </div>
 
-          {project.type.includes("Blockchain") && (
+          {Boolean(caseStudyRegistry[project.id]) ? (
+            <div style={{ position: "absolute", top: "12px", left: "12px", padding: "4px 10px", borderRadius: "9999px", background: "rgba(99,102,241,0.25)", backdropFilter: "blur(8px)", border: "1px solid rgba(99,102,241,0.45)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, color: "#c7d2fe", letterSpacing: "0.08em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "5px" }}>
+              <FiBookOpen size={11} /> Case Study
+            </div>
+          ) : project.type.includes("Blockchain") ? (
             <div style={{ position: "absolute", top: "12px", left: "12px", padding: "4px 10px", borderRadius: "9999px", background: "rgba(52,211,153,0.15)", backdropFilter: "blur(8px)", border: "1px solid rgba(52,211,153,0.35)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, color: "#34d399", letterSpacing: "0.08em", textTransform: "uppercase" }}>
               Web3
             </div>
-          )}
+          ) : null}
 
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 8 }}
             transition={{ duration: 0.2 }}
-            style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}
+            style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", flexWrap: "wrap", padding: "12px" }}
           >
+            {Boolean(caseStudyRegistry[project.id]) && (
+              <Link href={`/projects/${project.id}`} style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 14px", borderRadius: "10px", background: "linear-gradient(135deg, #6366f1, #8b5cf6)", color: "#fff", fontSize: "12px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)", boxShadow: "0 0 16px rgba(99,102,241,0.4)" }}>
+                <FiBookOpen size={13} /> Case Study
+              </Link>
+            )}
             {project.repo && (
-              <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
-                <FiGithub size={14} /> Code
+              <a href={project.repo} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 14px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "12px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+                <FiGithub size={13} /> Code
               </a>
             )}
             {project.deploy && (
-              <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "9px 16px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "13px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
-                <FiExternalLink size={14} /> Live
+              <a href={project.deploy} target="_blank" rel="noopener noreferrer" style={{ display: "inline-flex", alignItems: "center", gap: "6px", padding: "8px 14px", borderRadius: "10px", background: "rgba(10,10,20,0.85)", backdropFilter: "blur(12px)", border: "1px solid rgba(255,255,255,0.15)", color: "#fff", fontSize: "12px", fontWeight: 600, textDecoration: "none", fontFamily: "var(--font-body)" }}>
+                <FiExternalLink size={13} /> Live
               </a>
             )}
           </motion.div>
