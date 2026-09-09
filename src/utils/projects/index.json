@@ -61,21 +61,6 @@
       "status": "completed"
     },
     {
-      "id": "travel-world",
-      "name": "Travel World",
-      "type": "Full Stack · MERN",
-      "repo": "https://github.com/ABHINAVX03/Travel_World",
-      "deploy": "https://traveling-world-client.vercel.app/",
-      "image": "/projects/project4.png",
-      "description": "MERN travel booking app with JWT auth, bcrypt-secured accounts, package discovery, booking flows, and admin CRUD controls.",
-      "tags": ["MongoDB", "Express.js", "React", "Node.js", "JWT"],
-      "color": "violet",
-      "priority": 5,
-      "featured": true,
-      "year": 2025,
-      "status": "completed"
-    },
-    {
       "id": "voting-dapp",
       "name": "Voting DApp",
       "type": "Blockchain · Web3",
@@ -85,16 +70,16 @@
       "description": "Voting DApp with Solidity contracts, MetaMask integration, on-chain vote recording, and admin controls for candidates and election timing.",
       "tags": ["React", "Express.js", "Solidity", "MetaMask", "Ganache"],
       "color": "emerald",
-      "priority": 6,
+      "priority": 5,
       "featured": true,
       "year": 2024,
       "status": "completed"
     }
   ],
   "metadata": {
-    "totalProjects": 6,
-    "featuredProjects": 6,
+    "totalProjects": 5,
+    "featuredProjects": 5,
     "lastUpdated": "2026-09-09",
-    "version": "2.0.0"
+    "version": "2.1.0"
   }
 }

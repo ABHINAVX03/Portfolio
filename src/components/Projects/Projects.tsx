@@ -46,6 +46,13 @@ function useTilt3D() {
   return { ref, rotX, rotY, onMouseMove, onMouseLeave };
 }
 
+const nexoraPoints = {
+  problem: "Scale concurrent graph traversals, real-time feeds, and async notifications without database connection starvation.",
+  arch: ["Java 21 Virtual Threads (Loom)", "Neo4j Graph Social Network", "Kafka Decoupled Event Streams", "AWS S3 + CloudFront Edge CDN"],
+  apis: ["1st/2nd-Degree Graph Traversal", "Event-Driven Activity Feeds", "WebSocket STOMP Messaging", "Single Active Session Token Revoke"],
+  stack: ["Java 21", "Spring Boot", "Kafka", "Neo4j", "PostgreSQL", "Redis", "AWS EC2", "Docker"],
+};
+
 const uberPoints = {
   problem: "Design a backend that coordinates riders, drivers, trips and fare calculation with clean service boundaries.",
   arch: ["Layered Spring Boot services", "REST controllers separate from business logic", "Dockerized for repeatable deploy"],
@@ -54,11 +61,10 @@ const uberPoints = {
 };
 
 // ── Flagship card ──────────────────────────────────────────────────────────────
-// FIX: Added "Case Study →" button so the page is actually reachable from the UI.
-// Previously there was no link to /projects/uber-ride-platform anywhere on the site.
 function FlagshipCard({ project }: { project: Project }) {
   const c = COLOR[project.color] || COLOR.primary;
   const hasCaseStudy = Boolean(caseStudyRegistry[project.id]);
+  const points = project.id === "nexora" ? nexoraPoints : uberPoints;
 
   return (
     <motion.div
@@ -110,10 +116,10 @@ function FlagshipCard({ project }: { project: Project }) {
         {/* 2×2 case panels */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
           {[
-            { label: "Problem",      content: uberPoints.problem, type: "text" },
-            { label: "Architecture", items: uberPoints.arch,      type: "list" },
-            { label: "Core APIs",    items: uberPoints.apis,      type: "pills" },
-            { label: "Tech Stack",   items: uberPoints.stack,     type: "pills" },
+            { label: "Problem",      content: points.problem, type: "text" },
+            { label: "Architecture", items: points.arch,      type: "list" },
+            { label: "Core Capabilities", items: points.apis, type: "pills" },
+            { label: "Tech Stack",   items: points.stack,     type: "pills" },
           ].map((panel) => (
             <div key={panel.label} style={{
               padding: "14px 16px",
@@ -357,8 +363,8 @@ const Projects = () => {
     return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
   });
 
-  const flagship = projects.find((p) => p.id === "uber-ride-platform");
-  const cards    = projects.filter((p) => p.id !== "uber-ride-platform");
+  const flagship = projects.find((p) => p.id === "nexora") || projects[0];
+  const cards    = projects.filter((p) => p.id !== (flagship?.id || "nexora"));
   const techs    = [...new Set(projects.flatMap((p) => p.tags))];
 
   return (
