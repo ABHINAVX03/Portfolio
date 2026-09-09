@@ -73,7 +73,7 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
       transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 420px",
+        gridTemplateColumns: "1.1fr 1fr",
         gap: "0",
         borderRadius: "24px",
         border: `1px solid ${c.border}`,
@@ -155,7 +155,7 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
           ))}
         </div>
 
-        {/* ✅ FIX: action links — added "Case Study" button */}
+        {/* action links */}
         <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
           {hasCaseStudy && (
             <Link
@@ -212,27 +212,83 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
               <FiExternalLink size={14} /> Live Demo
             </a>
           )}
-
-          <a
-            href="#contact"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "7px",
-              padding: "9px 16px", borderRadius: "12px",
-              border: "1px solid rgba(255,255,255,0.1)", background: "rgba(255,255,255,0.05)",
-              color: "#f8fafc", fontSize: "13px", fontWeight: 600,
-              textDecoration: "none", fontFamily: "var(--font-body)",
-            }}
-          >
-            Hire Me <FiArrowRight size={14} />
-          </a>
         </div>
       </div>
 
-      {/* RIGHT — image */}
-      <div className="flagship-image-col" style={{ position: "relative", overflow: "hidden" }}>
-        <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover" }} sizes="420px" />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(10,10,20,0.4), transparent)" }} />
-        <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
+      {/* RIGHT — image in browser mockup */}
+      <div
+        className="flagship-image-col"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "32px 28px",
+          background: "radial-gradient(ellipse at center, rgba(99,102,241,0.06) 0%, rgba(8,8,16,0.6) 100%)",
+          borderLeft: "1px solid rgba(255,255,255,0.06)",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,0.12)",
+            background: "#080812",
+            overflow: "hidden",
+            boxShadow: "0 20px 48px rgba(0,0,0,0.7), 0 0 32px rgba(99,102,241,0.12)",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Browser Top Chrome */}
+          <div
+            style={{
+              height: "30px",
+              background: "rgba(255,255,255,0.04)",
+              borderBottom: "1px solid rgba(255,255,255,0.08)",
+              display: "flex",
+              alignItems: "center",
+              padding: "0 12px",
+              gap: "6px",
+            }}
+          >
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ff5f56" }} />
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#ffbd2e" }} />
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#27c93f" }} />
+            <div
+              style={{
+                margin: "0 auto",
+                padding: "2px 14px",
+                borderRadius: "9999px",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.08)",
+                fontFamily: "var(--font-jetbrains-mono)",
+                fontSize: "10px",
+                color: "rgba(255,255,255,0.55)",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {project.deploy
+                ? project.deploy.replace(/^https?:\/\//, "").replace(/\/$/, "")
+                : project.repo?.replace(/^https?:\/\/github.com\//, "") || "case-study.dev"}
+            </div>
+          </div>
+
+          {/* Screenshot Container - Full Aspect Ratio Without Zoom Distortion */}
+          <div style={{ position: "relative", width: "100%", aspectRatio: "16 / 10", background: "#05050a" }}>
+            <Image
+              src={project.image}
+              alt={project.name}
+              fill
+              style={{ objectFit: "contain" }}
+              sizes="(max-width: 900px) 100vw, 520px"
+              priority
+            />
+          </div>
+        </div>
+
+        {/* Feature Badges below the window */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center", marginTop: "18px" }}>
           {(project.id === "nexora"
             ? ["Java 21 Virtual Threads", "Neo4j Social Graph", "Apache Kafka Streams"]
             : ["Driver Matching", "Fare Calculation Engine", "Spring Boot REST APIs"]
@@ -240,17 +296,16 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
             <span
               key={t}
               style={{
-                padding: "5px 10px",
+                padding: "5px 12px",
                 borderRadius: "9999px",
-                background: "rgba(0,0,0,0.75)",
-                backdropFilter: "blur(8px)",
-                color: "#fff",
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+                color: "var(--c-text-secondary)",
                 fontSize: "10px",
                 fontFamily: "var(--font-jetbrains-mono)",
-                fontWeight: 700,
-                letterSpacing: "0.06em",
+                fontWeight: 600,
+                letterSpacing: "0.04em",
                 textTransform: "uppercase",
-                border: "1px solid rgba(255,255,255,0.15)",
               }}
             >
               {t}
@@ -462,16 +517,16 @@ const Projects = () => {
       </div>
 
       <style>{`
-        .flagship-image-col { min-height: 400px; }
         @media (max-width: 900px) {
           .flagship-grid { grid-template-columns: 1fr !important; }
-          .flagship-image-col { min-height: 260px !important; }
+          .flagship-image-col {
+            border-left: none !important;
+            border-top: 1px solid rgba(255,255,255,0.06) !important;
+            padding: 24px 16px !important;
+          }
         }
         @media (max-width: 600px) {
           .projects-masonry { grid-template-columns: 1fr !important; }
-        }
-        @media (max-width: 480px) {
-          .flagship-image-col { min-height: 220px !important; }
         }
       `}</style>
     </section>

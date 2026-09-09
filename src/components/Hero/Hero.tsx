@@ -9,12 +9,26 @@ import socials from "@/utils/socials";
 import AnimatedTagline from "./AnimatedTagline";
 import StatsWidget from "./StatsWidget";
 
-const ROLES = ["Full Stack Developer", "Java Spring Boot Engineer", "React Developer", "Problem Solver"];
-const SKILLS = ["React", "Next.js", "TypeScript", "Java", "Spring Boot", "PostgreSQL"];
+const ROLES = [
+  "Distributed Systems Engineer",
+  "Java 21 & Spring Boot Architect",
+  "Full Stack Web Engineer",
+  "High-Concurrency Problem Solver",
+];
+const SKILLS = [
+  "Java 21 Virtual Threads",
+  "Spring Boot",
+  "Apache Kafka",
+  "Neo4j",
+  "React",
+  "Next.js",
+  "PostgreSQL",
+  "AWS",
+];
 const STATS = [
   { value: "300+", label: "DSA Solved" },
   { value: "8.51", label: "CGPA" },
-  { value: "8",    label: "Projects" },
+  { value: "5",    label: "Core Projects" },
   { value: "1",    label: "Internship" },
 ];
 
@@ -76,15 +90,16 @@ const Hero = () => {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  const codeSnippet = useMemo(() => `class Developer {
-  name    = "Abhinav Gupta";
-  role    = "Full Stack";
-  gpa     = 8.51;
-  stack   = [
-    "React", "Next.js",
-    "Spring Boot", "PostgreSQL",
+  const codeSnippet = useMemo(() => `class Engineer {
+  name     = "Abhinav Gupta";
+  role     = "Distributed Systems & Backend";
+  degree   = "MCA · IIIT Vadodara (8.51)";
+  stack    = [
+    "Java 21 Loom", "Spring Boot",
+    "Kafka", "Neo4j", "PostgreSQL",
+    "Redis", "React", "AWS CloudFront"
   ];
-  status  = "open_to_work";
+  flagship = "Nexora (100k+ Concurrency)";
 }`, []);
 
   return (

@@ -65,20 +65,48 @@ export async function GET() {
     ],
     skills: [
       {
-        name: "Languages",
-        keywords: ["C", "C++", "Java", "Python", "JavaScript", "TypeScript", "Solidity"]
+        name: "Backend & Distributed Systems",
+        keywords: [
+          "Java 21 (Virtual Threads)",
+          "Spring Boot 3.3+",
+          "Spring Cloud Gateway",
+          "Apache Kafka",
+          "Microservices",
+          "Node.js",
+          "Express.js",
+          "REST APIs",
+          "WebSocket (STOMP)"
+        ]
       },
       {
-        name: "Backend & Database",
-        keywords: ["Node.js", "Express.js", "Spring Boot", "MongoDB", "PostgreSQL", "REST APIs"]
+        name: "Databases & Storage",
+        keywords: [
+          "PostgreSQL",
+          "Neo4j (Graph DB)",
+          "Redis (Cache & Rate Limiting)",
+          "MongoDB",
+          "Supabase"
+        ]
+      },
+      {
+        name: "Cloud & DevOps",
+        keywords: [
+          "AWS (EC2, S3, CloudFront)",
+          "Docker",
+          "Kubernetes",
+          "CI/CD (GitHub Actions)",
+          "Git / GitHub"
+        ]
       },
       {
         name: "Frontend",
-        keywords: ["HTML", "CSS", "Tailwind CSS", "React.js", "Next.js", "Bootstrap"]
-      },
-      {
-        name: "Tools & Infra",
-        keywords: ["Docker", "JWT", "Web3.js", "MetaMask", "Ganache", "Truffle", "GitHub"]
+        keywords: [
+          "React.js 18/19",
+          "Next.js 15 (App Router)",
+          "TypeScript",
+          "Tailwind CSS",
+          "HTML5 / CSS3"
+        ]
       }
     ],
     projects: projectsData.projects.map(p => ({

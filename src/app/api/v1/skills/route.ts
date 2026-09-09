@@ -3,32 +3,76 @@ import { NextResponse } from "next/server";
 const skillsData = {
   categories: [
     {
-      category: "Languages",
-      items: ["C", "C++", "Java", "Python", "JavaScript", "TypeScript", "Solidity"]
+      category: "Backend & Distributed Systems",
+      items: [
+        "Java 21 (Virtual Threads)",
+        "Spring Boot 3.3+",
+        "Spring Cloud Gateway",
+        "Apache Kafka",
+        "Microservices",
+        "Node.js",
+        "Express.js",
+        "REST APIs",
+        "WebSocket (STOMP)"
+      ]
     },
     {
-      category: "Frontend",
-      items: ["HTML", "CSS", "Tailwind CSS", "React.js", "Next.js", "Bootstrap"]
+      category: "Databases & In-Memory",
+      items: [
+        "PostgreSQL",
+        "Neo4j (Graph DB)",
+        "Redis (Cache & Rate Limiting)",
+        "MongoDB",
+        "Supabase",
+        "SQL"
+      ]
     },
     {
-      category: "Backend & Database",
-      items: ["Node.js", "Express.js", "Spring Boot", "MongoDB", "PostgreSQL", "REST APIs"]
+      category: "Frontend & Web Engineering",
+      items: [
+        "React.js 18/19",
+        "Next.js 15 (App Router)",
+        "TypeScript",
+        "JavaScript (ES6+)",
+        "Tailwind CSS",
+        "HTML5 / CSS3"
+      ]
     },
     {
-      category: "Tools & Infra",
-      items: ["Docker", "JWT", "Web3.js", "MetaMask", "Ganache", "Truffle", "GitHub"]
+      category: "Cloud, DevOps & Tools",
+      items: [
+        "AWS (EC2, S3, CloudFront)",
+        "Docker",
+        "Kubernetes",
+        "CI/CD (GitHub Actions)",
+        "Git / GitHub",
+        "Postman"
+      ]
+    },
+    {
+      category: "Languages & System Design",
+      items: [
+        "Java",
+        "C / C++",
+        "Python",
+        "Solidity",
+        "OOP & Design Patterns",
+        "Low-Level Design (LLD)",
+        "High-Level Design (HLD)",
+        "Data Structures & Algorithms"
+      ]
     }
   ],
   learningNow: [
-    "Kafka event-driven architecture",
-    "System design & HLD/LLD patterns",
-    "Advanced Next.js performance",
-    "Microservices observability"
+    "Distributed consensus algorithms (Raft)",
+    "Advanced Kubernetes cluster orchestration",
+    "High-throughput event sourcing architectures",
+    "Low-latency JVM memory tuning & profiling"
   ],
   buildingNow: [
-    "Backend notification pipeline prototype",
-    "System design case-study writeups",
-    "Consistent DSA grind routine"
+    "Nexora distributed graph recommendation enhancements",
+    "Real-time event streaming pipeline optimizations",
+    "High-concurrency benchmark suites & load tests"
   ],
   certifications: [
     "HackerRank Problem Solving",
