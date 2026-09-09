@@ -15,19 +15,19 @@ export default function Home() {
           scrolling page section, so it shouldn't be subject to depth fade */}
       <Navbar />
 
-      <ScrollSection id="home">
+      <ScrollSection>
         <Hero />
       </ScrollSection>
 
-      <ScrollSection id="projects">
+      <ScrollSection>
         <Projects />
       </ScrollSection>
 
-      <ScrollSection id="about">
+      <ScrollSection>
         <About />
       </ScrollSection>
 
-      <ScrollSection id="contact" intensity={0.6}>
+      <ScrollSection intensity={0.6}>
         <Contact />
       </ScrollSection>
     </div>

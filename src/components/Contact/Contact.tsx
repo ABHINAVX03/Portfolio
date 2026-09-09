@@ -1,6 +1,5 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { motion, useInView } from "framer-motion";
 import { FiGithub, FiLinkedin, FiMail, FiMapPin, FiArrowRight } from "react-icons/fi";
 import { ToastContainer } from "react-toastify";
@@ -107,7 +106,6 @@ const Contact = () => {
   const [isSending, setIsSending] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
-  useFocusTrap(formRef, true);
   const [formData, setFormData] = useState({
     user_name: "", user_email: "", message: "", company_url_confirm: "",
   });

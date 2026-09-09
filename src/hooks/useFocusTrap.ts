@@ -27,7 +27,7 @@ export function useFocusTrap<T extends HTMLElement>(ref: React.RefObject<T | nul
     };
 
     element.addEventListener("keydown", handleKeyDown);
-    first.focus();
+    first.focus({ preventScroll: true });
 
     return () => element.removeEventListener("keydown", handleKeyDown);
   }, [active, ref]);
