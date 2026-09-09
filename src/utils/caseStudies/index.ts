@@ -12,6 +12,7 @@ import { uberRidePlatform } from "./uber-ride-platform";
 import { portfolioPlatform } from "./portfolio-platform";
 import { experienceSystem } from "./experience-system";
 import { cpsync } from "./cpsync";
+import { aapkacoach } from "./aapkacoach";
 import { distributedReservationSystem } from "./distributed-reservation-system";
 import { nexora } from "./nexora";
 
@@ -22,5 +23,6 @@ export const caseStudyRegistry: Record<string, CaseStudyContent> = {
   "experience-system": experienceSystem,
   cpsync,
   "cp-sync-backend": cpsync,
+  "aapka-couch": aapkacoach,
   "distributed-reservation-system": distributedReservationSystem,
 };

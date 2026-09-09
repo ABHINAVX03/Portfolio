@@ -59,27 +59,12 @@
       "featured": true,
       "year": 2026,
       "status": "completed"
-    },
-    {
-      "id": "voting-dapp",
-      "name": "Voting DApp",
-      "type": "Blockchain · Web3",
-      "repo": "https://github.com/ABHINAVX03/Voting_Dapp",
-      "deploy": "https://votingbeta.netlify.app/",
-      "image": "/projects/project5.png",
-      "description": "Voting DApp with Solidity contracts, MetaMask integration, on-chain vote recording, and admin controls for candidates and election timing.",
-      "tags": ["React", "Express.js", "Solidity", "MetaMask", "Ganache"],
-      "color": "emerald",
-      "priority": 5,
-      "featured": true,
-      "year": 2024,
-      "status": "completed"
     }
   ],
   "metadata": {
-    "totalProjects": 5,
-    "featuredProjects": 5,
+    "totalProjects": 4,
+    "featuredProjects": 4,
     "lastUpdated": "2026-09-10",
-    "version": "2.2.0"
+    "version": "2.3.0"
   }
 }

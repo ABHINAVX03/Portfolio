@@ -5,6 +5,8 @@ import PageTransition from "@/components/PageTransition";
 import ThemeToggle from "@/components/ThemeToggle";
 import ScrollRestoration from "@/components/ScrollRestoration";
 import ResumeModal from "@/components/ResumeModal/ResumeModal";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   metadataBase: new URL("https://abhinavgupta.dev"),
@@ -87,6 +89,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </div>
         <PageTransition>{children}</PageTransition>
         <ResumeModal />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

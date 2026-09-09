@@ -60,11 +60,28 @@ const uberPoints = {
   stack: ["Java", "Spring Boot", "REST APIs", "Docker", "OOP"],
 };
 
+const cpsyncPoints = {
+  problem: "Synchronize multiple concurrent upstream coding contest platforms into a single normalized dashboard and Google Calendar.",
+  arch: ["Idempotent Calendar Sync", "Job Scheduling & Deduplication", "External API Rate Limiting", "Spring Boot Data JPA"],
+  apis: ["Codeforces/LeetCode Integrations", "Google Calendar OAuth2", "Contest CRUD & Aggregation", "Frontend React Dashboard"],
+  stack: ["Java 21", "Spring Boot", "Google Calendar API", "React", "PostgreSQL", "AWS EC2"],
+};
+
+const aapkacoachPoints = {
+  problem: "Generate highly personalized, localized Indian diet and fitness plans dynamically using AI while integrating seamless payment processing.",
+  arch: ["Next.js 16 App Router", "DeepSeek AI Generation Pipeline", "Supabase Row Level Security", "Cashfree Payment Webhooks"],
+  apis: ["AI Prompt Chaining", "Auth & State Sync", "Stripe/Cashfree Webhooks", "Edge Rendering & Caching"],
+  stack: ["Next.js 16", "React 19", "DeepSeek AI", "Supabase", "Cashfree", "Tailwind CSS"],
+};
+
 // ── Flagship card ──────────────────────────────────────────────────────────────
 function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project: Project; badgeLabel?: string }) {
   const c = COLOR[project.color] || COLOR.primary;
   const hasCaseStudy = Boolean(caseStudyRegistry[project.id]);
-  const points = project.id === "nexora" ? nexoraPoints : uberPoints;
+  const points = project.id === "nexora" ? nexoraPoints 
+               : project.id === "uber-ride-platform" ? uberPoints
+               : project.id === "cp-sync-backend" ? cpsyncPoints
+               : aapkacoachPoints;
 
   return (
     <motion.div
@@ -455,10 +472,7 @@ const Projects = () => {
     return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
   });
 
-  const nexoraFlagship = projects.find((p) => p.id === "nexora");
-  const uberFlagship   = projects.find((p) => p.id === "uber-ride-platform");
-  const cards          = projects.filter((p) => p.id !== "nexora" && p.id !== "uber-ride-platform");
-  const techs          = [...new Set(projects.flatMap((p) => p.tags))];
+  const techs = [...new Set(projects.flatMap((p) => p.tags))];
 
   return (
     <section id="projects" ref={ref} style={{ position: "relative", zIndex: 1, padding: "100px 0 80px" }}>
@@ -484,7 +498,7 @@ const Projects = () => {
             <span style={{ background: "linear-gradient(135deg, #6366f1, #8b5cf6, #f472b6)", backgroundClip: "text", WebkitBackgroundClip: "text", color: "transparent" }}>Built</span>
           </h2>
           <p style={{ fontFamily: "var(--font-body)", fontSize: "16px", color: "var(--c-text-secondary)", maxWidth: "500px", margin: "0 auto 28px", lineHeight: 1.7 }}>
-            Production-grade applications — React frontends, Java Spring Boot backends, REST APIs &amp; blockchain DApps.
+            Production-grade applications — React frontends, Java Spring Boot backends, REST APIs &amp; AI-driven platforms.
           </p>
 
           <div style={{ display: "inline-flex", alignItems: "center", background: "var(--bg-glass)", border: "1px solid var(--c-border)", borderRadius: "9999px", padding: "12px 28px", gap: "24px", boxShadow: "var(--shadow-soft)" } as any}>
@@ -506,13 +520,13 @@ const Projects = () => {
 
         {/* Flagships */}
         <div style={{ display: "flex", flexDirection: "column", gap: "36px", marginBottom: "48px" }}>
-          {nexoraFlagship && <FlagshipCard project={nexoraFlagship} badgeLabel="Flagship Case Study #1" />}
-          {uberFlagship && <FlagshipCard project={uberFlagship} badgeLabel="Flagship Case Study #2" />}
-        </div>
-
-        {/* Grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }} className="projects-masonry">
-          {cards.map((p, i) => <ProjectCard key={p.id} project={p} index={i} />)}
+          {projects.map((project, index) => (
+            <FlagshipCard 
+              key={project.id} 
+              project={project} 
+              badgeLabel={`Flagship Case Study #${index + 1}`} 
+            />
+          ))}
         </div>
       </div>
 
