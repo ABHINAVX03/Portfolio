@@ -113,11 +113,12 @@ const Contact = () => {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const next = { ...formData, [e.target.name]: e.target.value };
-    setFormData(next);
-    const result = formValidation(next, false);
-    if (result) {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors.form) {
       setErrors({});
+    }
+    if (status !== "idle") {
       setStatus("idle");
     }
   };
@@ -427,7 +428,7 @@ const Contact = () => {
         </div>
       </footer>
 
-      <ToastContainer theme="dark" position="bottom-right" />
+      <ToastContainer theme="dark" position="bottom-right" limit={1} autoClose={3000} />
 
       <style>{`
         @keyframes contactPulse {

@@ -10,16 +10,16 @@ interface FormData {
 }
 
 const formValidation = (formData: FormData, showToasts: boolean = true): boolean => {
-  if (
-    formData.user_name === "" ||
-    formData.user_email === "" ||
-    formData.message === ""
-  ) {
+  const name = formData.user_name?.trim() || "";
+  const email = formData.user_email?.trim() || "";
+  const message = formData.message?.trim() || "";
+
+  if (!name || !email || !message) {
     if (showToasts) warnNotify();
     return false;
   }
 
-  if (!emailRegex.test(formData.user_email ?? "")) {
+  if (!emailRegex.test(email)) {
     if (showToasts) emailWarnNotify();
     return false;
   }

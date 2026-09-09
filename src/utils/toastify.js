@@ -25,8 +25,9 @@ export const infoNotify = (message = "Loading...") => {
 
 export const warnNotify = () => {
   toast.warn("Make sure you have completed all fields.", {
+    toastId: "warn-required-fields",
     position: "bottom-right",
-    autoClose: 5000,
+    autoClose: 3500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
@@ -38,8 +39,9 @@ export const warnNotify = () => {
 
 export const emailWarnNotify = () => {
   toast.warn("Make sure you have entered a valid email format.", {
+    toastId: "warn-email-format",
     position: "bottom-right",
-    autoClose: 5000,
+    autoClose: 3500,
     hideProgressBar: false,
     closeOnClick: true,
     pauseOnHover: true,
