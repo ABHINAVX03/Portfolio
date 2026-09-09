@@ -7,7 +7,7 @@ const csp = `
   img-src 'self' data: https:;
   font-src 'self' data: https://fonts.gstatic.com;
   connect-src 'self' https: wss:;
-  frame-ancestors 'none';
+  frame-ancestors 'self';
   base-uri 'self';
   form-action 'self';
   upgrade-insecure-requests;
@@ -39,7 +39,7 @@ const nextConfig = {
         headers: [
           {
             key: "X-Frame-Options",
-            value: "DENY",
+            value: "SAMEORIGIN",
           },
           {
             key: "X-Content-Type-Options",
