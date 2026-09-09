@@ -213,10 +213,10 @@ const Navbar = () => {
 
           {/* ── Resume CTA + hamburger ── */}
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <a
-              href="/resume/Resume.pdf"
-              download
-              aria-label="Download resume"
+            <Link
+              href="?resume=true"
+              scroll={false}
+              aria-label="View resume"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -246,7 +246,7 @@ const Navbar = () => {
             >
               <FiDownload size={12} />
               Resume
-            </a>
+            </Link>
 
             {/* Hamburger — mobile only */}
             <button
@@ -356,9 +356,9 @@ const Navbar = () => {
               transition={{ delay: 0.32, duration: 0.35 }}
               style={{ marginTop: "16px" }}
             >
-              <a
-                href="/resume/Resume.pdf"
-                download
+              <Link
+                href="?resume=true"
+                scroll={false}
                 onClick={closeMenu}
                 style={{
                   display: "inline-flex",
@@ -376,8 +376,8 @@ const Navbar = () => {
                 }}
               >
                 <FiDownload size={16} />
-                Download Resume
-              </a>
+                View Resume
+              </Link>
             </motion.div>
           </motion.div>
         )}

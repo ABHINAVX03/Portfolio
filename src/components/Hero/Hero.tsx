@@ -324,9 +324,9 @@ const Hero = () => {
               Hire Me <FiMail size={14} />
             </a>
 
-            <a
-              href="/resume/Resume.pdf"
-              download
+            <Link
+              href="?resume=true"
+              scroll={false}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -352,10 +352,10 @@ const Hero = () => {
                 (e.currentTarget as HTMLElement).style.borderColor = "rgba(99,102,241,0.3)";
                 (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
               }}
-              aria-label="Download resume"
+              aria-label="View resume"
             >
               <FiDownload size={14} /> Resume
-            </a>
+            </Link>
 
             <Link
               href="#projects"

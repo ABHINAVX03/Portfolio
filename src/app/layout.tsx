@@ -4,6 +4,7 @@ import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 import ThemeToggle from "@/components/ThemeToggle";
 import ScrollRestoration from "@/components/ScrollRestoration";
+import ResumeModal from "@/components/ResumeModal/ResumeModal";
 
 export const metadata = {
   metadataBase: new URL("https://abhinavgupta.dev"),
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ThemeToggle />
         </div>
         <PageTransition>{children}</PageTransition>
+        <ResumeModal />
       </body>
     </html>
   );
