@@ -1,13 +1,8 @@
-// src/app/sitemap.ts
-//
-// FIX: Original only listed "/" — search engines couldn't discover
-// the case study pages at /projects/[slug].
-// Now includes one entry per registered case study.
-
 import { MetadataRoute } from "next";
 import { caseStudyRegistry } from "@/utils/caseStudies";
+import { getBlogPosts } from "@/utils/content/posts";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://abhinavgupta.dev";
   const now = new Date();
 
@@ -15,6 +10,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${base}/projects/${slug}`,
     lastModified: now,
     changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
+
+  const posts = await getBlogPosts();
+  const blogEntries = posts.map((post) => ({
+    url: `${base}/blog/${post.slug}`,
+    lastModified: post.date ? new Date(post.date) : now,
+    changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
 
@@ -38,5 +41,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
     ...caseStudyEntries,
+    ...blogEntries,
   ];
 }

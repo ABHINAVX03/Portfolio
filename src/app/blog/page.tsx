@@ -1,26 +1,14 @@
 import Link from "next/link";
-
-const posts = [
-  {
-    slug: "building-resilient-apis",
-    title: "Building resilient APIs with clear boundaries",
-    excerpt: "A practical guide to thinking about contracts, errors, and service ownership.",
-    readTime: "6 min read",
-  },
-  {
-    slug: "designing-for-performance",
-    title: "Designing for performance in modern React apps",
-    excerpt: "How progressive enhancement, selective hydration, and intentional rendering make a difference.",
-    readTime: "5 min read",
-  },
-];
+import { getBlogPosts } from "@/utils/content/posts";
 
 export const metadata = {
   title: "Blog | Abhinav Gupta",
   description: "Notes on software engineering, system design, and thoughtful product buildouts.",
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getBlogPosts();
+
   return (
     <main style={{ minHeight: "100vh", padding: "120px 24px 80px", maxWidth: "980px", margin: "0 auto" }}>
       <p style={{ fontFamily: "var(--font-jetbrains-mono)", color: "#6366f1", letterSpacing: "0.16em", textTransform: "uppercase", fontSize: "0.75rem" }}>Writing</p>
@@ -36,6 +24,26 @@ export default function BlogPage() {
               <span style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.75rem" }}>{post.readTime}</span>
             </div>
             <p style={{ margin: 0, color: "rgba(255,255,255,0.68)", lineHeight: 1.6 }}>{post.excerpt}</p>
+            {post.tags && post.tags.length > 0 && (
+              <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
+                {post.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    style={{
+                      fontSize: "0.7rem",
+                      fontFamily: "var(--font-jetbrains-mono)",
+                      color: "#a5b4fc",
+                      background: "rgba(99,102,241,0.12)",
+                      padding: "3px 8px",
+                      borderRadius: "6px",
+                      border: "1px solid rgba(99,102,241,0.2)",
+                    }}
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </Link>
         ))}
       </div>
