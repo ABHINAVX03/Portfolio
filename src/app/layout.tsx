@@ -3,6 +3,7 @@ import "./globals.css";
 import CustomCursor from "@/components/CustomCursor";
 import PageTransition from "@/components/PageTransition";
 import ThemeToggle from "@/components/ThemeToggle";
+import ScrollRestoration from "@/components/ScrollRestoration";
 
 export const metadata = {
   metadataBase: new URL("https://abhinavgupta.dev"),
@@ -74,6 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
+        <ScrollRestoration />
         <CustomCursor />
         <div className="bg-grid" aria-hidden="true" />
         <div className="bg-orb bg-orb-1" aria-hidden="true" />
