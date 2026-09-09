@@ -14,13 +14,16 @@
     "test:ci": "npm run test -- --runInBand && npm run build"
   },
   "dependencies": {
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.4",
     "framer-motion": "11.0.5",
     "next": "^15.5.19",
     "nodemailer": "^8.0.7",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "5.0.1",
-    "react-toastify": "10.0.4"
+    "react-toastify": "10.0.4",
+    "resend": "^6.26.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",

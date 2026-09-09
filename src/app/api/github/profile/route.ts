@@ -78,7 +78,7 @@ export async function GET(): Promise<NextResponse<GithubProfileResponse | { erro
 
     const commitActivity = buildCommitActivity(commitActivityResults);
 
-    return NextResponse.json({
+    const responsePayload = {
       username: user.login,
       profileUrl: user.html_url,
       avatarUrl: user.avatar_url,
@@ -88,6 +88,12 @@ export async function GET(): Promise<NextResponse<GithubProfileResponse | { erro
       totalStars,
       topLanguages,
       commitActivity,
+    };
+
+    return NextResponse.json(responsePayload, {
+      headers: {
+        "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
     });
   } catch (error) {
     return NextResponse.json({ error: "Unexpected GitHub API error" }, { status: 500 });
