@@ -26,10 +26,10 @@ const itemVariants = {
 const stats = [
   { value: "300+", label: "DSA Problems" },
   { value: "8.51", label: "CGPA (MCA)" },
-  { value: "8", label: "Projects Shipped" },
+  { value: "5", label: "Projects Shipped" },
   { value: "1", label: "Internship" },
-  { value: "7", label: "Deployments" },
-  { value: "2", label: "Hackathons" },
+  { value: "5", label: "Deployments" },
+  { value: "3", label: "Hackathons" },
   { value: "3", label: "Certifications" },
 ];
 
@@ -147,11 +147,12 @@ const codingProfiles = [
 ];
 
 const certifications = [
+  "Hackathon – Smart India Hackathon (SIH)",
+  "Hackathon – Cerebro",
+  "Hackathon – HACKOUT '25",
   "HackerRank Problem Solving",
   "HackerRank React Development",
-  "Hackathon – HACKOUT '25",
-  "TLE Eliminators Level 1",
-  "TLE Eliminators Level 2",
+  "TLE Eliminators Level 1 & 2",
   "Coding Society Representative · GGSIPU",
 ];
 

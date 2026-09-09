@@ -75,11 +75,12 @@ const skillsData = {
     "High-concurrency benchmark suites & load tests"
   ],
   certifications: [
+    "Hackathon – Smart India Hackathon (SIH)",
+    "Hackathon – Cerebro",
+    "Hackathon – HACKOUT '25",
     "HackerRank Problem Solving",
     "HackerRank React Development",
-    "Hackathon – HACKOUT '25",
-    "TLE Eliminators Level 1",
-    "TLE Eliminators Level 2",
+    "TLE Eliminators Level 1 & 2",
     "Coding Society Representative · GGSIPU"
   ],
   codingProfiles: [
