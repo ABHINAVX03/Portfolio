@@ -114,18 +114,18 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "8px",
           padding: "5px 12px", borderRadius: "9999px", width: "fit-content",
-          border: project.id === "nexora" ? "1px solid rgba(52,211,153,0.3)" : "1px solid rgba(99,102,241,0.3)",
-          background: project.id === "nexora" ? "rgba(52,211,153,0.08)" : "rgba(99,102,241,0.08)",
+          border: `1px solid ${c.border}`,
+          background: c.dim,
         }}>
           <span style={{
             width: 6, height: 6, borderRadius: "50%",
-            background: project.id === "nexora" ? "#34d399" : "#6366f1",
-            boxShadow: project.id === "nexora" ? "0 0 8px #34d399" : "0 0 8px #6366f1"
+            background: c.accent,
+            boxShadow: `0 0 8px ${c.accent}`
           }} />
           <span style={{
             fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700,
             letterSpacing: "0.12em", textTransform: "uppercase",
-            color: project.id === "nexora" ? "#34d399" : "#a5b4fc"
+            color: c.accent
           }}>
             {badgeLabel}
           </span>
@@ -308,7 +308,13 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", justifyContent: "center", marginTop: "18px" }}>
           {(project.id === "nexora"
             ? ["Java 21 Virtual Threads", "Neo4j Social Graph", "Apache Kafka Streams"]
-            : ["Driver Matching", "Fare Calculation Engine", "Spring Boot REST APIs"]
+            : project.id === "uber-ride-platform"
+            ? ["Driver Matching", "Fare Calculation Engine", "Spring Boot REST APIs"]
+            : project.id === "cp-sync-backend"
+            ? ["Contest Aggregator", "Google Calendar Sync", "OAuth2 Integration"]
+            : project.id === "aapka-couch"
+            ? ["DeepSeek AI Pipeline", "Personalized Nutrition", "Cashfree Gateway"]
+            : project.tags.slice(0, 3)
           ).map((t) => (
             <span
               key={t}
