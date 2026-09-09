@@ -21,5 +21,6 @@ export const caseStudyRegistry: Record<string, CaseStudyContent> = {
   "portfolio-platform": portfolioPlatform,
   "experience-system": experienceSystem,
   cpsync,
+  "cp-sync-backend": cpsync,
   "distributed-reservation-system": distributedReservationSystem,
 };

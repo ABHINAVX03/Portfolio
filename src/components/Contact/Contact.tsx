@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import socials from "@/utils/socials";
 import formValidation from "@/utils/formValidation";
-import { successNotify, errorNotify } from "@/utils/toastify.js";
+import { successNotify, errorNotify } from "@/utils/toastify";
 
 /* ── Design tokens ── */
 const T = {

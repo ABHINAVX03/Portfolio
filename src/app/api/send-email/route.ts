@@ -1,3 +1,4 @@
+import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { Resend } from "resend";
 import { Ratelimit } from "@upstash/ratelimit";
@@ -15,7 +16,7 @@ const resend = RESEND_API_KEY ? new Resend(RESEND_API_KEY) : null;
 // Upstash Redis Rate Limiting
 const UPSTASH_URL = process.env.UPSTASH_REDIS_REST_URL || "";
 const UPSTASH_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || "";
-let redisRateLimit = null;
+let redisRateLimit: Ratelimit | null = null;
 
 if (UPSTASH_URL && UPSTASH_TOKEN) {
   const redis = new Redis({ url: UPSTASH_URL, token: UPSTASH_TOKEN });
@@ -32,11 +33,16 @@ const MAX_NAME_LENGTH = 80;
 const MAX_EMAIL_LENGTH = 120;
 const MAX_MESSAGE_LENGTH = 2000;
 
+// Declare global type for rate limiting in memory
+declare global {
+  var __portfolioEmailRateLimit: Map<string, number[]> | undefined;
+}
+
 // Fallback in-memory rate limit store
-const rateLimitStore = globalThis.__portfolioEmailRateLimit || new Map();
+const rateLimitStore = globalThis.__portfolioEmailRateLimit || new Map<string, number[]>();
 globalThis.__portfolioEmailRateLimit = rateLimitStore;
 
-function escapeHtml(value = "") {
+function escapeHtml(value = ""): string {
   return String(value)
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
@@ -45,16 +51,16 @@ function escapeHtml(value = "") {
     .replace(/'/g, "&#39;");
 }
 
-function cleanText(value = "", maxLength) {
-  return String(value).trim().slice(0, maxLength);
+function cleanText(value: unknown, maxLength: number): string {
+  return String(value || "").trim().slice(0, maxLength);
 }
 
-function getClientIp(request) {
+function getClientIp(request: NextRequest): string {
   const forwardedFor = request.headers.get("x-forwarded-for");
   return forwardedFor?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
 }
 
-async function isRateLimited(ip) {
+async function isRateLimited(ip: string): Promise<boolean> {
   // Use Upstash Redis if available (Phase 1 Scaling)
   if (redisRateLimit) {
     try {
@@ -99,22 +105,13 @@ function getTransporter() {
   });
 }
 
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "1mb",
-    },
-    responseLimit: "8mb",
-  },
-};
-
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   try {
     const clientIp = getClientIp(request);
-    
+
     // Await the new async rate limiter
     if (await isRateLimited(clientIp)) {
-      return Response.json(
+      return NextResponse.json(
         { error: "Too many messages. Please try again later." },
         { status: 429 }
       );
@@ -122,7 +119,7 @@ export async function POST(request) {
 
     const body = await request.json();
     if (body.company_url_confirm || body.website_url_confirm) {
-      return Response.json({ success: true }, { status: 200 });
+      return NextResponse.json({ success: true }, { status: 200 });
     }
 
     const user_name = cleanText(body.user_name, MAX_NAME_LENGTH);
@@ -130,7 +127,7 @@ export async function POST(request) {
     const message = cleanText(body.message, MAX_MESSAGE_LENGTH);
 
     if (!user_name || !user_email || !message) {
-      return Response.json(
+      return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
@@ -138,13 +135,13 @@ export async function POST(request) {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(user_email)) {
-      return Response.json({ error: "Invalid email format" }, { status: 400 });
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
     }
 
     const safeName = escapeHtml(user_name);
     const safeEmail = escapeHtml(user_email);
     const safeMessage = escapeHtml(message);
-    
+
     const subjectLine = `New portfolio inquiry from ${user_name}`;
     const textBody = [
       "New Portfolio Inquiry",
@@ -155,7 +152,7 @@ export async function POST(request) {
       "Message:",
       message,
     ].join("\n");
-    
+
     const htmlBody = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #333; border-bottom: 2px solid #4f8ef7; padding-bottom: 10px;">
@@ -181,8 +178,8 @@ export async function POST(request) {
     if (resend) {
       try {
         const { error } = await resend.emails.send({
-          from: 'Portfolio Contact <onboarding@resend.dev>', // Adjust this when you add a verified domain
-          to: EMAIL_TO || 'delivered@resend.dev',
+          from: "Portfolio Contact <onboarding@resend.dev>", // Adjust this when you add a verified domain
+          to: EMAIL_TO || "delivered@resend.dev",
           replyTo: user_email,
           subject: subjectLine,
           text: textBody,
@@ -193,7 +190,7 @@ export async function POST(request) {
           console.error("Resend delivery error:", error);
           throw new Error("Resend failed");
         }
-        
+
         emailDelivered = true;
       } catch (error) {
         console.error("Resend completely failed, falling back to Gmail SMTP...", error);
@@ -205,7 +202,7 @@ export async function POST(request) {
       const transporter = getTransporter();
 
       if (!transporter) {
-        return Response.json(
+        return NextResponse.json(
           {
             success: false,
             warning: "Email service is unavailable. Please check environment variables.",
@@ -225,7 +222,7 @@ export async function POST(request) {
 
       try {
         await transporter.sendMail(adminMailOptions);
-      } catch (error) {
+      } catch (error: any) {
         console.error("Email send error:", error);
         const errorCode =
           error?.code === "EAUTH" || error?.responseCode === 535
@@ -234,7 +231,7 @@ export async function POST(request) {
               ? "EMAIL_CONNECTION_FAILED"
               : "EMAIL_SEND_FAILED";
 
-        return Response.json(
+        return NextResponse.json(
           {
             success: false,
             error: "Failed to send email. Please try again later.",
@@ -245,7 +242,7 @@ export async function POST(request) {
       }
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         success: true,
         message: "Thank you! Your message has been received. I'll get back to you soon.",
@@ -254,7 +251,7 @@ export async function POST(request) {
     );
   } catch (error) {
     console.error("Email processing error:", error);
-    return Response.json(
+    return NextResponse.json(
       { error: "Failed to process email" },
       { status: 500 }
     );

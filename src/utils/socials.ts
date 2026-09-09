@@ -1,4 +1,12 @@
-const socials = {
+export interface SocialLinks {
+  Location: string;
+  Github: string;
+  Linkedin: string;
+  Mail: string;
+  [key: string]: string;
+}
+
+const socials: SocialLinks = {
   // ✅ General location — avoids exposing a precise home address
   Location: "https://www.google.com/maps/place/Delhi,+India",
 

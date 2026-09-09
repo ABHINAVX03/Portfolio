@@ -1,4 +1,4 @@
-const logos = [
+const logos: string[] = [
   "/logos/react.png",
   "/logos/next.png",
   "/logos/js.png",

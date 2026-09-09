@@ -86,7 +86,7 @@ export const cpsync: CaseStudyContent = {
     { category: "Data", items: ["PostgreSQL", "JPA / Hibernate"] },
   ],
   links: {
-    repo: "https://github.com/ABHINAVX03/CPSync",
-    deploy: null,
+    repo: "https://github.com/ABHINAVX03/cp-sync-backend-",
+    deploy: "https://cp-sync-frontend.vercel.app",
   },
 };
