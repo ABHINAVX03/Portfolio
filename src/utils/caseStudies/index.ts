@@ -13,8 +13,10 @@ import { portfolioPlatform } from "./portfolio-platform";
 import { experienceSystem } from "./experience-system";
 import { cpsync } from "./cpsync";
 import { distributedReservationSystem } from "./distributed-reservation-system";
+import { nexora } from "./nexora";
 
 export const caseStudyRegistry: Record<string, CaseStudyContent> = {
+  nexora,
   "uber-ride-platform": uberRidePlatform,
   "portfolio-platform": portfolioPlatform,
   "experience-system": experienceSystem,

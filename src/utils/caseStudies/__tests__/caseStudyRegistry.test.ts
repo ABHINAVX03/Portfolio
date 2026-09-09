@@ -2,6 +2,7 @@ import { caseStudyRegistry } from "@/utils/caseStudies";
 
 describe("caseStudyRegistry", () => {
   it("includes the core case studies and their expected metadata", () => {
+    expect(caseStudyRegistry["nexora"]).toBeDefined();
     expect(caseStudyRegistry["uber-ride-platform"]).toBeDefined();
     expect(caseStudyRegistry["portfolio-platform"]).toBeDefined();
     expect(caseStudyRegistry["experience-system"]).toBeDefined();
