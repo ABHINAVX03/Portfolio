@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { label: "Contact", href: "#contact" },
   { label: "Blog", href: "/blog" },
   { label: "Now", href: "/now" },
+  { label: "API", href: "/developer" },
 ];
 
 const Navbar = () => {
