@@ -115,7 +115,7 @@ const Contact = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const next = { ...formData, [e.target.name]: e.target.value };
     setFormData(next);
-    const result = formValidation(next);
+    const result = formValidation(next, false);
     if (result) {
       setErrors({});
       setStatus("idle");

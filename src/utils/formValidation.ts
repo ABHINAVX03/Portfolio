@@ -9,18 +9,18 @@ interface FormData {
   company_url_confirm?: string;
 }
 
-const formValidation = (formData: FormData): boolean => {
+const formValidation = (formData: FormData, showToasts: boolean = true): boolean => {
   if (
     formData.user_name === "" ||
     formData.user_email === "" ||
     formData.message === ""
   ) {
-    warnNotify();
+    if (showToasts) warnNotify();
     return false;
   }
 
   if (!emailRegex.test(formData.user_email ?? "")) {
-    emailWarnNotify();
+    if (showToasts) emailWarnNotify();
     return false;
   }
 
