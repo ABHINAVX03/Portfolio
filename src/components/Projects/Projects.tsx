@@ -61,7 +61,7 @@ const uberPoints = {
 };
 
 // ── Flagship card ──────────────────────────────────────────────────────────────
-function FlagshipCard({ project }: { project: Project }) {
+function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project: Project; badgeLabel?: string }) {
   const c = COLOR[project.color] || COLOR.primary;
   const hasCaseStudy = Boolean(caseStudyRegistry[project.id]);
   const points = project.id === "nexora" ? nexoraPoints : uberPoints;
@@ -80,7 +80,6 @@ function FlagshipCard({ project }: { project: Project }) {
         background: "var(--bg-card)",
         overflow: "hidden",
         boxShadow: `var(--shadow-card), 0 0 60px ${c.glow}`,
-        marginBottom: "48px",
         position: "relative",
       }}
       className="flagship-grid"
@@ -98,11 +97,20 @@ function FlagshipCard({ project }: { project: Project }) {
         <div style={{
           display: "inline-flex", alignItems: "center", gap: "8px",
           padding: "5px 12px", borderRadius: "9999px", width: "fit-content",
-          border: "1px solid rgba(52,211,153,0.3)", background: "rgba(52,211,153,0.08)",
+          border: project.id === "nexora" ? "1px solid rgba(52,211,153,0.3)" : "1px solid rgba(99,102,241,0.3)",
+          background: project.id === "nexora" ? "rgba(52,211,153,0.08)" : "rgba(99,102,241,0.08)",
         }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#34d399", boxShadow: "0 0 8px #34d399" }} />
-          <span style={{ fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", color: "#34d399" }}>
-            Flagship Case Study
+          <span style={{
+            width: 6, height: 6, borderRadius: "50%",
+            background: project.id === "nexora" ? "#34d399" : "#6366f1",
+            boxShadow: project.id === "nexora" ? "0 0 8px #34d399" : "0 0 8px #6366f1"
+          }} />
+          <span style={{
+            fontFamily: "var(--font-jetbrains-mono)", fontSize: "10px", fontWeight: 700,
+            letterSpacing: "0.12em", textTransform: "uppercase",
+            color: project.id === "nexora" ? "#34d399" : "#a5b4fc"
+          }}>
+            {badgeLabel}
           </span>
         </div>
 
@@ -225,8 +233,28 @@ function FlagshipCard({ project }: { project: Project }) {
         <Image src={project.image} alt={project.name} fill style={{ objectFit: "cover" }} sizes="420px" />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(10,10,20,0.4), transparent)" }} />
         <div style={{ position: "absolute", bottom: "16px", left: "16px", right: "16px", display: "flex", flexWrap: "wrap", gap: "6px" }}>
-          {["Driver Matching", "Fare Logic", "REST APIs"].map(t => (
-            <span key={t} style={{ padding: "5px 10px", borderRadius: "9999px", background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)", color: "#fff", fontSize: "10px", fontFamily: "var(--font-jetbrains-mono)", fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase" }}>{t}</span>
+          {(project.id === "nexora"
+            ? ["Java 21 Virtual Threads", "Neo4j Social Graph", "Apache Kafka Streams"]
+            : ["Driver Matching", "Fare Calculation Engine", "Spring Boot REST APIs"]
+          ).map((t) => (
+            <span
+              key={t}
+              style={{
+                padding: "5px 10px",
+                borderRadius: "9999px",
+                background: "rgba(0,0,0,0.75)",
+                backdropFilter: "blur(8px)",
+                color: "#fff",
+                fontSize: "10px",
+                fontFamily: "var(--font-jetbrains-mono)",
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+                border: "1px solid rgba(255,255,255,0.15)",
+              }}
+            >
+              {t}
+            </span>
           ))}
         </div>
       </div>
@@ -372,9 +400,10 @@ const Projects = () => {
     return (b.featured ? 1 : 0) - (a.featured ? 1 : 0);
   });
 
-  const flagship = projects.find((p) => p.id === "nexora") || projects[0];
-  const cards    = projects.filter((p) => p.id !== (flagship?.id || "nexora"));
-  const techs    = [...new Set(projects.flatMap((p) => p.tags))];
+  const nexoraFlagship = projects.find((p) => p.id === "nexora");
+  const uberFlagship   = projects.find((p) => p.id === "uber-ride-platform");
+  const cards          = projects.filter((p) => p.id !== "nexora" && p.id !== "uber-ride-platform");
+  const techs          = [...new Set(projects.flatMap((p) => p.tags))];
 
   return (
     <section id="projects" ref={ref} style={{ position: "relative", zIndex: 1, padding: "100px 0 80px" }}>
@@ -420,8 +449,11 @@ const Projects = () => {
           </div>
         </motion.div>
 
-        {/* Flagship */}
-        {flagship && <FlagshipCard project={flagship} />}
+        {/* Flagships */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "36px", marginBottom: "48px" }}>
+          {nexoraFlagship && <FlagshipCard project={nexoraFlagship} badgeLabel="Flagship Case Study #1" />}
+          {uberFlagship && <FlagshipCard project={uberFlagship} badgeLabel="Flagship Case Study #2" />}
+        </div>
 
         {/* Grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: "20px" }} className="projects-masonry">
