@@ -100,7 +100,7 @@ const certifications = [
 ];
 
 /* ── Typewriter hook ── */
-function useTypewriter(text, speed = 30) {
+function useTypewriter(text: string, speed: number = 30) {
   const [display, setDisplay] = useState("");
   const indexRef = useRef(0);
   const mountedRef = useRef(true);
@@ -160,7 +160,7 @@ const SECTION_GAP = 56;
 const DONUT_COLORS = ["#6366f1", "#8b5cf6", "#f472b6", "#34d399", "#fbbf24", "#38bdf8"];
 
 /* ── Eyebrow label ── */
-function Eyebrow({ text }) {
+function Eyebrow({ text }: { text: string }) {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "14px", marginBottom: "64px" }}>
       <div style={{ height: 1, width: 60, background: "linear-gradient(90deg, transparent, #6366f1)" }} />
@@ -173,7 +173,7 @@ function Eyebrow({ text }) {
 }
 
 /* ── Section heading ── */
-function SectionHeading({ children, sub }) {
+function SectionHeading({ children, sub }: { children: React.ReactNode; sub?: string }) {
   return (
     <div style={{ marginBottom: 20 }}>
       <h3 style={{ fontFamily: T.sans, fontSize: 22, fontWeight: 700, letterSpacing: "-0.02em", color: T.text, margin: 0, lineHeight: 1.2 }}>
@@ -187,7 +187,7 @@ function SectionHeading({ children, sub }) {
 }
 
 /* ── Skill pill ── */
-function SkillPill({ label }) {
+function SkillPill({ label }: { label: string }) {
   return (
     <span className={styles.pill}>
       {label}
@@ -196,7 +196,7 @@ function SkillPill({ label }) {
 }
 
 /* ── Timeline card ── */
-function TimelineItem({ role, org, period, points, highlight }) {
+function TimelineItem({ role, org, period, points, highlight }: { role: string; org: string; period: string; points?: string[]; highlight?: string }) {
   return (
     <div style={{ ...card, marginBottom: 12, position: "relative", overflow: "hidden" }}>
       <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${T.accent}, ${T.violet}, transparent)` }} />
@@ -219,7 +219,7 @@ function TimelineItem({ role, org, period, points, highlight }) {
    Pure inline SVG, no chart library. Takes githubData.topLanguages
    (expects [{ name, percentage }] — see note below the component on the
    shape this assumes from the API route). */
-function LanguageDonut({ languages }) {
+function LanguageDonut({ languages }: { languages: any[] }) {
   const size = 160;
   const stroke = 22;
   const radius = (size - stroke) / 2;
@@ -227,7 +227,7 @@ function LanguageDonut({ languages }) {
 
   const segments = useMemo(() => {
     let cumulative = 0;
-    return languages.map((lang, i) => {
+    return languages.map((lang: any, i: number) => {
       const pct = lang.percentage ?? 0;
       const dash = (pct / 100) * circumference;
       const gap = circumference - dash;
@@ -247,7 +247,7 @@ function LanguageDonut({ languages }) {
     <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ flexShrink: 0, transform: "rotate(-90deg)" }}>
         <circle cx={size / 2} cy={size / 2} r={radius} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={stroke} />
-        {segments.map((seg) => (
+        {segments.map((seg: any) => (
           <circle
             key={seg.name}
             cx={size / 2}
@@ -264,7 +264,7 @@ function LanguageDonut({ languages }) {
         ))}
       </svg>
       <div style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 140 }}>
-        {segments.map((seg) => (
+        {segments.map((seg: any) => (
           <div key={seg.name} style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <span style={{ width: 9, height: 9, borderRadius: "50%", background: seg.color, flexShrink: 0 }} />
             <span style={{ fontFamily: T.body, fontSize: 12.5, color: T.text, flex: 1 }}>{seg.name}</span>
@@ -280,8 +280,8 @@ function LanguageDonut({ languages }) {
    Expects githubData.commitActivity as an array of weekly totals,
    most-recent-last, e.g. [{ week: "2026-03-23", count: 14 }, ...].
    See note below the component on the API aggregation this assumes. */
-function CommitActivityChart({ data }) {
-  const max = Math.max(...data.map((d) => d.count), 1);
+function CommitActivityChart({ data }: { data: any[] }) {
+  const max = Math.max(...data.map((d: any) => d.count), 1);
   const barWidth = 14;
   const gap = 8;
   const chartHeight = 90;
@@ -290,7 +290,7 @@ function CommitActivityChart({ data }) {
   return (
     <div style={{ overflowX: "auto" }}>
       <svg width={width} height={chartHeight + 24} viewBox={`0 0 ${width} ${chartHeight + 24}`}>
-        {data.map((d, i) => {
+        {data.map((d: any, i: number) => {
           const h = Math.max((d.count / max) * chartHeight, d.count > 0 ? 4 : 1.5);
           const x = i * (barWidth + gap);
           const y = chartHeight - h;
@@ -328,7 +328,7 @@ const About = () => {
     "I'm an MCA student at IIIT Vadodara and a full stack developer focused on production-grade web apps. I build performant React interfaces and scalable backend systems with Spring Boot, Node.js, and REST APIs — with additional blockchain experience in Solidity and Web3.";
   const typewriterText = useTypewriter(bioText, 28);
 
-  const [githubData, setGithubData] = useState(null);
+  const [githubData, setGithubData] = useState<any>(null);
   const [loadingGithub, setLoadingGithub] = useState(true);
   const [githubErrored, setGithubErrored] = useState(false);
 
