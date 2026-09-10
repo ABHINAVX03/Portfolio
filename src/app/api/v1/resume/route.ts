@@ -7,11 +7,12 @@ export async function GET() {
   const resume = {
     basics: {
       name: "Abhinav Gupta",
-      label: "Software Engineer",
+      label: "Software Development Engineer",
       image: "https://abhinavgupta.dev/avatar.jpg",
-      email: "your-email@gmail.com",
+      email: "guptaabhinav697@gmail.com",
+      phone: "+91 93152 31242",
       url: "https://abhinavgupta.dev",
-      summary: "Software Engineer focused on backend systems, full-stack architecture, and creating highly performant applications.",
+      summary: "Software Development Engineer with strong object-oriented design fundamentals, hands-on experience in Java/Spring Boot backend systems, MERN stack, and Blockchain. Practiced in Agile development workflows. Deployed production systems end-to-end. 422 DSA problems solved; Codeforces Pupil (rating 1383).",
       location: {
         city: "Delhi/NCT",
         countryCode: "IN",
@@ -26,36 +27,35 @@ export async function GET() {
         {
           network: "LinkedIn",
           username: "Abhinav Gupta",
-          url: "https://www.linkedin.com/in/abhinavgupta03/"
+          url: "https://www.linkedin.com/in/abhinav-gupta-367369167/"
         }
       ]
     },
     work: [
       {
-        name: "Code Eater",
-        position: "Blockchain Developer Trainee",
+        name: "Codeeater",
+        position: "Software Developer Intern",
         startDate: "2023-08-01",
         endDate: "2023-10-31",
-        summary: "Developed Ethereum smart contracts in Solidity for decentralized applications.",
+        summary: "Designed and deployed Ethereum smart contracts in Solidity and integrated with React frontend.",
         highlights: [
-          "Built Ethereum smart contracts in Solidity for a marketplace and a Twitter-style DApp.",
-          "Deployed and tested contracts locally with Ganache and Truffle.",
-          "Integrated contracts with React frontend using Web3.js and MetaMask.",
-          "Wrote modular, gas-efficient code following Solidity security best practices."
+          "Designed and deployed 3 Ethereum smart contracts in Solidity using OOP, covering 6+ on-chain operations with Ganache full test coverage.",
+          "Integrated smart contracts with React frontend via Web3.js and MetaMask; applied gas-optimisation techniques reducing estimated gas costs by ~15%.",
+          "Worked in an Agile team, participating in sprint planning and daily stand-ups; managed version control via Git on Linux across feature and release branches."
         ]
       }
     ],
     education: [
       {
-        institution: "IIIT Vadodara",
+        institution: "IIIT Vadodara (Indian Institute of Information Technology)",
         area: "Master of Computer Applications (MCA)",
         studyType: "Master's Degree",
         startDate: "2025-01-01",
         endDate: "2028-12-31",
-        score: "8.51 / 10"
+        score: "8.5 / 10"
       },
       {
-        institution: "Guru Gobind Singh Indraprastha University",
+        institution: "Guru Gobind Singh Indraprastha University (GGSIPU)",
         area: "Bachelor of Computer Applications (BCA)",
         studyType: "Bachelor's Degree",
         startDate: "2021-01-01",

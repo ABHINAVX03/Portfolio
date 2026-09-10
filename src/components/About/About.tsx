@@ -24,8 +24,8 @@ const itemVariants = {
 };
 
 const stats = [
-  { value: "300+", label: "DSA Problems" },
-  { value: "8.51", label: "CGPA (MCA)" },
+  { value: "422", label: "DSA Problems" },
+  { value: "8.5", label: "CGPA (MCA)" },
   { value: "5", label: "Projects Shipped" },
   { value: "1", label: "Internship" },
   { value: "5", label: "Deployments" },
@@ -111,14 +111,13 @@ const buildingNow = [
 
 const experience = [
   {
-    role: "Blockchain Developer Trainee",
-    org: "Code Eater",
+    role: "Software Developer Intern",
+    org: "Codeeater",
     period: "Aug 2023 – Oct 2023",
     points: [
-      "Built Ethereum smart contracts in Solidity for a marketplace and a Twitter-style DApp.",
-      "Deployed and tested contracts locally with Ganache and Truffle.",
-      "Integrated contracts with React frontend using Web3.js and MetaMask.",
-      "Wrote modular, gas-efficient code following Solidity security best practices.",
+      "Designed and deployed 3 Ethereum smart contracts in Solidity using OOP, covering 6+ on-chain operations with Ganache full test coverage.",
+      "Integrated contracts with React frontend via Web3.js & MetaMask; applied gas optimizations (loop refactoring, packing) reducing gas ~15%.",
+      "Participated in Agile sprint planning, daily stand-ups, and managed clean Git branching workflows across feature releases on Linux.",
     ],
   },
 ];
@@ -128,7 +127,7 @@ const education = [
     degree: "Master of Computer Applications (MCA)",
     school: "IIIT Vadodara",
     period: "2025 – 2028",
-    highlight: "GPA: 8.51 / 10  ·  Gandhinagar, Gujarat",
+    highlight: "GPA: 8.5 / 10  ·  Gandhinagar, Gujarat",
   },
   {
     degree: "Bachelor of Computer Applications (BCA)",
@@ -139,10 +138,10 @@ const education = [
 ];
 
 const codingProfiles = [
-  { name: "LeetCode", meta: "300+ problems", url: "https://leetcode.com/u/ABHINAVX03/" },
-  { name: "GeeksforGeeks", meta: "Active", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
-  { name: "Codeforces", meta: "Competitive programming", url: "https://codeforces.com/profile/ABHINAVX03" },
-  { name: "HackerRank", meta: "Java · React · PS", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
+  { name: "LeetCode", meta: "422 problems", url: "https://leetcode.com/u/ABHINAVX03/" },
+  { name: "Codeforces", meta: "Pupil (1383)", url: "https://codeforces.com/profile/ABHINAVX03" },
+  { name: "GeeksforGeeks", meta: "Active solver", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
+  { name: "HackerRank", meta: "Java (5★) · React.js", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
   { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
 ];
 
@@ -150,8 +149,8 @@ const certifications = [
   "Hackathon – Smart India Hackathon (SIH)",
   "Hackathon – Cerebro",
   "Hackathon – HACKOUT '25",
-  "HackerRank Problem Solving",
-  "HackerRank React Development",
+  "HackerRank Java (5★ Gold) Certified",
+  "HackerRank React.js Certified",
   "TLE Eliminators Level 1 & 2",
   "Coding Society Representative · GGSIPU",
 ];

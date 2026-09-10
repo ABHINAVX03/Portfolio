@@ -26,8 +26,8 @@ const SKILLS = [
   "AWS",
 ];
 const STATS = [
-  { value: "300+", label: "DSA Solved" },
-  { value: "8.51", label: "CGPA" },
+  { value: "422+", label: "DSA Solved" },
+  { value: "8.5",  label: "CGPA" },
   { value: "5",    label: "Core Projects" },
   { value: "1",    label: "Internship" },
 ];
