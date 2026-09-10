@@ -24,7 +24,7 @@ const itemVariants = {
 };
 
 const stats = [
-  { value: "422", label: "DSA Problems" },
+  { value: "500+", label: "DSA Problems" },
   { value: "8.5", label: "CGPA (MCA)" },
   { value: "5", label: "Projects Shipped" },
   { value: "1", label: "Internship" },
@@ -138,7 +138,7 @@ const education = [
 ];
 
 const codingProfiles = [
-  { name: "LeetCode", meta: "422 problems", url: "https://leetcode.com/u/ABHINAVX03/" },
+  { name: "LeetCode", meta: "500+ problems", url: "https://leetcode.com/u/ABHINAVX03/" },
   { name: "Codeforces", meta: "Pupil (1383)", url: "https://codeforces.com/profile/ABHINAVX03" },
   { name: "GeeksforGeeks", meta: "Active solver", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
   { name: "HackerRank", meta: "Java (5★) · React.js", url: "https://www.hackerrank.com/profile/ABHINAVX03" },

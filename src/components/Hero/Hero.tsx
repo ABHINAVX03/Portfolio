@@ -26,7 +26,7 @@ const SKILLS = [
   "AWS",
 ];
 const STATS = [
-  { value: "422+", label: "DSA Solved" },
+  { value: "500+", label: "DSA Solved" },
   { value: "8.5",  label: "CGPA" },
   { value: "5",    label: "Core Projects" },
   { value: "1",    label: "Internship" },
@@ -240,7 +240,7 @@ const Hero = () => {
             >
               MCA student at{" "}
               <span style={{ color: "var(--c-text-accent)", fontWeight: 600 }}>IIIT Vadodara</span>
-              {" "}(8.51 GPA) building production-grade full stack apps with React, Next.js, and Java Spring Boot. Codeforces Pupil with 300+ DSA problems solved.
+              {" "}(8.5 GPA) building production-grade full stack apps with React, Next.js, and Java Spring Boot. Codeforces Pupil with 500+ DSA problems solved.
             </p>
             <div style={{ marginTop: "14px" }}>
               <AnimatedTagline />

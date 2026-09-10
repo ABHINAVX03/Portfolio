@@ -175,7 +175,7 @@ const ResumeModalContent = () => {
               </div>
               
               <iframe
-                src="/resume/Resume.pdf?v=5#view=FitH"
+                src="/resume/Resume.pdf?v=6#view=FitH"
                 style={{
                   width: "100%",
                   height: "100%",
