@@ -6,15 +6,15 @@ export const cpsync: CaseStudyContent = {
     claim:
       "A sync system only feels simple until it has to survive retries, partial failures, and multiple concurrent updates without creating duplicate work.",
     subhead:
-      "A Spring Boot + React project that syncs Codeforces submissions into a personal tracker, with the hard part being making the sync safe under failure and concurrent execution.",
+      "A Spring Boot + React project that syncs external contest submissions into a personal tracker, with the hard part being making the sync safe under failure and concurrent execution.",
   },
   lifecycle: [
     {
       id: "fetch",
-      label: "Fetch latest Codeforces submissions",
+      label: "Fetch latest contest submissions",
       owningService: "Sync Service",
       detail:
-        "The sync job requests the latest submission data from Codeforces and compares it with records already stored for the user.",
+        "The sync job requests the latest submission data from upstream coding platforms and compares it with records already stored for the user.",
     },
     {
       id: "normalize",
@@ -43,7 +43,7 @@ export const cpsync: CaseStudyContent = {
     {
       question: "Why make the sync idempotent instead of just retrying blindly?",
       decision:
-        "The sync process now treats each Codeforces submission as a unique, stable event and writes it only once per external ID.",
+        "The sync process now treats each contest submission as a unique, stable event and writes it only once per external ID.",
       reasoning:
         "Without an idempotency guard, a partial DB write followed by a retry could create duplicate calendar entries, duplicate tracker rows, or repeated notifications. The sync has to be safe even when the external API and the local database disagree about what already happened.",
       tradeoff:
@@ -63,7 +63,7 @@ export const cpsync: CaseStudyContent = {
     {
       title: "A failed DB write caused duplicate calendar syncs",
       whatHappened:
-        "The first version of the sync could retry after a database error and create a second Google Calendar event for the same Codeforces submission because the event creation was not guarded by a durable idempotency check.",
+        "The first version of the sync could retry after a database error and create a second Google Calendar event for the same contest submission because the event creation was not guarded by a durable idempotency check.",
       rootCause:
         "The system treated the external sync as if it were a simple read-and-write loop, but the persistence boundary was not safe under retry.",
       fix:

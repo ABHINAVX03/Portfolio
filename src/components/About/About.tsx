@@ -139,7 +139,6 @@ const education = [
 
 const codingProfiles = [
   { name: "LeetCode", meta: "500+ problems", url: "https://leetcode.com/u/ABHINAVX03/" },
-  { name: "Codeforces", meta: "Pupil (1383)", url: "https://codeforces.com/profile/ABHINAVX03" },
   { name: "GeeksforGeeks", meta: "Active solver", url: "https://www.geeksforgeeks.org/user/ABHINAVX03/" },
   { name: "HackerRank", meta: "Java (5★) · React.js", url: "https://www.hackerrank.com/profile/ABHINAVX03" },
   { name: "GitHub", meta: "ABHINAVX03", url: "https://github.com/ABHINAVX03" },
@@ -151,7 +150,6 @@ const certifications = [
   "Hackathon – HACKOUT '25",
   "HackerRank Java (5★ Gold) Certified",
   "HackerRank React.js Certified",
-  "TLE Eliminators Level 1 & 2",
   "Coding Society Representative · GGSIPU",
 ];
 

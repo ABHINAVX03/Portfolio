@@ -61,7 +61,7 @@ Unlike conventional static portfolios, this site is engineered as a **distribute
 * **Dedicated Case Study**: View the deep dive at [`/projects/uber-ride-platform`](https://portfolio-beta-smoky-46.vercel.app/projects/uber-ride-platform).
 
 ### 3. ⚡ CP Sync — Contest Aggregation & Calendar Sync Engine
-* **Concept**: Automated contest aggregation engine and interactive dashboard that synchronizes upcoming competitive programming rounds from Codeforces, LeetCode, CodeChef, and AtCoder directly to Google Calendar.
+* **Concept**: Automated contest aggregation engine and interactive dashboard that synchronizes upcoming coding rounds from developer platforms (LeetCode, CodeChef, and AtCoder) directly to Google Calendar.
 * **Tech**: Java 21, Spring Boot, React, Google Calendar API, AWS EC2, Caching.
 * **Live Demo**: [cp-sync-frontend.vercel.app](https://cp-sync-frontend.vercel.app) • **GitHub**: [ABHINAVX03/cp-sync-backend-](https://github.com/ABHINAVX03/cp-sync-backend-)
 

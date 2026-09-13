@@ -37,7 +37,7 @@
       "repo": "https://github.com/ABHINAVX03/cp-sync-backend-",
       "deploy": "https://cp-sync-frontend.vercel.app",
       "image": "/projects/cpsync.png",
-      "description": "Contest aggregation engine and dashboard that fetches upcoming competitive programming rounds from Codeforces, LeetCode, CodeChef, and AtCoder and synchronizes them directly to Google Calendar.",
+      "description": "Contest aggregation engine and dashboard that fetches upcoming developer rounds from platforms like LeetCode, CodeChef, and AtCoder and synchronizes them directly to Google Calendar.",
       "tags": ["Java 21", "Spring Boot", "Google Calendar API", "React", "REST APIs", "AWS EC2"],
       "color": "violet",
       "priority": 3,

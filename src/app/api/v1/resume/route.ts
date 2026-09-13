@@ -12,7 +12,7 @@ export async function GET() {
       email: "guptaabhinav697@gmail.com",
       phone: "+91 93152 31242",
       url: "https://abhinavgupta.dev",
-      summary: "Software Development Engineer with strong object-oriented design fundamentals, hands-on experience in Java/Spring Boot backend systems, MERN stack, and Blockchain. Practiced in Agile development workflows. Deployed production systems end-to-end. 500+ DSA problems solved; Codeforces Pupil (rating 1383).",
+      summary: "Software Development Engineer with strong object-oriented design fundamentals, hands-on experience in Java/Spring Boot backend systems, MERN stack, and Blockchain. Practiced in Agile development workflows. Deployed production systems end-to-end. 500+ DSA problems solved.",
       location: {
         city: "Delhi/NCT",
         countryCode: "IN",

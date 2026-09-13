@@ -240,7 +240,7 @@ const Hero = () => {
             >
               MCA student at{" "}
               <span style={{ color: "var(--c-text-accent)", fontWeight: 600 }}>IIIT Vadodara</span>
-              {" "}(8.5 GPA) building production-grade full stack apps with React, Next.js, and Java Spring Boot. Codeforces Pupil with 500+ DSA problems solved.
+              {" "}(8.5 GPA) building production-grade full stack apps with React, Next.js, and Java Spring Boot with 500+ DSA problems solved.
             </p>
             <div style={{ marginTop: "14px" }}>
               <AnimatedTagline />

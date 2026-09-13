@@ -63,7 +63,7 @@ const uberPoints = {
 const cpsyncPoints = {
   problem: "Synchronize multiple concurrent upstream coding contest platforms into a single normalized dashboard and Google Calendar.",
   arch: ["Idempotent Calendar Sync", "Job Scheduling & Deduplication", "External API Rate Limiting", "Spring Boot Data JPA"],
-  apis: ["Codeforces/LeetCode Integrations", "Google Calendar OAuth2", "Contest CRUD & Aggregation", "Frontend React Dashboard"],
+  apis: ["Multi-Platform Contest APIs", "Google Calendar OAuth2", "Contest CRUD & Aggregation", "Frontend React Dashboard"],
   stack: ["Java 21", "Spring Boot", "Google Calendar API", "React", "PostgreSQL", "AWS EC2"],
 };
 
