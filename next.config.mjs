@@ -85,6 +85,16 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   poweredByHeader: false,
+
+  async redirects() {
+    return [
+      {
+        source: "/projects/uber-ride-platform",
+        destination: "/projects/bookkaro",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;
