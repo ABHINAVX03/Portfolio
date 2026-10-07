@@ -1,25 +1,25 @@
 "use client";
 import styles from "./about.module.css";
 import { useRef, useState, useEffect, useMemo } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import StackSlider from "../StackSlider/StackSlider";
 import socials from "@/utils/socials";
 import { FiGithub, FiLinkedin, FiMail, FiMapPin, FiExternalLink } from "react-icons/fi";
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: {},
   show: {
     transition: { staggerChildren: 0.08, delayChildren: 0.1 },
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 24, filter: "blur(6px)" },
   show: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.55, ease: [0.23, 1, 0.32, 1] },
+    transition: { duration: 0.55, ease: "easeOut" },
   },
 };
 
@@ -495,7 +495,7 @@ const About = () => {
                     key={stat.label}
                     initial={{ opacity: 0, scale: 0.85 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: 0.3 + i * 0.07, duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
+                    transition={{ delay: 0.3 + i * 0.07, duration: 0.4, ease: "easeOut" }}
                     className={styles.statCard}
                     style={{ ...card, textAlign: "center", position: "relative", overflow: "hidden", cursor: "default" }}
                     whileHover={{ scale: 1.02 }}

@@ -87,7 +87,7 @@ function FlagshipCard({ project, badgeLabel = "Flagship Case Study" }: { project
     <motion.div
       initial={{ opacity: 0, y: 32 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+      transition={{ duration: 0.7, ease: "easeOut" }}
       style={{
         display: "grid",
         gridTemplateColumns: "1.1fr 1fr",
@@ -357,7 +357,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: [0.23, 1, 0.32, 1] }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: "easeOut" }}
     >
       <div style={{
         borderRadius: "20px",
@@ -488,7 +488,7 @@ const Projects = () => {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
           style={{ textAlign: "center", marginBottom: "64px" }}
         >
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "12px", marginBottom: "20px" }}>

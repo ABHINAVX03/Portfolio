@@ -17,9 +17,9 @@ export default function OpengraphImage() {
           color: "white",
         }}
       >
-        <div}>Abhinav Gupta</div>
-        <div}>Software Development Engineer</div>
-        <div}>React • Next.js • Java Spring Boot</div>
+        <div>Abhinav Gupta</div>
+        <div>Software Development Engineer</div>
+        <div>React • Next.js • Java Spring Boot</div>
       </div>
     ),
     { width: 1200, height: 630 }
