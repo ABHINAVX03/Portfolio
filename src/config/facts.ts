@@ -33,7 +33,7 @@ export const FACTS = {
       "Integrates with Google Calendar API v3 via OAuth2 and AES-256-GCM token encryption",
       "Aggregates data via REST APIs, GraphQL (LeetCode), and JSoup HTML scraping (AtCoder)",
       "Resolved fetcher timeouts and deadlocks using Java 21 Virtual Threads, bounded timeouts, and eager Caffeine cache warming",
-      "Runs automated daily CRON jobs at 3:00 AM to seamlessly synchronize user preferences without duplicates"
+      "Runs automated daily CRON jobs at 3:00 AM to synchronize user preferences without duplicates"
     ]
   },
 };

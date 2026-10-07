@@ -1,49 +1,36 @@
-// src/app/projects/[slug]/page.tsx
-//
-// FIXES APPLIED:
-// 1. params is now Promise<{slug:string}> — required in Next.js 15+
-// 2. generateMetadata is async and awaits params
-// 3. CaseStudyPage is async and awaits params
-// Without these changes the page crashes at runtime with:
-// "params should be awaited before using its properties"
-
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { FiArrowLeft, FiGithub, FiExternalLink } from "react-icons/fi";
 import { caseStudyRegistry } from "@/utils/caseStudies";
 import LifecycleDiagram from "@/utils/caseStudies/LifecycleDiagram";
 import BoundaryDecisionBlock from "@/utils/caseStudies/BoundaryDecisionBlock";
 import FailureScenarioCard from "@/utils/caseStudies/FailureScenarioCard";
 import projectsData from "@/utils/projects/index.json";
+import TitleBlock from "@/components/DrawingSheet/TitleBlock";
 
 interface Project {
   id: string;
   name: string;
 }
 
-// ✅ FIX: params is a Promise in Next.js 15+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Pre-render known case studies at build time rather than on first request.
 export function generateStaticParams() {
   return Object.keys(caseStudyRegistry).map((slug) => ({ slug }));
 }
 
-// ✅ FIX: async + await params
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
   const content = caseStudyRegistry[slug];
   if (!content) return {};
   const project = (projectsData.projects as Project[]).find((p) => p.id === slug);
   return {
-    title: `${project?.name ?? content.slug} — Case Study | Abhinav Gupta`,
+    title: `${project?.name ?? content.slug} — Case Study // Abhinav Gupta`,
     description: content.hero.claim,
   };
 }
 
-// ✅ FIX: async + await params
 export default async function CaseStudyPage({ params }: PageProps) {
   const { slug } = await params;
   const content = caseStudyRegistry[slug];
@@ -56,118 +43,105 @@ export default async function CaseStudyPage({ params }: PageProps) {
     !content.failures[0].title.startsWith("[FILL IN");
 
   return (
-    <article
-      style={{
-        position: "relative",
-        zIndex: 1,
-        minHeight: "100vh",
-        paddingTop: "100px",
-        paddingBottom: "80px",
-      }}
-    >
-      <div style={{ maxWidth: 880, margin: "0 auto", padding: "0 24px" }}>
-
-        {/* Back link */}
-        <Link
-          href="/#projects"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            fontFamily: "var(--font-jetbrains-mono)",
-            fontSize: 12,
-            color: "var(--c-text-subtle)",
-            textDecoration: "none",
-            marginBottom: 32,
-          }}
-        >
-          <FiArrowLeft size={13} /> All projects
-        </Link>
-
-        {/* Hero */}
-        <header style={{ marginBottom: 56 }}>
-          <p
-            style={{
-              fontFamily: "var(--font-jetbrains-mono)",
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "#6366f1",
-              margin: "0 0 16px",
-            }}
+    <div className="sheet-wrapper" style={{ paddingTop: "24px", paddingBottom: "64px" }}>
+      <article
+        className="sheet"
+        style={{
+          maxWidth: "760px",
+          margin: "0 auto",
+        }}
+      >
+        {/* Navigation link back to Sheet 3 */}
+        <div style={{ marginBottom: "24px" }}>
+          <Link
+            href="/#work"
+            className="btn-dwg"
+            style={{ height: "32px", minHeight: "32px", fontSize: "11px" }}
           >
-            Case Study
+            ← Return to Drawing List (Index)
+          </Link>
+        </div>
+
+        {/* Case Study Header */}
+        <header style={{ marginBottom: "36px", borderBottom: "1px solid var(--hairline)", paddingBottom: "20px" }}>
+          <p
+            className="font-mono text-xs uppercase"
+            style={{ color: "var(--accent)", fontWeight: 700, margin: "0 0 10px" }}
+          >
+            TECHNICAL SPECIFICATION SHEET // {slug.toUpperCase()}
           </p>
           <h1
             style={{
-              fontFamily: "var(--font-space-grotesk)",
-              fontSize: "clamp(28px, 4vw, 42px)",
-              fontWeight: 700,
-              letterSpacing: "-0.03em",
+              fontFamily: "var(--font-serif)",
+              fontSize: "clamp(26px, 4vw, 36px)",
               lineHeight: 1.15,
-              color: "var(--c-text-primary)",
-              margin: "0 0 20px",
+              margin: "0 0 16px",
             }}
           >
             {content.hero.claim}
           </h1>
           <p
             style={{
-              fontFamily: "var(--font-body)",
-              fontSize: 15,
-              lineHeight: 1.7,
-              color: "var(--c-text-secondary)",
+              fontFamily: "var(--font-serif)",
+              fontSize: "16px",
+              lineHeight: 1.65,
+              color: "var(--muted)",
               margin: 0,
-              maxWidth: 640,
             }}
           >
             {content.hero.subhead}
           </p>
         </header>
 
-        {/* Lifecycle diagram */}
-        <section style={{ marginBottom: 64 }}>
+        {/* Lifecycle flow diagram */}
+        <section style={{ marginBottom: "48px" }}>
+          <h2
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "20px",
+              fontWeight: 600,
+              margin: "0 0 16px",
+            }}
+          >
+            Request Lifecycle & Execution Order
+          </h2>
           <LifecycleDiagram steps={content.lifecycle} />
         </section>
 
         {/* Boundary decisions */}
-        <section style={{ marginBottom: hasFailureContent ? 64 : 56 }}>
+        <section style={{ marginBottom: "48px" }}>
           <h2
             style={{
-              fontFamily: "var(--font-space-grotesk)",
-              fontSize: 22,
-              fontWeight: 700,
-              color: "var(--c-text-primary)",
-              letterSpacing: "-0.02em",
-              margin: "0 0 24px",
+              fontFamily: "var(--font-serif)",
+              fontSize: "20px",
+              fontWeight: 600,
+              margin: "0 0 16px",
             }}
           >
-            Where the boundaries are drawn
+            Architectural Boundary Decisions
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {content.decisions.map((d) => (
               <BoundaryDecisionBlock key={d.question} decision={d} />
             ))}
           </div>
         </section>
 
-        {/* Failure scenarios — only shown when real content exists */}
+        {/* Failure Scenarios & Incident Postmortems */}
         {hasFailureContent && (
-          <section style={{ marginBottom: 56 }}>
+          <section style={{ marginBottom: "48px" }}>
             <h2
               style={{
-                fontFamily: "var(--font-space-grotesk)",
-                fontSize: 22,
-                fontWeight: 700,
-                color: "var(--c-text-primary)",
-                letterSpacing: "-0.02em",
-                margin: "0 0 24px",
+                fontFamily: "var(--font-serif)",
+                fontSize: "20px",
+                fontWeight: 600,
+                color: "var(--accent)",
+                margin: "0 0 16px",
               }}
             >
-              What broke when a boundary was wrong
+              Failure Scenarios & Postmortems
             </h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
               {content.failures.map((f) => (
                 <FailureScenarioCard key={f.title} scenario={f} />
               ))}
@@ -175,50 +149,40 @@ export default async function CaseStudyPage({ params }: PageProps) {
           </section>
         )}
 
-        {/* Stack + links */}
+        {/* Stack Specification & Repository Links */}
         <section
           style={{
-            padding: "28px 32px",
-            borderRadius: 16,
-            border: "1px solid var(--c-border)",
-            background: "var(--bg-card)",
+            padding: "20px",
+            border: "1px solid var(--hairline)",
+            backgroundColor: "var(--paper)",
+            marginBottom: "32px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: 32,
-              marginBottom: 24,
-            }}
+          <h3
+            className="font-mono text-xs uppercase"
+            style={{ color: "var(--accent)", fontWeight: 700, margin: "0 0 16px" }}
           >
+            COMPONENT STACK SPECIFICATION
+          </h3>
+
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "24px", marginBottom: "20px" }}>
             {content.stack.map((group) => (
               <div key={group.category}>
                 <p
-                  style={{
-                    fontFamily: "var(--font-jetbrains-mono)",
-                    fontSize: 10,
-                    fontWeight: 700,
-                    letterSpacing: "0.1em",
-                    textTransform: "uppercase",
-                    color: "#6366f1",
-                    margin: "0 0 10px",
-                  }}
+                  className="font-mono text-[10px] uppercase font-bold"
+                  style={{ color: "var(--muted)", margin: "0 0 6px" }}
                 >
                   {group.category}
                 </p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
                   {group.items.map((item) => (
                     <span
                       key={item}
+                      className="font-mono text-xs"
                       style={{
-                        fontFamily: "var(--font-jetbrains-mono)",
-                        fontSize: 11,
-                        padding: "4px 10px",
-                        borderRadius: 8,
-                        border: "1px solid rgba(99,102,241,0.25)",
-                        background: "rgba(99,102,241,0.08)",
-                        color: "var(--c-text-accent)",
+                        padding: "2px 8px",
+                        border: "1px solid var(--grid-line)",
+                        backgroundColor: "#EFE9DD",
                       }}
                     >
                       {item}
@@ -229,28 +193,16 @@ export default async function CaseStudyPage({ params }: PageProps) {
             ))}
           </div>
 
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
             {content.links.repo && (
               <a
                 href={content.links.repo}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  padding: "10px 18px",
-                  borderRadius: 10,
-                  border: "1px solid var(--c-border)",
-                  background: "var(--bg-subtle)",
-                  color: "var(--c-text-primary)",
-                  fontFamily: "var(--font-body)",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  textDecoration: "none",
-                }}
+                className="btn-dwg"
+                style={{ height: "34px", minHeight: "34px", fontSize: "11px" }}
               >
-                <FiGithub size={14} /> View source
+                [ Source Repository ↗ ]
               </a>
             )}
             {content.links.deploy && (
@@ -258,26 +210,25 @@ export default async function CaseStudyPage({ params }: PageProps) {
                 href={content.links.deploy}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 7,
-                  padding: "10px 18px",
-                  borderRadius: 10,
-                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  color: "var(--c-on-accent)",
-                  fontFamily: "var(--font-body)",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  textDecoration: "none",
-                }}
+                className="btn-dwg btn-dwg-accent"
+                style={{ height: "34px", minHeight: "34px", fontSize: "11px" }}
               >
-                <FiExternalLink size={14} /> Live demo
+                [ Live Production System ↗ ]
               </a>
             )}
           </div>
         </section>
-      </div>
-    </article>
+
+        {/* Title block */}
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: "24px" }}>
+          <TitleBlock
+            title={`${(project?.name ?? slug).slice(0, 20).toUpperCase()} CS`}
+            dwgNo={`AG-CS-${slug.slice(0, 4).toUpperCase()}`}
+            sheetNo={1}
+            totalSheets={1}
+          />
+        </div>
+      </article>
+    </div>
   );
 }

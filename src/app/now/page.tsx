@@ -1,26 +1,84 @@
+import React from "react";
+import Link from "next/link";
+import TitleBlock from "@/components/DrawingSheet/TitleBlock";
+
 export const metadata = {
-  title: "Now | Abhinav Gupta",
-  description: "What I am focused on right now in engineering, reading, and building.",
+  title: "Now // Technical Activity Log | Abhinav Gupta",
+  description: "Current engineering focus, readings, and active systems research.",
 };
 
 export default function NowPage() {
   return (
-    <main style={{ minHeight: "100vh", padding: "120px 24px 80px", maxWidth: "900px", margin: "0 auto" }}>
-      <p style={{ fontFamily: "var(--font-jetbrains-mono)", color: "#6366f1", letterSpacing: "0.16em", textTransform: "uppercase", fontSize: "0.75rem" }}>Now</p>
-      <h1 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(2rem, 4vw, 3rem)", color: "#f8fafc", margin: "0 0 12px" }}>What I’m up to lately</h1>
-      <p style={{ color: "rgba(255,255,255,0.7)", lineHeight: 1.7, marginBottom: "24px" }}>A snapshot of the work, reading, and learning occupying my attention right now.</p>
-      <div style={{ display: "grid", gap: "16px" }}>
-        {[
-          { title: "Building", body: "A more polished case-study system and stronger frontend architecture patterns for my portfolio." },
-          { title: "Reading", body: "System Design Interview, Designing Data-Intensive Applications, and practical software architecture essays." },
-          { title: "Learning", body: "Distributed systems, observability, and the tradeoffs between elegant abstractions and pragmatic delivery." },
-        ].map((item) => (
-          <section key={item.title} style={{ padding: "20px 22px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.04)" }}>
-            <h2 style={{ fontSize: "1.05rem", color: "#fff", margin: "0 0 8px" }}>{item.title}</h2>
-            <p style={{ margin: 0, color: "rgba(255,255,255,0.72)", lineHeight: 1.7 }}>{item.body}</p>
-          </section>
-        ))}
-      </div>
-    </main>
+    <div className="sheet-wrapper" style={{ paddingTop: "24px", paddingBottom: "64px" }}>
+      <section className="sheet" style={{ maxWidth: "760px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "20px" }}>
+          <Link
+            href="/"
+            className="btn-dwg"
+            style={{ height: "32px", minHeight: "32px", fontSize: "11px" }}
+          >
+            ← Return to Index
+          </Link>
+        </div>
+
+        <header style={{ marginBottom: "28px", borderBottom: "1px solid var(--hairline)", paddingBottom: "16px" }}>
+          <p className="font-mono text-xs uppercase" style={{ color: "var(--accent)", fontWeight: 700, margin: "0 0 8px" }}>
+            FIELD REPORT // NOW
+          </p>
+          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(24px, 4vw, 32px)", margin: "0 0 10px" }}>
+            Current Activity & Technical Focus
+          </h1>
+          <p style={{ color: "var(--muted)", margin: 0, fontSize: "15px" }}>
+            Status record of engineering priorities, systems research, and active reading.
+          </p>
+        </header>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "32px" }}>
+          {[
+            {
+              title: "Systems Engineering",
+              body: "Benchmarking distributed microservices with k6, refining Neo4j Cypher traversals, and exploring event-driven consistency tradeoffs in Kafka.",
+            },
+            {
+              title: "Literature & Study",
+              body: "Reading Martin Kleppmann's Designing Data-Intensive Applications, deep-diving into Java 21 concurrency internals, and studying high-throughput database index designs.",
+            },
+            {
+              title: "Formation at IIIT Vadodara",
+              body: "Pursuing MCA degree coursework in advanced operating systems, graph algorithms, and cloud computing architectures.",
+            },
+          ].map((item) => (
+            <div
+              key={item.title}
+              style={{
+                padding: "16px 20px",
+                border: "1px solid var(--hairline)",
+                backgroundColor: "var(--paper)",
+              }}
+            >
+              <h2
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: "17px",
+                  fontWeight: 600,
+                  color: "var(--ink)",
+                  margin: "0 0 6px",
+                }}
+              >
+                {item.title}
+              </h2>
+              <p style={{ margin: 0, color: "var(--ink)", fontSize: "14px", lineHeight: "1.6" }}>
+                {item.body}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Title block */}
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <TitleBlock title="FIELD LOG: NOW" dwgNo="AG-NOW-01" sheetNo={1} totalSheets={1} />
+        </div>
+      </section>
+    </div>
   );
 }

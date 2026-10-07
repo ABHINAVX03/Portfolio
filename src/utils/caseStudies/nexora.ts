@@ -9,7 +9,7 @@ export const nexora: CaseStudyContent = {
     claim:
       "A social network is fundamentally four divergent computational workloads — graph traversal, high-velocity feeds, ACID profile updates, and async fan-out — that tear monolithic databases apart unless separated into polyglot persistence.",
     subhead:
-      "Enterprise-grade distributed professional network: Java 21 Virtual Threads, Spring Cloud, Kafka event streams, Neo4j graph engine, PostgreSQL, and Redis deployed live on AWS EC2 & CloudFront.",
+      "Distributed professional network: Java 21 Virtual Threads, Spring Cloud, Kafka event streams, Neo4j graph engine, PostgreSQL, and Redis deployed live on AWS EC2 & CloudFront.",
   },
 
   lifecycle: [
@@ -25,7 +25,7 @@ export const nexora: CaseStudyContent = {
       label: "Virtual Thread Execution",
       owningService: "Domain Microservices (Java 21 Loom)",
       detail:
-        "Every incoming HTTP request is assigned a Java 21 Virtual Thread. Blocking I/O calls to PostgreSQL, Neo4j, or S3 unmount the virtual thread from the carrier thread, preserving throughput under 100k+ concurrency.",
+        "Every incoming HTTP request is assigned a Java 21 Virtual Thread. Blocking I/O calls to PostgreSQL, Neo4j, or S3 unmount the virtual thread from the carrier thread, preserving throughput under high concurrency load.",
     },
     {
       id: "graph",
@@ -52,7 +52,7 @@ export const nexora: CaseStudyContent = {
     },
     {
       id: "cdn",
-      label: "Edge Delivery & Zero-Disk I/O",
+      label: "Edge Delivery & S3 Static Media",
       owningService: "AWS S3 + CloudFront CDN",
       detail:
         "User avatars, resumes, and media attachments are uploaded to S3 buckets and distributed across AWS CloudFront's global edge network, delivering sub-15ms edge asset latency.",

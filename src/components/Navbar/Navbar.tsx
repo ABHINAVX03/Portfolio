@@ -1,403 +1,156 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useState } from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FiDownload, FiMenu, FiX } from "react-icons/fi";
 
-const NAV_ITEMS = [
-  { label: "Home", href: "#home" },
-  { label: "Projects", href: "#projects" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-  { label: "Blog", href: "/blog" },
-  { label: "Now", href: "/now" },
-  { label: "API", href: "/developer" },
-];
-
-const Navbar = () => {
-  const [isScrolled,  setIsScrolled]  = useState(false);
-  const [isMenuOpen,  setIsMenuOpen]  = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
-
-  /* ── scroll + active-section tracker ── */
-  useEffect(() => {
-    const onScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-
-      const sections = ["home", "projects", "about", "contact"];
-      const current = sections.find((id) => {
-        const el = document.getElementById(id);
-        if (!el) return false;
-        const { top, bottom } = el.getBoundingClientRect();
-        return top <= 120 && bottom >= 120;
-      });
-      if (current) setActiveSection(current);
-    };
-
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  /* ── lock body scroll when mobile menu open ── */
-  useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [isMenuOpen]);
-
-  const closeMenu = () => setIsMenuOpen(false);
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <>
-      <header
+    <header
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+        backgroundColor: "var(--paper)",
+        borderBottom: "1px solid var(--hairline)",
+        height: "54px",
+      }}
+    >
+      <div
         style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-          padding: "16px 24px",
+          maxWidth: "1440px",
+          margin: "0 auto",
+          padding: "0 16px",
+          height: "100%",
           display: "flex",
-          justifyContent: "center",
-          pointerEvents: "none",
+          alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        <motion.nav
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0,   opacity: 1 }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-          role="navigation"
-          aria-label="Main navigation"
+        {/* Brand / Title mark */}
+        <Link
+          href="/"
           style={{
-            pointerEvents: "auto",
-            display: "flex",
+            fontFamily: "var(--font-mono)",
+            fontSize: "13px",
+            fontWeight: 700,
+            letterSpacing: "0.08em",
+            display: "inline-flex",
             alignItems: "center",
-            justifyContent: "space-between",
-            width: "100%",
-            maxWidth: "900px",
-            padding: "10px 16px",
-            borderRadius: "9999px",
-            border: `1px solid ${isScrolled ? "var(--c-border-glow)" : "var(--c-border)"}`,
-            background: isScrolled
-              ? "var(--bg-card)"
-              : "var(--bg-glass)",
-            backdropFilter: "blur(24px)",
-            WebkitBackdropFilter: "blur(24px)",
-            boxShadow: isScrolled
-              ? "var(--shadow-card)"
-              : "var(--shadow-soft)",
-            transition: "all 0.4s cubic-bezier(0.23, 1, 0.32, 1)",
+            gap: "8px",
           }}
+          aria-label="Abhinav Gupta - Home"
         >
-          {/* ── Logo ── */}
-          <Link
-            href="#home"
-            aria-label="Go to home"
-            style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}
-          >
-            <div style={{
-              width: 36,
-              height: 36,
-              borderRadius: "10px",
-              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "13px",
-              fontWeight: 800,
-              color: "#fff",
-              fontFamily: "var(--font-space-grotesk)",
-              boxShadow: "0 0 16px rgba(99,102,241,0.4)",
-              flexShrink: 0,
-            }}>
-              AG
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
-              <span style={{
-                fontFamily: "var(--font-space-grotesk)",
-                fontSize: "14px",
-                fontWeight: 700,
-                color: "#f8fafc",
-                letterSpacing: "-0.02em",
-              }}>
-                Abhinav Gupta
-              </span>
-              <span style={{
-                fontFamily: "var(--font-jetbrains-mono)",
-                fontSize: "10px",
-                color: "#34d399",
-                letterSpacing: "0.04em",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-              }}>
-                <span style={{
-                  display: "inline-block",
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "#34d399",
-                  boxShadow: "0 0 8px #34d399",
-                  animation: "ping 2s ease-in-out infinite",
-                }} />
-                Available
-              </span>
-            </div>
-          </Link>
-
-          {/* ── Desktop nav links ── */}
-          <ul style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "2px",
-            listStyle: "none",
-            margin: 0,
-            padding: 0,
-          }}
-            className="nav-desktop-links"
-          >
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeSection === item.href.replace("#", "");
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-label={item.label}
-                    style={{
-                      position: "relative",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "6px",
-                      padding: "7px 14px",
-                      borderRadius: "9999px",
-                      fontFamily: "var(--font-body)",
-                      fontSize: "13px",
-                      fontWeight: 500,
-                      color: isActive ? "var(--c-text-primary)" : "var(--c-text-secondary)",
-                      background: isActive ? "var(--c-primary-dim)" : "transparent",
-                      border: isActive ? "1px solid var(--c-border-glow)" : "1px solid transparent",
-                      transition: "all 0.25s ease",
-                      textDecoration: "none",
-                      letterSpacing: "0.01em",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.color = "var(--c-text-primary)";
-                        e.currentTarget.style.background = "var(--c-primary-dim)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActive) {
-                        e.currentTarget.style.color = "var(--c-text-secondary)";
-                        e.currentTarget.style.background = "transparent";
-                      }
-                    }}
-                  >
-                    {isActive && (
-                      <span style={{
-                        width: 5,
-                        height: 5,
-                        borderRadius: "50%",
-                        background: "#6366f1",
-                        boxShadow: "0 0 8px #6366f1",
-                        flexShrink: 0,
-                      }} />
-                    )}
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-
-          {/* ── Resume CTA + hamburger ── */}
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <Link
-              href="?resume=true"
-              scroll={false}
-              aria-label="View resume"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "8px 16px",
-                borderRadius: "9999px",
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                color: "#fff",
-                fontFamily: "var(--font-body)",
-                fontSize: "12px",
-                fontWeight: 600,
-                letterSpacing: "0.01em",
-                textDecoration: "none",
-                boxShadow: "0 0 20px rgba(99,102,241,0.3)",
-                transition: "all 0.25s ease",
-                flexShrink: 0,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 0 30px rgba(99,102,241,0.55)";
-                e.currentTarget.style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "0 0 20px rgba(99,102,241,0.3)";
-                e.currentTarget.style.transform = "translateY(0)";
-              }}
-              className="nav-resume-btn"
-            >
-              <FiDownload size={12} />
-              Resume
-            </Link>
-
-            {/* Hamburger — mobile only */}
-            <button
-              type="button"
-              onClick={() => setIsMenuOpen((p) => !p)}
-              aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isMenuOpen}
-              aria-controls="mobile-menu"
-              style={{
-                display: "none",
-                width: 36,
-                height: 36,
-                borderRadius: "10px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                background: "rgba(255,255,255,0.05)",
-                color: "#f8fafc",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-                flexShrink: 0,
-              }}
-              className="nav-hamburger"
-            >
-              {isMenuOpen ? <FiX size={16} /> : <FiMenu size={16} />}
-            </button>
-          </div>
-        </motion.nav>
-      </header>
-
-      {/* ── Mobile full-screen menu ── */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(32px)" }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+          <span
             style={{
-              position: "fixed",
-              inset: 0,
-              zIndex: 999,
-              background: "rgba(5, 5, 8, 0.97)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px",
+              padding: "2px 6px",
+              backgroundColor: "var(--ink)",
+              color: "var(--paper)",
+              fontSize: "11px",
             }}
           >
-            {/* Close button top-right */}
-            <button
-              type="button"
-              onClick={closeMenu}
-              aria-label="Close menu"
-              style={{
-                position: "absolute",
-                top: "24px",
-                right: "24px",
-                width: 40,
-                height: 40,
-                borderRadius: "10px",
-                border: "1px solid rgba(255,255,255,0.1)",
-                background: "rgba(255,255,255,0.05)",
-                color: "#f8fafc",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-            >
-              <FiX size={18} />
-            </button>
+            AG
+          </span>
+          <span>ABHINAV GUPTA</span>
+          <span style={{ color: "var(--muted)", fontWeight: 400 }}>{"//"} DWG SET</span>
+        </Link>
 
-            {NAV_ITEMS.map((item, i) => (
-              <motion.div
-                key={item.href}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ delay: i * 0.07, duration: 0.35, ease: "easeOut" }}
-              >
-                <Link
-                  href={item.href}
-                  onClick={closeMenu}
-                  style={{
-                    display: "block",
-                    fontFamily: "var(--font-space-grotesk)",
-                    fontSize: "42px",
-                    fontWeight: 800,
-                    letterSpacing: "-0.04em",
-                    color: activeSection === item.href.replace("#", "") ? "#6366f1" : "rgba(255,255,255,0.85)",
-                    textDecoration: "none",
-                    padding: "8px 24px",
-                    transition: "color 0.2s ease",
-                  }}
-                >
-                  {item.label}
-                </Link>
-              </motion.div>
-            ))}
+        {/* Desktop Navigation */}
+        <nav
+          aria-label="Main Navigation"
+          style={{
+            alignItems: "center",
+            gap: "24px",
+            fontFamily: "var(--font-mono)",
+            fontSize: "12px",
+            textTransform: "uppercase",
+            letterSpacing: "0.05em",
+          }}
+          className="hidden md:flex"
+        >
+          <Link href="/#work" className="hover:underline">
+            01 {"//"} Work
+          </Link>
+          <Link href="/#about" className="hover:underline">
+            02 {"//"} Notes
+          </Link>
+          <Link href="/#contact" className="hover:underline">
+            03 {"//"} Inquire
+          </Link>
+          <a
+            href="/Abhinav_Gupta_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-dwg"
+            style={{ height: "32px", minHeight: "32px", padding: "0 12px", fontSize: "11px" }}
+          >
+            Resume (PDF)
+          </a>
+        </nav>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.32, duration: 0.35 }}
-              style={{ marginTop: "16px" }}
-            >
-              <Link
-                href="?resume=true"
-                scroll={false}
-                onClick={closeMenu}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "14px 32px",
-                  borderRadius: "9999px",
-                  background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
-                  color: "#fff",
-                  fontFamily: "var(--font-body)",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  textDecoration: "none",
-                  boxShadow: "0 0 32px rgba(99,102,241,0.4)",
-                }}
-              >
-                <FiDownload size={16} />
-                View Resume
-              </Link>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Mobile menu trigger */}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+          aria-label="Toggle navigation menu"
+          className="flex md:hidden btn-dwg"
+          style={{ height: "34px", minHeight: "34px", padding: "0 10px", fontSize: "11px" }}
+        >
+          {isOpen ? "[ CLOSE ]" : "[ MENU ]"}
+        </button>
+      </div>
 
-      {/* ── Responsive styles injected globally ── */}
-      <style>{`
-        @media (max-width: 768px) {
-          .nav-desktop-links { display: none !important; }
-          .nav-resume-btn    { display: none !important; }
-          .nav-hamburger     { display: flex !important; }
-        }
-        @keyframes ping {
-          0%   { box-shadow: 0 0 0 0 rgba(52,211,153,0.6); }
-          70%  { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
-          100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
-        }
-      `}</style>
-    </>
+      {/* Mobile dropdown */}
+      {isOpen && (
+        <nav
+          id="mobile-menu"
+          aria-label="Mobile Navigation"
+          className="flex md:hidden flex-col"
+          style={{
+            backgroundColor: "var(--paper)",
+            borderBottom: "1px solid var(--hairline)",
+            padding: "16px",
+            gap: "12px",
+            fontFamily: "var(--font-mono)",
+            fontSize: "13px",
+            textTransform: "uppercase",
+          }}
+        >
+          <Link
+            href="/#work"
+            onClick={() => setIsOpen(false)}
+            style={{ padding: "8px 0", borderBottom: "1px solid var(--grid-line)" }}
+          >
+            01 {"//"} Work
+          </Link>
+          <Link
+            href="/#about"
+            onClick={() => setIsOpen(false)}
+            style={{ padding: "8px 0", borderBottom: "1px solid var(--grid-line)" }}
+          >
+            02 {"//"} Notes
+          </Link>
+          <Link
+            href="/#contact"
+            onClick={() => setIsOpen(false)}
+            style={{ padding: "8px 0", borderBottom: "1px solid var(--grid-line)" }}
+          >
+            03 {"//"} Inquire
+          </Link>
+          <a
+            href="/Abhinav_Gupta_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setIsOpen(false)}
+            style={{ padding: "8px 0", color: "var(--accent)", fontWeight: 700 }}
+          >
+            → Resume (PDF)
+          </a>
+        </nav>
+      )}
+    </header>
   );
-};
-
-export default Navbar;
+}

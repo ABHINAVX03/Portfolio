@@ -1,35 +1,38 @@
-import Navbar from "@/components/Navbar/Navbar";
-import Hero from "@/components/Hero/Hero";
-import Projects from "@/components/Projects/Projects";
-import About from "@/components/About/About";
-import Contact from "@/components/Contact/Contact";
-import ScrollSection from "@/components/ScrollSection/ScrollSection";
+import React from "react";
+import Sheet1Hero from "@/components/DrawingSheet/Sheet1Hero";
+import Sheet2Nexora from "@/components/DrawingSheet/Sheet2Nexora";
+import Sheet3DrawingList from "@/components/DrawingSheet/Sheet3DrawingList";
+import Sheet4About from "@/components/DrawingSheet/Sheet4About";
+import Sheet5BOM from "@/components/DrawingSheet/Sheet5BOM";
+import Sheet6History from "@/components/DrawingSheet/Sheet6History";
+import Sheet7Contact from "@/components/DrawingSheet/Sheet7Contact";
+import Footer from "@/components/DrawingSheet/Footer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-transparent text-[var(--c-text-primary)]">
-      {/* CSS-only animated background — zero JS, zero lag */}
-      <div className="bg-grid" aria-hidden="true" />
+    <>
+      <div className="sheet-wrapper">
+        {/* Sheet 1: Specification Overview (Hero & Info Card) */}
+        <Sheet1Hero />
 
-      {/* Navbar sits outside ScrollSection — it's fixed/global chrome, not a
-          scrolling page section, so it shouldn't be subject to depth fade */}
-      <Navbar />
+        {/* Sheet 2: Nexora System Architecture (Schematic & Benchmark) */}
+        <Sheet2Nexora />
 
-      <ScrollSection>
-        <Hero />
-      </ScrollSection>
+        {/* Sheet 3: Drawing List (Project Register) */}
+        <Sheet3DrawingList />
 
-      <ScrollSection>
-        <Projects />
-      </ScrollSection>
+        {/* Sheet 4: General Notes (About & Formation) */}
+        <Sheet4About />
 
-      <ScrollSection>
-        <About />
-      </ScrollSection>
+        {/* Sheet 5: Bill of Materials (Defensible Skills) */}
+        <Sheet5BOM />
 
-      <ScrollSection intensity={0.6}>
-        <Contact />
-      </ScrollSection>
-    </div>
+        {/* Sheet 6: Revision History (Education & Experience Log) */}
+        <Sheet6History />
+
+        {/* Sheet 7: Request for Information (Contact & Transmission) */}
+        <Sheet7Contact />
+      </div>
+    </>
   );
 }

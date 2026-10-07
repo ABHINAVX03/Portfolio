@@ -1,61 +1,80 @@
 import React from "react";
+import { Newsreader, JetBrains_Mono, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
-import CustomCursor from "@/components/CustomCursor";
-import PageTransition from "@/components/PageTransition";
-import ThemeToggle from "@/components/ThemeToggle";
-import ScrollRestoration from "@/components/ScrollRestoration";
-import ResumeModal from "@/components/ResumeModal/ResumeModal";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { SITE_URL } from "@/config/site";
+import { Metadata } from "next";
+import Navbar from "@/components/Navbar/Navbar";
 
-export const metadata = {
-  metadataBase: new URL("https://abhinavgupta.dev"),
-  title: "Abhinav Gupta | Full Stack Developer — React & Java Spring Boot",
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-newsreader",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+});
+
+const barlowCondensed = Barlow_Condensed({
+  weight: ["400", "600", "700"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-barlow-condensed",
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    template: "%s | Abhinav Gupta",
+    default: "Abhinav Gupta | Software Development Engineer",
+  },
   description:
-    "Portfolio of Abhinav Gupta, a Full Stack Developer specializing in React, Next.js, Java Spring Boot, REST APIs and modern web engineering.",
+    "Engineering portfolio and technical specification drawings of Abhinav Gupta. Java 21, Spring Boot, Kafka, and distributed data systems.",
   keywords: [
-    "Full Stack Developer",
-    "React",
-    "Java",
+    "Software Development Engineer",
+    "Java 21",
     "Spring Boot",
-    "Next.js",
-    "Portfolio",
-    "Software Engineer",
+    "Kafka",
+    "Neo4j",
+    "Distributed Systems",
     "Abhinav Gupta",
   ],
   authors: [{ name: "Abhinav Gupta" }],
-  icons: { icon: "/logo.png" },
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+  },
   openGraph: {
-    title: "Abhinav Gupta | Full Stack Developer",
+    title: "Abhinav Gupta | Software Development Engineer",
     description:
-      "Portfolio of Abhinav Gupta — React, Next.js, Java Spring Boot, REST APIs.",
-    url: "https://abhinavgupta.dev",
-    siteName: "Abhinav Gupta Portfolio",
+      "Engineering portfolio and technical drawing specifications for Abhinav Gupta. Java 21, Spring Boot, Kafka, and distributed systems.",
+    url: SITE_URL,
+    siteName: "Abhinav Gupta Specification Set",
     locale: "en_US",
     type: "website",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Abhinav Gupta — Full Stack Developer",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abhinav Gupta | Full Stack Developer",
+    title: "Abhinav Gupta | Software Development Engineer",
     description:
-      "Portfolio of Abhinav Gupta — React, Next.js, and Java Spring Boot.",
-    images: ["/og-image.png"],
+      "Engineering portfolio and technical drawings — Java 21, Spring Boot, Kafka, and distributed systems.",
   },
 };
 
+import Footer from "@/components/DrawingSheet/Footer";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${newsreader.variable} ${jetbrainsMono.variable} ${barlowCondensed.variable}`}
+    >
       <head>
-        <meta name="theme-color" content="#050508" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -63,32 +82,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Abhinav Gupta",
-              url: "https://abhinavgupta.dev",
+              url: SITE_URL,
               sameAs: [
                 "https://github.com/ABHINAVX03",
                 "https://www.linkedin.com/in/abhinav-gupta-367369167/",
               ],
-              jobTitle: "Full Stack Developer",
-              worksFor: {
-                "@type": "Organization",
-                name: "Freelance",
-              },
+              jobTitle: "Software Development Engineer",
+              alumniOf: [
+                "Indian Institute of Information Technology Vadodara",
+                "Guru Gobind Singh Indraprastha University",
+              ],
             }),
           }}
         />
       </head>
       <body>
-        <ScrollRestoration />
-        <CustomCursor />
-        <div className="bg-grid" aria-hidden="true" />
-        <div className="bg-orb bg-orb-1" aria-hidden="true" />
-        <div className="bg-orb bg-orb-2" aria-hidden="true" />
-        <div className="bg-orb bg-orb-3" aria-hidden="true" />
-        <div className="shell-controls" aria-label="Portfolio controls">
-          <ThemeToggle />
-        </div>
-        <PageTransition>{children}</PageTransition>
-        <ResumeModal />
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
+        <Navbar />
+        <main id="main-content">{children}</main>
+        <Footer />
         <Analytics />
         <SpeedInsights />
       </body>

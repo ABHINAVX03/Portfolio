@@ -1,52 +1,86 @@
 import Link from "next/link";
 import { getBlogPosts } from "@/utils/content/posts";
+import TitleBlock from "@/components/DrawingSheet/TitleBlock";
 
 export const metadata = {
-  title: "Blog | Abhinav Gupta",
-  description: "Notes on software engineering, system design, and thoughtful product buildouts.",
+  title: "Engineering Notes & Postmortems // Abhinav Gupta",
+  description: "Technical writings on distributed systems, concurrency, and architecture tradeoffs.",
 };
 
 export default async function BlogPage() {
   const posts = await getBlogPosts();
 
   return (
-    <main style={{ minHeight: "100vh", padding: "120px 24px 80px", maxWidth: "980px", margin: "0 auto" }}>
-      <p style={{ fontFamily: "var(--font-jetbrains-mono)", color: "#6366f1", letterSpacing: "0.16em", textTransform: "uppercase", fontSize: "0.75rem" }}>Writing</p>
-      <h1 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(2rem, 4vw, 3rem)", color: "#f8fafc", margin: "0 0 12px" }}>Notes from the build</h1>
-      <p style={{ color: "rgba(255,255,255,0.7)", maxWidth: "700px", lineHeight: 1.7, marginBottom: "32px" }}>
-        I write about the systems, tradeoffs, and product decisions behind the projects I ship.
-      </p>
-      <div style={{ display: "grid", gap: "16px" }}>
-        {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`} style={{ display: "block", padding: "20px 22px", borderRadius: "16px", border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.04)", textDecoration: "none" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", gap: "12px", alignItems: "center", marginBottom: "8px" }}>
-              <h2 style={{ fontSize: "1.1rem", color: "#fff", margin: 0 }}>{post.title}</h2>
-              <span style={{ color: "rgba(255,255,255,0.55)", fontFamily: "var(--font-jetbrains-mono)", fontSize: "0.75rem" }}>{post.readTime}</span>
-            </div>
-            <p style={{ margin: 0, color: "rgba(255,255,255,0.68)", lineHeight: 1.6 }}>{post.excerpt}</p>
-            {post.tags && post.tags.length > 0 && (
-              <div style={{ display: "flex", gap: "8px", marginTop: "12px" }}>
-                {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    style={{
-                      fontSize: "0.7rem",
-                      fontFamily: "var(--font-jetbrains-mono)",
-                      color: "#a5b4fc",
-                      background: "rgba(99,102,241,0.12)",
-                      padding: "3px 8px",
-                      borderRadius: "6px",
-                      border: "1px solid rgba(99,102,241,0.2)",
-                    }}
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            )}
+    <div className="sheet-wrapper" style={{ paddingTop: "24px", paddingBottom: "64px" }}>
+      <section className="sheet" style={{ maxWidth: "780px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "20px" }}>
+          <Link
+            href="/"
+            className="btn-dwg"
+            style={{ height: "32px", minHeight: "32px", fontSize: "11px" }}
+          >
+            ← Return to Index
           </Link>
-        ))}
-      </div>
-    </main>
+        </div>
+
+        <header style={{ marginBottom: "28px", borderBottom: "1px solid var(--hairline)", paddingBottom: "16px" }}>
+          <p className="font-mono text-xs uppercase" style={{ color: "var(--accent)", fontWeight: 700, margin: "0 0 8px" }}>
+            WRITING & ESSAYS // TECHNICAL DISPATCH
+          </p>
+          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(24px, 4vw, 34px)", margin: "0 0 10px" }}>
+            Notes from the Build
+          </h1>
+          <p style={{ color: "var(--muted)", margin: 0, fontSize: "15px" }}>
+            Reflections on distributed systems design, concurrency primitives, and architectural tradeoffs.
+          </p>
+        </header>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "32px" }}>
+          {posts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="p-4 border border-[var(--hairline)] bg-[var(--paper)] hover:border-[var(--accent)] transition-colors block"
+            >
+              <div className="flex flex-col sm:flex-row justify-between sm:items-baseline gap-1 mb-2">
+                <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "18px", fontWeight: 600, color: "var(--ink)", margin: 0 }}>
+                  {post.title}
+                </h2>
+                <span className="font-mono text-xs text-[var(--accent)] font-semibold">
+                  [{post.readTime}]
+                </span>
+              </div>
+
+              <p style={{ margin: "0 0 12px", color: "var(--ink)", fontSize: "14px", lineHeight: "1.6" }}>
+                {post.excerpt}
+              </p>
+
+              {post.tags && post.tags.length > 0 && (
+                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="font-mono text-[10px] text-[var(--muted)]"
+                      style={{
+                        padding: "2px 6px",
+                        border: "1px solid var(--grid-line)",
+                        backgroundColor: "#EFE9DD",
+                      }}
+                    >
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </Link>
+          ))}
+        </div>
+
+        {/* Title block */}
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <TitleBlock title="TECHNICAL DISPATCH" dwgNo="AG-WRIT-01" sheetNo={1} totalSheets={1} />
+        </div>
+      </section>
+    </div>
   );
 }

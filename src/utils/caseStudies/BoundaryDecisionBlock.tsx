@@ -1,52 +1,64 @@
-// src/components/CaseStudy/BoundaryDecisionBlock.tsx
-//
-// Renders one "where the boundary is drawn" entry: the question, the
-// actual decision, the reasoning, and the honest tradeoff. Four short
-// fields rather than one paragraph, because the tradeoff specifically
-// needs to stay visually distinct -- it's the part that keeps this from
-// reading like marketing copy. A decision with no stated cost is a sales
-// pitch, not an engineering explanation.
-
+import React from "react";
 import { BoundaryDecision } from "@/utils/caseStudies/types";
 
 export default function BoundaryDecisionBlock({ decision }: { decision: BoundaryDecision }) {
   return (
-    <div style={{
-      padding: "22px 24px",
-      borderRadius: 14,
-      border: "1px solid var(--c-border)",
-      background: "var(--bg-subtle)",
-    }}>
-      <h3 style={{
-        fontFamily: "var(--font-space-grotesk)", fontSize: 15.5, fontWeight: 700,
-        color: "var(--c-text-primary)", margin: "0 0 14px", letterSpacing: "-0.01em",
-      }}>
+    <div
+      style={{
+        padding: "20px",
+        border: "1px solid var(--hairline)",
+        backgroundColor: "var(--paper)",
+        marginBottom: "16px",
+      }}
+    >
+      <h3
+        style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "17px",
+          fontWeight: 600,
+          color: "var(--ink)",
+          margin: "0 0 12px",
+        }}
+      >
         {decision.question}
       </h3>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-        <Field label="Decision" color="#6366f1" text={decision.decision} />
-        <Field label="Reasoning" color="#8b5cf6" text={decision.reasoning} />
-        <Field label="Tradeoff" color="#fbbf24" text={decision.tradeoff} />
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        <Field label="DECISION" isAccent={false} text={decision.decision} />
+        <Field label="REASONING" isAccent={false} text={decision.reasoning} />
+        <Field label="TRADEOFF" isAccent={true} text={decision.tradeoff} />
       </div>
     </div>
   );
 }
 
-function Field({ label, color, text }: { label: string; color: string; text: string }) {
+function Field({ label, isAccent, text }: { label: string; isAccent: boolean; text: string }) {
   return (
-    <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-      <span style={{
-        fontFamily: "var(--font-jetbrains-mono)", fontSize: 10, fontWeight: 700,
-        letterSpacing: "0.08em", textTransform: "uppercase", color,
-        flexShrink: 0, width: 84, paddingTop: 2,
-      }}>
-        {label}
+    <div style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
+      <span
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "10px",
+          fontWeight: 700,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: isAccent ? "var(--accent)" : "var(--ink)",
+          flexShrink: 0,
+          width: "80px",
+          paddingTop: "2px",
+        }}
+      >
+        [{label}]
       </span>
-      <p style={{
-        fontFamily: "var(--font-body)", fontSize: 13, lineHeight: 1.6,
-        color: "var(--c-text-secondary)", margin: 0,
-      }}>
+      <p
+        style={{
+          fontFamily: "var(--font-serif)",
+          fontSize: "14px",
+          lineHeight: "1.6",
+          color: "var(--ink)",
+          margin: 0,
+        }}
+      >
         {text}
       </p>
     </div>

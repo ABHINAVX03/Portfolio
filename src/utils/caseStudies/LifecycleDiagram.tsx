@@ -1,99 +1,113 @@
-// src/components/CaseStudy/LifecycleDiagram.tsx
-//
-// The signature element. Renders the actual request lifecycle as a
-// vertical sequence -- not a generic boxes-and-arrows architecture
-// diagram, but the specific order a ride moves through, with each step
-// tagged by which service owns it. Steps marked isFailurePoint get an
-// amber accent: "this is a boundary that mattered."
-//
-// Deliberately plain SVG, no chart library -- this needs to be exact and
-// readable at a glance, not a generic chart-library default.
-
+import React from "react";
 import { LifecycleStep } from "@/utils/caseStudies/types";
 
-const ACCENT = "#6366f1";
-const AMBER = "#fbbf24";
-const NODE_R = 7;
-const ROW_H = 92;
+const INK = "#1B1F2A";
+const ACCENT = "#C23B22";
+const ROW_H = 88;
 
 export default function LifecycleDiagram({ steps }: { steps: LifecycleStep[] }) {
-  const width = 760;
-  const height = steps.length * ROW_H + 24;
-  const lineX = 32;
-  const textX = 64;
+  const width = 680;
+  const height = steps.length * ROW_H + 32;
+  const lineX = 24;
+  const textX = 52;
 
   return (
-    <div style={{
-      padding: "32px 28px",
-      borderRadius: 18,
-      border: "1px solid rgba(99,102,241,0.18)",
-      background: "var(--bg-card)",
-      overflowX: "auto",
-    }}>
-      <p style={{
-        fontFamily: "var(--font-jetbrains-mono)", fontSize: 10, fontWeight: 700,
-        letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--c-text-muted)",
-        margin: "0 0 24px",
-      }}>
-        Request lifecycle — one ride, in order
+    <div
+      style={{
+        padding: "24px 20px",
+        border: "1px solid var(--hairline)",
+        backgroundColor: "var(--paper)",
+        overflowX: "auto",
+      }}
+    >
+      <p
+        style={{
+          fontFamily: "var(--font-mono)",
+          fontSize: "11px",
+          fontWeight: 700,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+          color: "var(--accent)",
+          margin: "0 0 20px",
+        }}
+      >
+        LIFECYCLE SCHEMATIC // FLOW DIAGRAM
       </p>
 
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} role="img"
-        aria-label="Diagram showing the sequence of a ride request: rider requests, system matches a driver, driver accepts, trip runs, fare is calculated, fare is settled. Each step labeled with the service that owns it.">
-        {/* connecting spine */}
-        <line x1={lineX} y1={12} x2={lineX} y2={height - 12}
-          stroke="var(--c-border)" strokeWidth={2} />
+      <svg
+        width="100%"
+        height={height}
+        viewBox={`0 0 ${width} ${height}`}
+        role="img"
+        aria-label="Lifecycle diagram showing the sequential flow of requests across system components"
+      >
+        {/* Connecting spine */}
+        <line
+          x1={lineX}
+          y1={16}
+          x2={lineX}
+          y2={height - 24}
+          stroke={INK}
+          strokeWidth={1.5}
+        />
 
         {steps.map((step, i) => {
-          const cy = 12 + i * ROW_H + ROW_H / 2 - ROW_H / 2 + 24;
-          const color = step.isFailurePoint ? AMBER : ACCENT;
+          const cy = 20 + i * ROW_H + 16;
+          const isCritical = step.isFailurePoint;
+          const nodeColor = isCritical ? ACCENT : INK;
+
           return (
             <g key={step.id}>
-              {/* node */}
-              <circle cx={lineX} cy={cy} r={NODE_R} fill="var(--bg-elevated)" stroke={color} strokeWidth={2.5} />
-              {step.isFailurePoint && (
-                <circle cx={lineX} cy={cy} r={NODE_R + 5} fill="none" stroke={color} strokeWidth={1} opacity={0.35} />
-              )}
+              {/* Node marker (callout balloon shape) */}
+              <circle
+                cx={lineX}
+                cy={cy}
+                r={8}
+                fill="#F3EFE6"
+                stroke={nodeColor}
+                strokeWidth={2}
+              />
 
-              {/* step label */}
-              <text x={textX} y={cy - 12} fontFamily="var(--font-space-grotesk)" fontSize={15}
-                fontWeight={700} fill="var(--c-text-primary)">
+              {/* Step Title */}
+              <text
+                x={textX}
+                y={cy - 4}
+                fontFamily="var(--font-serif)"
+                fontSize={16}
+                fontWeight={600}
+                fill={INK}
+              >
                 {step.label}
               </text>
 
-              {/* owning service tag */}
-              <text x={textX} y={cy + 6} fontFamily="var(--font-jetbrains-mono)" fontSize={11}
-                fontWeight={600} fill={color} letterSpacing="0.04em">
-                {step.owningService.toUpperCase()}
+              {/* Owning Service / Boundary tag */}
+              <text
+                x={textX}
+                y={cy + 14}
+                fontFamily="var(--font-mono)"
+                fontSize={11}
+                fontWeight={700}
+                fill={isCritical ? ACCENT : "var(--muted)"}
+              >
+                [{step.owningService}] {isCritical ? "★ CRITICAL BOUNDARY" : ""}
               </text>
 
-              {/* detail line, wrapped manually -- SVG has no native text
-                  wrapping, and this content is short enough that one or
-                  two foreignObject lines is simpler than a wrapping lib */}
-              <foreignObject x={textX} y={cy + 16} width={width - textX - 16} height={ROW_H - 40}>
-                <div style={{
-                  fontFamily: "var(--font-body)", fontSize: 12.5, lineHeight: 1.55,
-                  color: "var(--c-text-secondary)",
-                }}>
-                  {step.detail}
-                </div>
-              </foreignObject>
+              {/* Step Detail */}
+              <text
+                x={textX}
+                y={cy + 32}
+                fontFamily="var(--font-serif)"
+                fontSize={13}
+                fill="#3A3E4A"
+              >
+                {step.detail.length > 90
+                  ? `${step.detail.slice(0, 90)}...`
+                  : step.detail}
+              </text>
             </g>
           );
         })}
       </svg>
-
-      {/* legend */}
-      <div style={{ display: "flex", gap: 20, marginTop: 16, flexWrap: "wrap" }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "var(--c-text-muted)" }}>
-          <span style={{ width: 9, height: 9, borderRadius: "50%", border: `2px solid ${ACCENT}`, display: "inline-block" }} />
-          standard step
-        </span>
-        <span style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: "var(--font-jetbrains-mono)", fontSize: 10.5, color: "var(--c-text-muted)" }}>
-          <span style={{ width: 9, height: 9, borderRadius: "50%", border: `2px solid ${AMBER}`, display: "inline-block" }} />
-          boundary that mattered
-        </span>
-      </div>
     </div>
   );
 }

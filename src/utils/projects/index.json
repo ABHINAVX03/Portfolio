@@ -7,7 +7,7 @@
       "repo": "https://github.com/ABHINAVX03/nexora",
       "deploy": "https://nexoranetwork.site",
       "image": "/projects/nexora.png",
-      "description": "Enterprise-grade distributed professional network with Java 21 Virtual Threads, Spring Cloud, Kafka event streams, Neo4j social graph, PostgreSQL, Redis, and CloudFront CDN. Benchmarked for 100k+ concurrent users with 0% error rate.",
+      "description": "Distributed professional network with Java 21 Virtual Threads, Spring Cloud Gateway, Kafka event streams, Neo4j social graph, PostgreSQL, and Redis. Benchmarked via k6 up to 500 virtual users with 56.1ms median latency on AWS EC2.",
       "tags": ["Java 21", "Spring Boot", "Kafka", "Neo4j", "PostgreSQL", "Redis", "AWS EC2", "Docker"],
       "color": "cyan",
       "priority": 1,

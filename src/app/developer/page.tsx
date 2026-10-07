@@ -1,45 +1,101 @@
+import React from "react";
+import Link from "next/link";
 import ApiPlayground from "@/components/ApiPlayground/ApiPlayground";
+import TitleBlock from "@/components/DrawingSheet/TitleBlock";
 
 export const metadata = {
-  title: "Developer API | Abhinav Gupta",
-  description: "Public headless APIs and JSON Resume for Abhinav Gupta's portfolio.",
+  title: "Developer Platform & REST APIs // Abhinav Gupta",
+  description: "Headless public REST endpoints and JSON Resume schema specifications.",
 };
 
 export default function DeveloperPage() {
   return (
-    <main style={{ minHeight: "100vh", padding: "120px 24px 80px", maxWidth: "980px", margin: "0 auto" }}>
-      <p style={{ fontFamily: "var(--font-jetbrains-mono)", color: "#6366f1", letterSpacing: "0.16em", textTransform: "uppercase", fontSize: "0.75rem" }}>
-        Developer Platform
-      </p>
-      <h1 style={{ fontFamily: "var(--font-space-grotesk)", fontSize: "clamp(2rem, 4vw, 3rem)", color: "#f8fafc", margin: "0 0 12px" }}>
-        Headless API & JSON Resume
-      </h1>
-      <p style={{ color: "rgba(255,255,255,0.7)", maxWidth: "700px", lineHeight: 1.7, marginBottom: "48px" }}>
-        I built this portfolio as a headless platform. You can consume my projects, skills, and resume data programmatically via public REST APIs. Try it out in the sandbox below.
-      </p>
+    <div className="sheet-wrapper" style={{ paddingTop: "24px", paddingBottom: "64px" }}>
+      <section className="sheet" style={{ maxWidth: "800px", margin: "0 auto" }}>
+        <div style={{ marginBottom: "20px" }}>
+          <Link
+            href="/"
+            className="btn-dwg"
+            style={{ height: "32px", minHeight: "32px", fontSize: "11px" }}
+          >
+            ← Return to Index
+          </Link>
+        </div>
 
-      <ApiPlayground />
+        <header style={{ marginBottom: "28px", borderBottom: "1px solid var(--hairline)", paddingBottom: "16px" }}>
+          <p className="font-mono text-xs uppercase" style={{ color: "var(--accent)", fontWeight: 700, margin: "0 0 8px" }}>
+            HEADLESS INTERFACE // REST & JSON SPEC
+          </p>
+          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(24px, 4vw, 34px)", margin: "0 0 10px" }}>
+            Public Headless APIs & Schema
+          </h1>
+          <p style={{ color: "var(--muted)", margin: 0, fontSize: "15px", lineHeight: "1.6" }}>
+            This portfolio serves its projects, skills, and resume data through headless REST routes. All endpoints return normalized JSON.
+          </p>
+        </header>
 
-      <div style={{ marginTop: "64px", display: "grid", gap: "32px", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}>
-        <div style={{ padding: "24px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px" }}>
-          <h3 style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", fontSize: "1.2rem", margin: "0 0 8px" }}>Always in Sync</h3>
-          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>
-            Powered by Next.js On-Demand ISR, these API endpoints serve cached edge responses that are instantly invalidated whenever I push an update via my CMS.
-          </p>
+        {/* Interactive API Sandbox */}
+        <div style={{ marginBottom: "36px" }}>
+          <div className="font-mono text-xs uppercase font-bold text-[var(--ink)] mb-2">
+            REST API QUERY TERMINAL
+          </div>
+          <ApiPlayground />
         </div>
-        <div style={{ padding: "24px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px" }}>
-          <h3 style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", fontSize: "1.2rem", margin: "0 0 8px" }}>JSON Resume Standard</h3>
-          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>
-            The <code>/api/v1/resume</code> endpoint strictly adheres to the open-source JSON Resume schema, making it easily parsable by ATS systems and developer tools.
-          </p>
+
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <div
+            style={{
+              padding: "16px 20px",
+              border: "1px solid var(--hairline)",
+              backgroundColor: "var(--paper)",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "17px",
+                fontWeight: 600,
+                color: "var(--ink)",
+                margin: "0 0 8px",
+              }}
+            >
+              JSON Resume Standard
+            </h2>
+            <p style={{ margin: 0, color: "var(--ink)", fontSize: "13px", lineHeight: "1.6" }}>
+              The <code>/api/v1/resume</code> endpoint strictly adheres to the open JSON Resume schema specification, allowing direct parsing by developer tooling and ATS pipelines.
+            </p>
+          </div>
+
+          <div
+            style={{
+              padding: "16px 20px",
+              border: "1px solid var(--hairline)",
+              backgroundColor: "var(--paper)",
+            }}
+          >
+            <h2
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: "17px",
+                fontWeight: 600,
+                color: "var(--ink)",
+                margin: "0 0 8px",
+              }}
+            >
+              Single Data Source
+            </h2>
+            <p style={{ margin: 0, color: "var(--ink)", fontSize: "13px", lineHeight: "1.6" }}>
+              Project counts, defensible skills, and verified metrics are derived from the central facts module across both UI sheets and JSON responses.
+            </p>
+          </div>
         </div>
-        <div style={{ padding: "24px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "16px" }}>
-          <h3 style={{ color: "#fff", fontFamily: "var(--font-space-grotesk)", fontSize: "1.2rem", margin: "0 0 8px" }}>CORS Enabled</h3>
-          <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.95rem", lineHeight: 1.6, margin: 0 }}>
-            Want to build a widget featuring my projects? The API has permissive CORS headers. Feel free to `fetch()` it directly from your own frontend.
-          </p>
+
+        {/* Title block */}
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <TitleBlock title="HEADLESS API SPEC" dwgNo="AG-API-01" sheetNo={1} totalSheets={1} />
         </div>
-      </div>
-    </main>
+      </section>
+    </div>
   );
 }

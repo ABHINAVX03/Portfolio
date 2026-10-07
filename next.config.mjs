@@ -89,6 +89,18 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: "/",
+        has: [
+          {
+            type: "query",
+            key: "resume",
+            value: "true",
+          },
+        ],
+        destination: "/Abhinav_Gupta_Resume.pdf",
+        permanent: false,
+      },
+      {
         source: "/projects/uber-ride-platform",
         destination: "/projects/bookkaro",
         permanent: true,
