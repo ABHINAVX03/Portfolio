@@ -14,14 +14,26 @@ export const FACTS = {
   ],
   KUBERNETES_STATUS: "Currently Learning",
   BENCHMARK_NEXORA: {
-    loadTool: null,
-    testMachine: null,
-    neo4jTier: null,
-    duration: null,
-    latencies: null,
-    concurrentMeaning: null,
-    errorRateDef: null,
+    loadTool: "k6",
+    testMachine: "AWS EC2",
+    neo4jTier: "AuraDB",
+    duration: "150s (progressively scaled)",
+    latencies: "p50: 56.1ms, p95: 2197.3ms, p99: 3680.2ms (at peak 500 VUs)",
+    concurrentMeaning: "Virtual Users simulating real user sessions and API polling",
+    errorRateDef: "0.77% peak error rate (timeouts or non-200 responses)",
   },
-  BOOKKARO: null,
-  CPSYNC: null,
+  BOOKKARO: {
+    title: "BookKaro",
+    shortDescription: "A ride-booking platform with PostGIS spatial tracking and real-time JWT authentication.",
+  },
+  CPSYNC: {
+    title: "CPSync",
+    shortDescription: "An automated calendar sync service aggregating contests across Codeforces, LeetCode, CodeChef, and AtCoder using Caffeine caching and Spring Boot.",
+    facts: [
+      "Integrates with Google Calendar API v3 via OAuth2 and AES-256-GCM token encryption",
+      "Aggregates data via REST APIs, GraphQL (LeetCode), and JSoup HTML scraping (AtCoder)",
+      "Resolved fetcher timeouts and deadlocks using Java 21 Virtual Threads, bounded timeouts, and eager Caffeine cache warming",
+      "Runs automated daily CRON jobs at 3:00 AM to seamlessly synchronize user preferences without duplicates"
+    ]
+  },
 };

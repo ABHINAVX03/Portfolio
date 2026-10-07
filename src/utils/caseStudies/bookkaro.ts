@@ -92,9 +92,9 @@ export const bookkaro: CaseStudyContent = {
   failures: [
     {
       title: "CORS outage between Railway backend and Vercel frontend",
-      whatHappened: "TODO(owner): Fill in what happened during the CORS outage",
-      rootCause: "TODO(owner): Fill in root cause of the CORS outage",
-      fix: "TODO(owner): Fill in fix for the CORS outage",
+      whatHappened: "The production Vercel frontend completely lost API access after a backend deployment to Railway, with all requests failing due to CORS errors. The backend application itself was trapped in a crash loop.",
+      rootCause: "The Spring Boot backend contained an environment validation check that intentionally threw an `IllegalStateException` if `localhost` was found in the CORS allowed origins list under the `prod` profile. The `application-prod.properties` file mistakenly still included local development URLs alongside the Vercel production URL, triggering the crash on startup.",
+      fix: "Removed the `http://localhost:3000` and `http://localhost:5173` entries from the `app.security.allowed-origins` property in production, which allowed the Spring Boot server to pass its own security validations, start successfully, and restore API connectivity for the frontend.",
     },
     {
 
